@@ -1,6 +1,6 @@
 # PathLSTM 
 
-This repository contains code for the PathLSTM semantic role labeler introduced in [Roth and Lapata, 2016][1]. It is built on top of the [mate-tools semantic role labeler][2]. The PathLSTM model achieves state-of-the-art results on in the in-domain (87.9) and out-of-domain (76.6) test sets of the CoNLL-2009 data set.
+This repository contains code for the PathLSTM semantic role labeler introduced in [Roth and Lapata, 2016][1]. It is built on top of the [mate-tools semantic role labeler][2]. The PathLSTM model achieves state-of-the-art results on the in-domain (87.9) and out-of-domain (76.6) test sets of the CoNLL-2009 data set.
 
 # Dependencies
 
@@ -8,7 +8,7 @@ The following libraries and model files need to be downloaded in order to run Pa
 
  * Bernd Bohnet's dependency parser and model files ([`anna-3.3.jar` and `CoNLL2009-ST-English*.model`](http://code.google.com/p/mate-tools/downloads/))<sup>1</sup>
  * The WSJ tokenizer from Stanford CoreNLP ([`stanford-corenlp-3.x.jar`](http://nlp.stanford.edu/software/corenlp.shtml)) 
- * The most recent _PathLSTM_ SRL model (June 2015), available from Google Drive [here][3] 
+ * The most recent _PathLSTM_ SRL model (July 2016), available from Google Drive [here][3] 
 
 # Running PathLSTM  
 
