@@ -43,11 +43,11 @@ public class DataConverter implements Serializable {
 			//} else {
 				embeddings[i] = net.getEmbeddings(i);
 			if(ont5)
-				indices[i] = readIndices(new File("/disk/scratch/mroth/xlbp/lexicon_ont5/" + net.layers.get(i) + ".txt"));
+				indices[i] = readIndices(new File("lexicon_ont5/" + net.layers.get(i) + ".txt"));
 			else if(Language.getLanguage().getL()==L.eng)
-				indices[i] = readIndices(new File("/disk/scratch/mroth/xlbp/lexicon/" + net.layers.get(i) + ".txt"));
+				indices[i] = readIndices(new File("lexicon/" + net.layers.get(i) + ".txt"));
 			else
-				indices[i] = readIndices(new File("/disk/scratch/mroth/xlbp/lexicon_"+ Language.getLanguage().getL().toString() +"/" + net.layers.get(i) + ".txt"));					
+				indices[i] = readIndices(new File("lexicon_"+ Language.getLanguage().getL().toString() +"/" + net.layers.get(i) + ".txt"));					
 		}
 	}
 	

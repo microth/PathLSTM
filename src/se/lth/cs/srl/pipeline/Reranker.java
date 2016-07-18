@@ -103,7 +103,6 @@ public class Reranker extends SemanticRoleLabeler {
 		zipFile.close();
 	}
 
-
 	private Reranker(double alfa, boolean noPI, int aiBeam, int acBeam) {
 		this.alfa = alfa;
 		this.noPI = noPI;
@@ -119,16 +118,19 @@ public class Reranker extends SemanticRoleLabeler {
 			if (!noPI)
 				pipeline.steps.get(1).parse(sen);
 		}
-
+		
 		for (Predicate pred : sen.getPredicates()) {
+		
 			List<ArgMap> candidates = acModule.beamSearch(pred,
 					aiModule.beamSearch(pred, aiBeam), acBeam);
 			List<Map<Integer, Double>> candidate_representations = new LinkedList<Map<Integer, Double>>(); 
 			for (ArgMap argMap : candidates) {
 				ArrayList<Integer> indices = new ArrayList<Integer>();
 				Map<Integer, Double> nonbinFeats = new TreeMap<Integer, Double>();
+				
 				collectPipelineFeatureIndices(pred, argMap, indices,
 						nonbinFeats);
+				
 				collectGlobalFeatures(pred, argMap, indices, nonbinFeats);
 				
 				candidate_representations.add(nonbinFeats);
@@ -136,28 +138,25 @@ public class Reranker extends SemanticRoleLabeler {
 				List<Label> labels = model.classifyProb(indices, nonbinFeats);
 				for (Label label : labels) {
 					if (label.getLabel().equals(AbstractStep.NEGATIVE))
-						continue;
+						continue;								
 					argMap.setRerankProb(label.getProb());
 					argMap.resetProb();
 				}
 			}
 			int bestCandidateIndex = softMax(candidates); // Returns the index
 															// of the best
-															// argmap
+															// argmap		
 			if(bestCandidateIndex==-1) {
 				zeroArgMapCount++;
 				continue;
-			}
+			}	
 			
 			rankCount[bestCandidateIndex]++;
 			ArgMap bestCandidate = candidates.get(bestCandidateIndex);
 			if (bestCandidate.size() == 0)
 				zeroArgMapCount++;
-
-
 			pred.setArgMap(bestCandidate);
 		}
-		System.err.println();
 	}
 
 	private boolean equal(ArgMap newargs, Map<Word, String> oldargs) {
@@ -194,6 +193,8 @@ public class Reranker extends SemanticRoleLabeler {
 			double localProb = am.getProb();
 			// am.setRerankProb(am.getRerankProb()/sumRR);
 			double weightedRerankProb = Math.pow(am.getRerankProb(), alfa);
+			
+		
 			double score = localProb * weightedRerankProb;
 			if (score > bestScore) {
 				bestIndex = i;
@@ -223,109 +224,30 @@ public class Reranker extends SemanticRoleLabeler {
 		List<Feature> aiFeatures = allAIfeatures.get(allAIfeatures.POSPrefixes[aiprefix]);
 		List<Feature> acFeatures = allACfeatures.get(allACfeatures.POSPrefixes[acprefix]);
 		
-		HashSet<String> processedargs = new HashSet<String>();
-		for (Word arg : argMap.keySet()) {
+		List<String> processedargs = new LinkedList<String>();
+		for (Word arg : argMap.keySet()) {		
 			boolean hybrid = false;
 			
 			Integer aiOffset = 0;
-			HashSet<Integer> currentInstance = new HashSet<Integer>(); // I
-																		// think
-																		// we
-																		// need
-																		// to
-																		// watch
-																		// out
-																		// for
-																		// doubles
-																		// here.
+			HashSet<Integer> currentInstance = new HashSet<Integer>();
 			HashSet<Integer> currentBackup = new HashSet<Integer>();
 			
 			Map<Integer, Double> currentNonbinary = new TreeMap<Integer, Double>();
 			boolean clear = false;
 			List<NNThread> nnfeats = new LinkedList<NNThread>();
-			//Feature tmp = null;
-			for (Feature f : aiFeatures) {
-				if(f instanceof DependencyPathEmbedding) {
-					if(!clear) aiOffset = 0;
-					NNThread t = new NNThread(f, currentInstance, pred, arg, 1 + aiOffset + aiprefix*250000 + (processedargs.contains(argMap.get(arg))?(Language.getLanguage().getL()==L.ont5?66:52):0 + argLabels.indexOf(argMap.get(arg)))*4000);
-					//NNThread t = new NNThread(f, currentInstance, pred, arg, aiOffset+(1+aiprefix*200000));
-					nnfeats.add(t);
-					t.start();
-					try {
-						t.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-						System.exit(1);
-					}
-					clear = true;					
-					//System.err.println(t.getFeats().toString());
-					//f.addFeatures(currentInstance, currentNonbinary, pred, arg, aiOffset+(1+aiprefix*200000), false);
-					//System.err.println(currentNonbinary.toString());
-					//System.err.println();
-					//tmp = f;					
-				} else {
-					f.addFeatures(currentInstance, currentNonbinary, pred, arg, aiOffset, false);
-				}
-				aiOffset += f.size(false);
-			}
-			Integer acOffset;
-			
-			////System.err.println("AI below");
-
-			
-			/** Okay, this seems to work **/
-			if(clear) {
-				for(NNThread t : nnfeats) {
-					// wait until done (in order of starting)
-					try {
-						t.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-						System.exit(1);
-					}
-					int i = t.getFeats().keySet().iterator().next();
-					////System.err.println(i + ":" + t.getFeats().get(i));					
-					// add hidden state components to list of non-binary features
-					
-					/////nonbinFeats.putAll(t.getFeats());
-					for(Entry<Integer, Double> e : t.getFeats().entrySet()) {
-						if(e.getValue()!=0.0) currentNonbinary.put(e.getKey(), e.getValue());
-					}
-				}
-				// if feature indices were erased, reset offset such that coming input indices are as they are expected by the neural network (starting at 0)
-				currentInstance.clear();
-				acOffset = 0;								
-			} else			
-				// if no dependency path embedding feature erased the list of current feature indices, proceed as normal (no NN will follow)
-				acOffset = sizeAIFeatures[aiprefix] + sizeACFeatures[acprefix] * argLabels.indexOf(argMap.get(arg));
-
-			////System.err.println("AC below");
-			
-			if(acOffset>0) {
-				for (Feature f : acFeatures) {
-					if(f instanceof DependencyPathEmbedding) {
-						hybrid=true;
-						currentBackup.addAll(currentInstance);
-						currentInstance.clear();
-						acOffset = 0;
-						break;
-					}
-				}
-			}
-			
+			Integer acOffset = 0;
+						
 			clear = false;
 			nnfeats = new LinkedList<NNThread>();
 			//tmp = null;
 			for (Feature f : acFeatures) {
 				if(f instanceof DependencyPathEmbedding) {
 					if(!clear) acOffset = 0;
-					NNThread t = new NNThread(f, currentInstance, pred, arg, acOffset+(aiprefix*250000+500000+(processedargs.contains(argMap.get(arg))?(Language.getLanguage().getL()==L.ont5?66:52):0 + argLabels.indexOf(argMap.get(arg)))*4000));
-					//NNThread t = new NNThread(f, currentInstance, pred, arg, acOffset+(aiprefix*200000+1000+(argLabels.indexOf(argMap.get(arg))*1000)));
-					nnfeats.add(t);
-					t.start();					
+					f.addFeatures(currentInstance, currentNonbinary, pred, arg, acOffset+(aiprefix*250000+500000+(processedargs.indexOf(argMap.get(arg))>-1?(Language.getLanguage().getL()==L.ont5?66:52):0 + argLabels.indexOf(argMap.get(arg)))*4000), false);
+//					NNThread t = new NNThread(f, currentInstance, pred, arg, acOffset+(aiprefix*250000+500000+(processedargs.indexOf(argMap.get(arg))>-1?(Language.getLanguage().getL()==L.ont5?66:52):0 + argLabels.indexOf(argMap.get(arg)))*4000));
+//					nnfeats.add(t);
+//					t.start();					
 					clear = true;
-					//f.addFeatures(currentInstance, currentNonbinary, pred, arg, acOffset+(aiprefix*200000+1000+(argLabels.indexOf(argMap.get(arg))*1000)), false);
-					//tmp = f;
 				} else {
 					f.addFeatures(currentInstance, currentNonbinary, pred, arg, acOffset, false);
 				}
@@ -352,10 +274,7 @@ public class Reranker extends SemanticRoleLabeler {
 				}
 				currentInstance.clear();
 			}
-			//if(tmp!=null)
-			//	currentInstance.clear();			
-			
-			
+								
 			indices.addAll(currentInstance);
 			if(hybrid) indices.addAll(currentBackup);
 			nonbinFeats.putAll(currentNonbinary);
@@ -384,7 +303,12 @@ public class Reranker extends SemanticRoleLabeler {
 		
 		@Override
 		public void run() {
-			f.addFeatures(indices, feats, p, a, offset, false);
+			try {
+				f.addFeatures(indices, feats, p, a, offset, false);
+			} catch(Exception e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
 		}
 		
 		private Map<Integer, Double> getFeats() {
@@ -412,17 +336,6 @@ public class Reranker extends SemanticRoleLabeler {
 			indices.add(sizePipelineFeatures + argMap.size());
 			offset = 10;
 		}
-		/*
-		 * boolean conflict=false; int argsize = argMap.size(); for(int i=0;
-		 * i<argsize; i++) { Integer[] span1 = DasFilter.pass(pred,
-		 * (Word)argMap.keySet().toArray()[i]); if(span1==null) continue;
-		 * for(int j=i+1; j<argsize; j++) { Integer[] span2 =
-		 * DasFilter.pass(pred, (Word)argMap.keySet().toArray()[j]);
-		 * if(span2==null) continue; if(span1[0]<span2[1] && span1[1]>span2[1])
-		 * conflict=true; if(span2[0]<span1[1] && span2[1]>span1[1])
-		 * conflict=true; } } if(conflict)
-		 * indices.add(offset+sizePipelineFeatures); offset+=1;
-		 */
 
 		String cals = Language.getLanguage().getCoreArgumentLabelSequence(pred,
 				argMap);
@@ -461,18 +374,33 @@ public class Reranker extends SemanticRoleLabeler {
 
 		String cals = Language.getLanguage().getCoreArgumentLabelSequence(pred,
 				argMap);
-		Integer index = calsMap.get(cals); // Need to build this beforehand --
-											// can't be done, since we don't
-											// know what faulty CALS we will
-											// generate during training
-		if (index != null)
+		Integer index = calsMap.get(cals);		
+		if (index != null) {
 			indices.add(offset + sizePipelineFeatures + index);/**/
+		}
 	}
 
 	private void populateRerankerFeatureSets(Map<Step, FeatureSet> featureSets,
 			FeatureGenerator fg) {
 		/** TODO: all of this needs could be made POSPrefix specific (cf. TODO comments above) **/
+		/*aiFeatures = new ArrayList<Feature>();
+		acFeatures = new ArrayList<Feature>();
+		for (Entry<String, List<Feature>> entry : featureSets.get(Step.ai)
+				.entrySet())
+			aiFeatures.addAll(entry.getValue());
+		for (Entry<String, List<Feature>> entry : featureSets.get(Step.ac)
+				.entrySet())
+			acFeatures.addAll(entry.getValue());
 
+		sizeAIFeatures = 0;
+		sizeACFeatures = 0;
+		for (Feature f : aiFeatures)
+			sizeAIFeatures += f.size(false);
+		for (Feature f : acFeatures)
+			sizeACFeatures += f.size(false);
+		sizePipelineFeatures = sizeAIFeatures + argLabels.size()
+				* sizeACFeatures;*/
+		
 		allAIfeatures = featureSets.get(Step.ai);
 		sizeAIFeatures = new int[allAIfeatures.POSPrefixes.length];		
 		for(int i=0; i<sizeAIFeatures.length; i++)
@@ -501,7 +429,6 @@ public class Reranker extends SemanticRoleLabeler {
 		candidates.removeAll(bestArgMaps);
 		return bestScore;
 	}
-
 
 	@Override
 	protected String getSubStatus() {

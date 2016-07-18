@@ -396,7 +396,6 @@ public class FeatureGenerator implements Serializable {
 				ret = new PBLabelFeature(fn, TargetWord.Arg, includeAllWords,
 						POSPrefix);
 				break;
-				
 			case PathItemSet:
 				ret = new PathItemSetFeature(fn, WordData.Deprel, 1, false,
 						POSPrefix);
@@ -439,8 +438,7 @@ public class FeatureGenerator implements Serializable {
 			case SpanSize:
 				ret = new SpanLengthFeature(fn, WordData.Deprel, false,
 						POSPrefix);
-				break;
-			
+				break;		
 			default:
 				if (fn.toString().startsWith("WordEmbedding")
 						|| fn.toString().startsWith("WordTokenEmbedding")) {
@@ -645,47 +643,11 @@ public class FeatureGenerator implements Serializable {
 
 	public Feature getCachedFeature(String featureNameString) {
 		Feature ret;
-		if (featureNameString.startsWith("PathEmbedding")) {
-			String step = featureNameString.substring(13);
-			if(nets==null) {
-				System.err.println("Creating DataConverter...");
-				nets = new TreeMap<String, EmbeddingNetwork>();			
-			}
-			if(!nets.containsKey(step)) {
-				System.err.println("Loading network " + step);
-				try {
-					//EmbeddingNetwork net = (EmbeddingNetwork)new ObjectInputStream(new FileInputStream(step/*+"_network"*/)).readObject();
-					ZipFile z = new ZipFile(step);
-					EmbeddingNetwork net = (EmbeddingNetwork)new ObjectInputStream(z.getInputStream(z.getEntry("network.o"))).readObject();
-					nets.put(step,  net);
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.exit(1);
-				}	
-			}
-			if(dc==null) {
-				System.err.println(featureNameString +"\t" + featureNameString.contains("ONT5"));
-				dc = new DataConverter(nets.get(step), featureNameString.contains("ONT5"));
-			}
-			EmbeddingNetwork net = nets.get(step);
-			int hid1 = 0;
-			if(net.getComponentByName("Hidden")!=null)
-				hid1 = ((AbstractWeightedCompound)net.getComponentByName("Hidden")).getOutput().getActivations().length;
-			int hid2 = 0;
-			if(net.getComponentByName("ExtraHidden")!=null)
-				hid2 = ((AbstractWeightedCompound)net.getComponentByName("ExtraHidden")).getOutput().getActivations().length;						
-
-			if(step.startsWith("ac"))
-				ret = new DependencyCPathEmbedding(FeatureName.valueOf(featureNameString), null, step.substring(2), true, nets.get(step), dc, hid1+hid2); 
-			else ret = new DependencyIPathEmbedding(FeatureName.valueOf(featureNameString), null, step.substring(2), true, nets.get(step), dc, hid1+hid2); 
-
-		} else {/* */
-			if (featureNameString.contains("+")) {
-				ret = qcache.get(getCanonicalQFeatureName(featureNameString));
-			} else {
-				ret = cache.get(FeatureName.valueOf(featureNameString));
-			}
-		/* */}/* */
+		if (featureNameString.contains("+")) {
+			ret = qcache.get(getCanonicalQFeatureName(featureNameString));
+		} else {
+			ret = cache.get(FeatureName.valueOf(featureNameString));
+		}
 		if(ret==null)
 			throw new Error(
 				"Trying to read a cached feature that doesn't exist. Did you do something nasty with your model? Otherwise the implementation is wrong.");
