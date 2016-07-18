@@ -1,6 +1,6 @@
 # PathLSTM 
 
-This repository contains code for the PathLSTM semantic role labeler introduced in [Roth and Lapata, 2016][1]. It is built on top of the mate-tools semantic role labeler[2]. The PathLSTM model achieves state-of-the-art results on in the in-domain (87.9) and out-of-domain (76.6) test sets of the CoNLL-2009 data set.
+This repository contains code for the PathLSTM semantic role labeler introduced in [Roth and Lapata, 2016][1]. It is built on top of the [mate-tools semantic role labeler][2]. The PathLSTM model achieves state-of-the-art results on in the in-domain (87.9) and out-of-domain (76.6) test sets of the CoNLL-2009 data set.
 
 # Dependencies
 
