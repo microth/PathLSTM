@@ -2,7 +2,7 @@
 LEMMA_MODEL=models/lemma-eng.model
 POS_MODEL=models/tagger-eng.model
 PARSER_MODEL=models/parse-eng.model
-SRL_NODEL=models/srl-ACL2016-eng.model
+SRL_MODEL=models/srl-ACL2016-eng.model
 
 RERANKER="-reranker -externalNNs"
 TOKENIZE="-tokenize"
