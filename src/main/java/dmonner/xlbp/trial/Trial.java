@@ -21,7 +21,7 @@ public class Trial
 	public Trial(final Network meta)
 	{
 		this.meta = meta;
-		this.steps = new ArrayList<Step>();
+		this.steps = new ArrayList<>();
 		this.clear = true;
 		this.clearInputs = true;
 		this.evaluate = true;

@@ -71,8 +71,8 @@ public class PredicateIdentifier extends AbstractStep {
 		if (POSPrefix == null)
 			return NEGATIVE;
 		Model m = models.get(POSPrefix);
-		Collection<Integer> indices = new TreeSet<Integer>();
-		Map<Integer, Double> nonbinFeats = new TreeMap<Integer, Double>();
+		Collection<Integer> indices = new TreeSet<>();
+		Map<Integer, Double> nonbinFeats = new TreeMap<>();
 		Integer offset = 0;
 		for (Feature f : featureSet.get(POSPrefix)) {
 			f.addFeatures(s, indices, nonbinFeats, i, -1, offset, true);

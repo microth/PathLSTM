@@ -12,8 +12,8 @@ import se.lth.cs.srl.corpus.Word;
 public abstract class Feature implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected Map<String, Integer> indices = new HashMap<String, Integer>();
-	protected Map<String, Integer> nonbinFeats = new HashMap<String, Integer>();
+	protected Map<String, Integer> indices = new HashMap<>();
+	protected Map<String, Integer> nonbinFeats = new HashMap<>();
 
 	protected int indexcounter = 1;
 	protected int predMaxIndex;

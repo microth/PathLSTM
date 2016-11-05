@@ -16,7 +16,7 @@ public class PredicateReference implements Serializable {
 	private boolean all = false;
 
 	public PredicateReference(String[] POSPrefixes) {
-		map = new HashMap<String, PredicateMap>();
+		map = new HashMap<>();
 		this.POSPrefixes = POSPrefixes;
 		for (String prefix : POSPrefixes) {
 			map.put(prefix, new PredicateMap(prefix));
@@ -50,7 +50,7 @@ public class PredicateReference implements Serializable {
 		private String POS;
 
 		public PredicateMap(String POS) {
-			map = new HashMap<String, Value>();
+			map = new HashMap<>();
 			this.POS = POS;
 		}
 
@@ -62,7 +62,7 @@ public class PredicateReference implements Serializable {
 			} else {
 				Value v = new Value();
 				v.filename = POS + (++lemmaCounter);
-				v.senses = new ArrayList<String>();
+				v.senses = new ArrayList<>();
 				v.senses.add(sense);
 				map.put(lemma, v);
 			}

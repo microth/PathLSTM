@@ -196,7 +196,7 @@ public class MemoryCompound extends AbstractWeightedCompound
 		if(!super.optimize())
 			return false;
 
-		final List<Component> activate = new ArrayList<Component>(7);
+		final List<Component> activate = new ArrayList<>(7);
 
 		if(bias != null)
 			if(bias.optimize())

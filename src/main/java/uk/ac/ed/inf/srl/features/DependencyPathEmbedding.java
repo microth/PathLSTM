@@ -91,7 +91,7 @@ public abstract class DependencyPathEmbedding extends ContinuousSetFeature {
 			
 			
 			if( (Parse.parseOptions!=null && Parse.parseOptions.noPathEmbs)) {
-				HashMap<Integer, Float> ix = new HashMap<Integer, Float>();
+				HashMap<Integer, Float> ix = new HashMap<>();
 				for(int x : indices)
 					ix.put(x, 1.0F);		
 				net.getInputLayer(0).setInput(ix);
@@ -110,7 +110,7 @@ public abstract class DependencyPathEmbedding extends ContinuousSetFeature {
 			}						
 			
 			if(i==length-1) {
-				HashMap<Integer, Float> in = new HashMap<Integer, Float>();
+				HashMap<Integer, Float> in = new HashMap<>();
 				for(int x : indices)
 					in.put(x, 1.0F);
 		

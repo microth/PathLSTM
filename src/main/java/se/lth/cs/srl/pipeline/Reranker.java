@@ -123,10 +123,10 @@ public class Reranker extends SemanticRoleLabeler {
 		
 			List<ArgMap> candidates = acModule.beamSearch(pred,
 					aiModule.beamSearch(pred, aiBeam), acBeam);
-			List<Map<Integer, Double>> candidate_representations = new LinkedList<Map<Integer, Double>>(); 
+			List<Map<Integer, Double>> candidate_representations = new LinkedList<>();
 			for (ArgMap argMap : candidates) {
-				ArrayList<Integer> indices = new ArrayList<Integer>();
-				Map<Integer, Double> nonbinFeats = new TreeMap<Integer, Double>();
+				ArrayList<Integer> indices = new ArrayList<>();
+				Map<Integer, Double> nonbinFeats = new TreeMap<>();
 				
 				collectPipelineFeatureIndices(pred, argMap, indices,
 						nonbinFeats);
@@ -224,21 +224,21 @@ public class Reranker extends SemanticRoleLabeler {
 		List<Feature> aiFeatures = allAIfeatures.get(allAIfeatures.POSPrefixes[aiprefix]);
 		List<Feature> acFeatures = allACfeatures.get(allACfeatures.POSPrefixes[acprefix]);
 		
-		List<String> processedargs = new LinkedList<String>();
+		List<String> processedargs = new LinkedList<>();
 		for (Word arg : argMap.keySet()) {		
 			boolean hybrid = false;
 			
 			Integer aiOffset = 0;
-			HashSet<Integer> currentInstance = new HashSet<Integer>();
-			HashSet<Integer> currentBackup = new HashSet<Integer>();
+			HashSet<Integer> currentInstance = new HashSet<>();
+			HashSet<Integer> currentBackup = new HashSet<>();
 			
-			Map<Integer, Double> currentNonbinary = new TreeMap<Integer, Double>();
+			Map<Integer, Double> currentNonbinary = new TreeMap<>();
 			boolean clear = false;
-			List<NNThread> nnfeats = new LinkedList<NNThread>();
+			List<NNThread> nnfeats = new LinkedList<>();
 			Integer acOffset = 0;
 						
 			clear = false;
-			nnfeats = new LinkedList<NNThread>();
+			nnfeats = new LinkedList<>();
 			//tmp = null;
 			for (Feature f : acFeatures) {
 				if(f instanceof DependencyPathEmbedding) {
@@ -298,7 +298,7 @@ public class Reranker extends SemanticRoleLabeler {
 			this.p = p;
 			this.a = a;
 			this.offset = offset;
-			this.feats = new TreeMap<Integer, Double>();
+			this.feats = new TreeMap<>();
 		}
 		
 		@Override

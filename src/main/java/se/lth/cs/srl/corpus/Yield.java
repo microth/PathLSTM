@@ -66,7 +66,7 @@ public class Yield extends TreeSet<Word> implements Comparable<Yield> {
 	public Collection<Yield> explode() {
 		if (isContinuous())
 			return Arrays.asList(this);
-		Collection<Yield> ret = new TreeSet<Yield>();
+		Collection<Yield> ret = new TreeSet<>();
 		String curArgLabel = argLabel;
 		Yield subYield = new Yield(pred, sen, curArgLabel);
 		for (int i = this.first().idx; i <= this.last().idx; ++i) {

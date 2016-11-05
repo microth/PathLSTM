@@ -284,7 +284,7 @@ public class MultiBindCompound extends AbstractInternalCompound
 		if(activate != null)
 			return activate.clone();
 
-		final List<Component> comps = new ArrayList<Component>();
+		final List<Component> comps = new ArrayList<>();
 
 		for(final FunctionCompound bind : inbind)
 			comps.add(bind);
@@ -364,7 +364,7 @@ public class MultiBindCompound extends AbstractInternalCompound
 		if(!super.optimize())
 			return false;
 
-		final List<Component> act = new ArrayList<Component>();
+		final List<Component> act = new ArrayList<>();
 
 		for(final FunctionCompound bind : inbind)
 			act.add(bind);

@@ -61,7 +61,7 @@ public class Word implements Serializable {
 	public Word(Sentence s) {
 		idx = 0;
 		isBOS = true;
-		children = new HashSet<Word>();
+		children = new HashSet<>();
 		this.Form = "<ROOT-FORM>";
 		this.Lemma = "<ROOT-LEMMA>";
 		this.POS = "<ROOT-POS>";
@@ -90,7 +90,7 @@ public class Word implements Serializable {
 		this.rep = new Double[] { 0.0 };
 
 		// children=new HashSet<Word>();
-		children = new HashSet<Word>();
+		children = new HashSet<>();
 		
 	}
 
@@ -410,13 +410,13 @@ public class Word implements Serializable {
 
 	public static List<Word> findPath(Word pred, Word arg) {
 
-		List<Word> predPath = pathToRoot(pred, new LinkedList<Word>());
-		List<Word> argPath = pathToRoot(arg, new LinkedList<Word>());
+		List<Word> predPath = pathToRoot(pred, new LinkedList<>());
+		List<Word> argPath = pathToRoot(arg, new LinkedList<>());
 
 		if (argPath == null || predPath == null)
 			return null;
 
-		List<Word> ret = new ArrayList<Word>();
+		List<Word> ret = new ArrayList<>();
 
 		int commonIndex = 0;
 		int min = (predPath.size() < argPath.size() ? predPath.size() : argPath
@@ -458,7 +458,7 @@ public class Word implements Serializable {
 		List<Word> path;
 
 		if (w.isBOS) {
-			path = new ArrayList<Word>();
+			path = new ArrayList<>();
 			path.add(w);
 			return path;
 		}
@@ -500,7 +500,7 @@ public class Word implements Serializable {
 	 * @return
 	 */
 	private static Collection<Word> getDominated(Collection<Word> words) {
-		Collection<Word> ret = new HashSet<Word>(words);
+		Collection<Word> ret = new HashSet<>(words);
 		for (Word c : words)
 			ret.addAll(getDominated(c.getChildren()));
 		return ret;
@@ -521,7 +521,7 @@ public class Word implements Serializable {
 		if (pred.idx == this.idx) // If the predicate is the argument, we don't
 									// consider the yield
 			return ret;
-		Set<Integer> args = new TreeSet<Integer>();
+		Set<Integer> args = new TreeSet<>();
 		for (Word w : argSet)
 			args.add(w.getIdx());
 		for (Word child : children) {
@@ -580,16 +580,16 @@ public class Word implements Serializable {
 		if (span != null)
 			return span;
 
-		span = new TreeSet<Word>(new Comparator<Word>() {
-			@Override
-			public int compare(Word o1, Word o2) {
-				return o1.getIdx() < o2.getIdx() ? -1
-						: o1.getIdx() > o2.getIdx() ? 1 : 0;
-			}
-		});
+		span = new TreeSet<>(new Comparator<Word>() {
+            @Override
+            public int compare(Word o1, Word o2) {
+                return o1.getIdx() < o2.getIdx() ? -1
+                        : o1.getIdx() > o2.getIdx() ? 1 : 0;
+            }
+        });
 		span.add(this);
 
-		List<Word> children = new LinkedList<Word>();
+		List<Word> children = new LinkedList<>();
 		children.addAll(this.getChildren());
 		while (!children.isEmpty()) {
 			Word c = children.remove(0);

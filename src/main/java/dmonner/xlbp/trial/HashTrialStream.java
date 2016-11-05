@@ -37,9 +37,9 @@ public abstract class HashTrialStream extends AbstractTrialStream
 		super(name, net, split);
 
 		this.perFold = perFold;
-		this.trainCache = new ArrayQueue<Trial>(cacheSize);
-		this.testCache = new ArrayQueue<Trial>(cacheSize);
-		this.validCache = new ArrayQueue<Trial>(cacheSize);
+		this.trainCache = new ArrayQueue<>(cacheSize);
+		this.testCache = new ArrayQueue<>(cacheSize);
+		this.validCache = new ArrayQueue<>(cacheSize);
 
 		this.permutation = new ArrayQueue[nFolds()];
 

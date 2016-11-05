@@ -50,7 +50,7 @@ public class PredicateDisambiguator implements PipelineStep {
 	}
 
 	private Map<String, List<String>> createLexicon(String lexicondir) {
-		Map<String, List<String>> retval = new HashMap<String, List<String>>();
+		Map<String, List<String>> retval = new HashMap<>();
 		File[] files = new File(lexicondir).listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".xml");
@@ -69,7 +69,7 @@ public class PredicateDisambiguator implements PipelineStep {
 					String lexeme = line.replaceAll(".*name=\"", "")
 							.replaceAll("\".*", "");
 					if (!retval.containsKey(lexeme))
-						retval.put(lexeme, new LinkedList<String>());
+						retval.put(lexeme, new LinkedList<>());
 					retval.get(lexeme).add(framename);
 				}
 			} catch (IOException e) {
@@ -112,8 +112,8 @@ public class PredicateDisambiguator implements PipelineStep {
 					sense = predicateReference.getSimpleSense(pred, POSPrefix);
 				} else {
 					Model m = getModel(filename);
-					Collection<Integer> indices = new TreeSet<Integer>();
-					Map<Integer, Double> nonbinFeats = new TreeMap<Integer, Double>();
+					Collection<Integer> indices = new TreeSet<>();
+					Map<Integer, Double> nonbinFeats = new TreeMap<>();
 					Integer offset = 0;
 					for (Feature f : featureSet.get(POSPrefix)) {
 						f.addFeatures(indices, nonbinFeats, pred, null, offset,
@@ -183,7 +183,7 @@ public class PredicateDisambiguator implements PipelineStep {
 	@Override
 	public void readModels(ZipFile zipFile) throws IOException,
 			ClassNotFoundException {
-		models = new HashMap<String, Model>();
+		models = new HashMap<>();
 		AbstractStep.readModels(zipFile, models, getModelFileName());
 	}
 

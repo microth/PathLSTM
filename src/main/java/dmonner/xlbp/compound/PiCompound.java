@@ -151,7 +151,7 @@ public class PiCompound extends AbstractWeightedCompound
 	@Override
 	public Component[] getComponents()
 	{
-		final List<Component> list = new ArrayList<Component>();
+		final List<Component> list = new ArrayList<>();
 		for(final FunctionCompound in : ins)
 			list.add(in);
 		list.add(pi);
@@ -175,7 +175,7 @@ public class PiCompound extends AbstractWeightedCompound
 		if(!super.optimize())
 			return false;
 
-		final List<FunctionCompound> list = new ArrayList<FunctionCompound>(ins.length);
+		final List<FunctionCompound> list = new ArrayList<>(ins.length);
 		for(final FunctionCompound in : ins)
 			list.add(in);
 

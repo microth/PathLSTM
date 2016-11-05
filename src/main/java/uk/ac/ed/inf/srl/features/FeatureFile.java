@@ -32,7 +32,7 @@ public class FeatureFile {
 
 	public static Map<String, List<String>> readFile(BufferedReader in)
 			throws IOException {
-		Map<String, List<String>> ret = new HashMap<String, List<String>>();
+		Map<String, List<String>> ret = new HashMap<>();
 		List<String> array = null;
 		String line, prefix = null;
 		while ((line = in.readLine()) != null) {
@@ -41,7 +41,7 @@ public class FeatureFile {
 			} else if (prefix == null) { // Prefix was null, the line contains a
 											// POS-tag
 				prefix = line;
-				array = new ArrayList<String>();
+				array = new ArrayList<>();
 			} else if (line.equals("")) { // Empty line, this marks the end of a
 											// feature set
 				ret.put(prefix, array);

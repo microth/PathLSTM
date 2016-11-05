@@ -68,7 +68,7 @@ public class DataReader {
 		
 		if(supplement) {
 			final Step step = trial.nextStep();
-			Map<Integer, Float> inputmap = new TreeMap<Integer, Float>();
+			Map<Integer, Float> inputmap = new TreeMap<>();
 			for(int i=1; i<(inputs.length-negoffset); i++)
 				inputmap.put(Integer.valueOf(inputs[i]), 1.0F);
 			step.addInput(new Input(((InputCompound)net.getComponentByName("ExtraInput")).getInputLayer(), inputmap));

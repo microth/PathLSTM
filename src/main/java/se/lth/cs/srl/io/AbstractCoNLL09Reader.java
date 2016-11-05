@@ -66,7 +66,7 @@ public abstract class AbstractCoNLL09Reader implements SentenceReader {
 
 	@Override
 	public List<Sentence> readAll() {
-		ArrayList<Sentence> ret = new ArrayList<Sentence>();
+		ArrayList<Sentence> ret = new ArrayList<>();
 		for (Sentence s : this)
 			ret.add(s);
 		ret.trimToSize();

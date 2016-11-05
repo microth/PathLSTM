@@ -47,7 +47,7 @@ public class OpenNLPToolsTokenizerWrapper implements Tokenizer {
 	@Override
 	public StringInText[] tokenizeplus(String sentence) {
 		Reader r = new StringReader(sentence);
-		List<StringInText> l = new ArrayList<StringInText>();
+		List<StringInText> l = new ArrayList<>();
 		for (String s : tokenize(sentence)) {
 			Word w = new Word(s);
 			l.add(new StringInText(w.word(), w.beginPosition() + startpos, w

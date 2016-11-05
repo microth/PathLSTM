@@ -27,7 +27,7 @@ public class WordEmbedding implements Serializable {
 	private final Map<String, EmbeddingEntry> map;
 
 	public WordEmbedding(DataInput input) throws IOException {
-		map = new HashMap<String, EmbeddingEntry>();
+		map = new HashMap<>();
 		read(input);
 	}
 
@@ -36,7 +36,7 @@ public class WordEmbedding implements Serializable {
 	}
 
 	public WordEmbedding(File dataFile, int dim) throws IOException {
-		map = new HashMap<String, EmbeddingEntry>();
+		map = new HashMap<>();
 		if (dataFile != null) {
 			InputStream is = new FileInputStream(dataFile);
 			if (dataFile.toString().endsWith(".gz"))

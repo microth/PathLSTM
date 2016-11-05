@@ -139,7 +139,7 @@ public abstract class WeightVector implements Serializable {
 
 		public BinarySparseVector(BinaryLibLinearVector vec) {
 			super(vec.bias, vec.features, 2);
-			weightMap = new HashMap<Integer, Float>();
+			weightMap = new HashMap<>();
 			for (int i = 0; i < vec.features; ++i) {
 				if (vec.weights[i] != 0)
 					weightMap.put(i, vec.weights[i]);
@@ -151,7 +151,7 @@ public abstract class WeightVector implements Serializable {
 		public BinarySparseVector(BufferedReader in, int features, double bias)
 				throws IOException {
 			super(bias, features, 2);
-			weightMap = new HashMap<Integer, Float>();
+			weightMap = new HashMap<>();
 			String str;
 
 			for (int i = 0; (str = in.readLine()) != null; ++i) {
@@ -262,7 +262,7 @@ public abstract class WeightVector implements Serializable {
 
 		public MultipleSparseVector(MultipleLibLinearVector vec) {
 			super(vec.bias, vec.features, vec.classes);
-			weightMap = new HashMap<Integer, WeightArray>();
+			weightMap = new HashMap<>();
 			for (int i = 0; i < vec.features; ++i) {
 				WeightArray wa = new WeightArray(classes);
 				boolean notNull = false;
@@ -285,7 +285,7 @@ public abstract class WeightVector implements Serializable {
 		public MultipleSparseVector(BufferedReader in, int features,
 				int classes, double bias) throws IOException {
 			super(bias, features, classes);
-			weightMap = new HashMap<Integer, WeightArray>();
+			weightMap = new HashMap<>();
 			String str;
 			for (int i = 0; (str = in.readLine()) != null; ++i) {
 				WeightArray weights = new WeightArray(classes);

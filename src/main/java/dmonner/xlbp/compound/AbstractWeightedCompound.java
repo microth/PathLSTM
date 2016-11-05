@@ -157,7 +157,7 @@ public abstract class AbstractWeightedCompound extends AbstractInternalCompound 
 		{
 			final AbstractWeightedCompound that = (AbstractWeightedCompound) comp;
 
-			final List<WeightBank> list = new ArrayList<WeightBank>(that.conn.length);
+			final List<WeightBank> list = new ArrayList<>(that.conn.length);
 			for(final WeightBank bank : that.conn)
 				if(copier.copyExists(bank))
 					list.add(copier.getCopyOf(bank));

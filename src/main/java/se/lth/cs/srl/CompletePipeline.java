@@ -189,9 +189,9 @@ public class CompletePipeline {
 	private static int parseCoNLL09(CompletePipelineCMDLineOptions options,
 			CompletePipeline pipeline, BufferedReader in, SentenceWriter writer)
 			throws IOException, Exception {
-		List<String> forms = new ArrayList<String>();
+		List<String> forms = new ArrayList<>();
 		forms.add("<root>");
-		List<Boolean> isPred = new ArrayList<Boolean>();
+		List<Boolean> isPred = new ArrayList<>();
 		isPred.add(false);
 		String str;
 		int senCount = 0;

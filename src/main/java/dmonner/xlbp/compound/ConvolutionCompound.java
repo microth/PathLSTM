@@ -221,7 +221,7 @@ public class ConvolutionCompound extends AbstractInternalCompound implements Int
 	@Override
 	public Component[] getComponents()
 	{
-		final List<Component> list = new ArrayList<Component>();
+		final List<Component> list = new ArrayList<>();
 		list.add(af);
 		list.add(bf);
 		for(int i = 0; i < size; i++)

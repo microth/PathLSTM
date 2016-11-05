@@ -53,7 +53,7 @@ public class LibLinearModel implements Model {
 	@Override
 	public List<Label> classifyProb(Collection<Integer> indices,
 			Map<Integer, Double> nonbinFeats) {
-		ArrayList<Label> ret = new ArrayList<Label>(labels.size());
+		ArrayList<Label> ret = new ArrayList<>(labels.size());
 		double[] probs = weightVector.computeAllProbs(indices, nonbinFeats);
 		for (int i = 0; i < probs.length; ++i) {
 			ret.add(new Label(labels.get(i), probs[i]));
@@ -79,7 +79,7 @@ public class LibLinearModel implements Model {
 	}
 
 	protected void parseHeader(BufferedReader in) throws IOException {
-		labels = new ArrayList<Integer>();
+		labels = new ArrayList<>();
 		solverType = in.readLine().substring("solver_type ".length());
 		if (Short.parseShort(in.readLine().substring("nr_class ".length())) == 0)
 			throw new IOException("Error while parsing header! Model is empty!");

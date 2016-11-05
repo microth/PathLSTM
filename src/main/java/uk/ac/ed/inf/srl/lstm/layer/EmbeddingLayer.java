@@ -19,10 +19,10 @@ public class EmbeddingLayer {
 	
 	public EmbeddingLayer() {
 		size = 0;
-		internalLayers = new ArrayList<String>();
-		internalEmbeddings = new ArrayList<Map<Integer, Float[]>>();
-		internalLayersBegin = new ArrayList<Integer>();
-		internalLayersEnd = new ArrayList<Integer>();
+		internalLayers = new ArrayList<>();
+		internalEmbeddings = new ArrayList<>();
+		internalLayersBegin = new ArrayList<>();
+		internalLayersEnd = new ArrayList<>();
 	}
 
 	public int getNumberOfInputs() {
@@ -89,8 +89,8 @@ public class EmbeddingLayer {
 	
 	private Map<Integer, Float[]> readVectors(File vectors, File lexicon) {
 		BufferedReader br = null;
-		Map<String, Integer> tmp = new HashMap<String, Integer>();
-		Map<Integer, Float[]> retval = new TreeMap<Integer, Float[]>();		
+		Map<String, Integer> tmp = new HashMap<>();
+		Map<Integer, Float[]> retval = new TreeMap<>();
 
 		tmp.put("=unk=", 0);
 		try {

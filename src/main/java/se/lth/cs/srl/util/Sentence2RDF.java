@@ -131,7 +131,7 @@ public class Sentence2RDF {
 		if (argMap.isEmpty()) {
 			return "[]";
 		}
-		TreeSet<Word> ts = new TreeSet<Word>(Word.WORD_LINEAR_ORDER_COMPARATOR);
+		TreeSet<Word> ts = new TreeSet<>(Word.WORD_LINEAR_ORDER_COMPARATOR);
 		ts.addAll(argMap.keySet());
 		String tmp = "";
 		for (Word word : ts) {

@@ -82,9 +82,9 @@ public class TrialSet extends AbstractTrialStream
 		super(name, net, split);
 
 		rand = random;
-		trainCache = new ArrayQueue<Trial>();
-		testCache = new ArrayQueue<Trial>();
-		validCache = new ArrayQueue<Trial>();
+		trainCache = new ArrayQueue<>();
+		testCache = new ArrayQueue<>();
+		validCache = new ArrayQueue<>();
 
 		// If we have specified sizes for the folds
 		if(foldSizes.length > 0)
@@ -165,9 +165,9 @@ public class TrialSet extends AbstractTrialStream
 			final List<Target> targets = entry.getValue();
 			final int n = layer.size() == 1 ? 2 : layer.size();
 
-			final List<List<Target>> byBit = new ArrayList<List<Target>>(n);
+			final List<List<Target>> byBit = new ArrayList<>(n);
 			for(int i = 0; i < n; i++)
-				byBit.add(new ArrayList<Target>());
+				byBit.add(new ArrayList<>());
 
 			// Examine the active bit in each Target and put it in the appropriate bucket
 			for(final Target target : targets)
@@ -252,9 +252,9 @@ public class TrialSet extends AbstractTrialStream
 	private Map<TargetLayer, List<Target>> groupTargetsByLayer(final Trial[] set)
 	{
 		// Collect all Targets in the training set and sort them by TargetLayer
-		final Map<TargetLayer, List<Target>> byLayer = new HashMap<TargetLayer, List<Target>>();
+		final Map<TargetLayer, List<Target>> byLayer = new HashMap<>();
 		for(final TargetLayer layer : getMetaNetwork().getTargetLayers())
-			byLayer.put(layer, new ArrayList<Target>());
+			byLayer.put(layer, new ArrayList<>());
 
 		for(final Trial trial : set)
 			for(final Step step : trial.getSteps())

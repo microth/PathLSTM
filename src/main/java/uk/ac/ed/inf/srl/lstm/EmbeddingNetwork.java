@@ -62,10 +62,10 @@ public class EmbeddingNetwork extends Network {
 		this.dropout = options.dropout;
 		
 		size = 0;
-		layers = new ArrayList<String>();
-		embeddings = new ArrayList<Map<Integer, Float[]>>();
-		layersBegin = new ArrayList<Integer>();
-		layersEnd = new ArrayList<Integer>();
+		layers = new ArrayList<>();
+		embeddings = new ArrayList<>();
+		layersBegin = new ArrayList<>();
+		layersEnd = new ArrayList<>();
 		supplementary = false;
 	}
 	
@@ -178,8 +178,8 @@ public class EmbeddingNetwork extends Network {
 	
 	private Map<Integer, Float[]> readVectors(File vectors, File lexicon) {
 		BufferedReader br = null;
-		Map<String, Integer> tmp = new HashMap<String, Integer>();
-		Map<Integer, Float[]> retval = new TreeMap<Integer, Float[]>();		
+		Map<String, Integer> tmp = new HashMap<>();
+		Map<Integer, Float[]> retval = new TreeMap<>();
 
 		tmp.put("=unk=", 0);
 //		tmp.put("unknown", 0);

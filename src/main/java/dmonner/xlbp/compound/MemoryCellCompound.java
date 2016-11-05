@@ -92,7 +92,7 @@ public class MemoryCellCompound extends AbstractWeightedCompound
 		super(name);
 		this.size = size;
 
-		final List<Component> act = new ArrayList<Component>();
+		final List<Component> act = new ArrayList<>();
 
 		if(inputSquash != null)
 		{
@@ -546,7 +546,7 @@ public class MemoryCellCompound extends AbstractWeightedCompound
 		if(!super.optimize())
 			return false;
 
-		final List<Component> act = new ArrayList<Component>();
+		final List<Component> act = new ArrayList<>();
 		for(final Component comp : activate)
 			act.add(comp);
 

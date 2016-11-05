@@ -86,8 +86,8 @@ public class ArgDependentEmbedding extends ContinuousFeature {
 	}
 
 	private Double getAvgFeatureValue(Word word) {
-		List<Word> allChildren = new LinkedList<Word>();
-		List<Word> processed = new LinkedList<Word>();
+		List<Word> allChildren = new LinkedList<>();
+		List<Word> processed = new LinkedList<>();
 
 		double ret = 0.0;
 		allChildren.add(word);

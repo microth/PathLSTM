@@ -28,7 +28,7 @@ public class Predicate extends Word {
 
 	public Predicate(Word w, Sentence s) {
 		super(w, s);
-		argmap = new TreeMap<Word, String>(mySentence.wordComparator);
+		argmap = new TreeMap<>(mySentence.wordComparator);
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class Predicate extends Word {
 
 		if (CoNLL2009Columns.length > 13 + offset)
 			this.sense = CoNLL2009Columns[13 + offset];
-		argmap = new TreeMap<Word, String>(mySentence.wordComparator);
+		argmap = new TreeMap<>(mySentence.wordComparator);
 	}
 
 	public Map<Word, String> getArgMap() {
@@ -104,12 +104,12 @@ public class Predicate extends Word {
 	}
 	
 	public float[] getACPathEmbedding(Word word) {
-		if(argCEmbeds==null) argCEmbeds = new HashMap<Word, float[]>();
+		if(argCEmbeds==null) argCEmbeds = new HashMap<>();
 		return argCEmbeds.containsKey(word)?argCEmbeds.get(word):null;
 	}
 	
 	public float[] getAIPathEmbedding(Word word) {
-		if(argIEmbeds==null) argIEmbeds = new HashMap<Word, float[]>();
+		if(argIEmbeds==null) argIEmbeds = new HashMap<>();
 		return argIEmbeds.containsKey(word)?argIEmbeds.get(word):null;
 	}
 }

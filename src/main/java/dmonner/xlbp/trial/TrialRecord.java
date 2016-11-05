@@ -11,7 +11,7 @@ public class TrialRecord
 	public TrialRecord(final Trial trial)
 	{
 		this.trial = trial;
-		this.recordings = new ArrayList<StepRecord>(trial.size());
+		this.recordings = new ArrayList<>(trial.size());
 
 		for(final Step step : trial.getSteps())
 			recordings.add(step.getLastRecording());

@@ -195,7 +195,7 @@ public class FunctionCompound extends AbstractWeightedCompound
 		if(!super.optimize())
 			return false;
 
-		final List<Component> activate = new ArrayList<Component>(5);
+		final List<Component> activate = new ArrayList<>(5);
 
 		if(bias != null)
 			if(bias.optimize())

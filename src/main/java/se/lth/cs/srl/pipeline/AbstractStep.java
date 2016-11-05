@@ -31,7 +31,7 @@ public abstract class AbstractStep implements PipelineStep {
 	@Override
 	public void readModels(ZipFile zipFile) throws IOException,
 			ClassNotFoundException {
-		models = new HashMap<String, Model>();
+		models = new HashMap<>();
 		readModels(zipFile, models, getModelFileName());
 	}
 

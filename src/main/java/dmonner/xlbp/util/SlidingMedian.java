@@ -48,13 +48,13 @@ public class SlidingMedian
 		};
 
 		// Create and populate the heaps with the default median value
-		this.samples = new ArrayQueue<IndexAwareHeapNode<Float>>(window);
+		this.samples = new ArrayQueue<>(window);
 
-		this.less = new IndexAwareHeap<Float>(lessSize); // max heap
+		this.less = new IndexAwareHeap<>(lessSize); // max heap
 		for(int i = 0; i < lessSize; i++)
 			this.samples.push(this.less.add(defaultMedian));
 
-		this.more = new IndexAwareHeap<Float>(moreSize, reverseComp); // min heap
+		this.more = new IndexAwareHeap<>(moreSize, reverseComp); // min heap
 		for(int i = 0; i < moreSize; i++)
 			this.samples.push(this.more.add(defaultMedian));
 	}
@@ -87,7 +87,7 @@ public class SlidingMedian
 	public void update(final float sample)
 	{
 		final IndexAwareHeapNode<Float> out = samples.pop();
-		final IndexAwareHeapNode<Float> in = new IndexAwareHeapNode<Float>(sample);
+		final IndexAwareHeapNode<Float> in = new IndexAwareHeapNode<>(sample);
 		samples.push(in);
 
 		update(in, out);

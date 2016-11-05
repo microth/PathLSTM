@@ -103,7 +103,7 @@ public class FrameNetXMLWriter implements SentenceWriter {
 							labelID++;
 						}
 					else {
-						Map<String, List<Word[]>> label2spans = new HashMap<String, List<Word[]>>();
+						Map<String, List<Word[]>> label2spans = new HashMap<>();
 						for (Word a : p.getArgMap().keySet()) {
 							Word[] begin_end = DasFilter.pass(p, a);
 							if (begin_end == null)
@@ -112,12 +112,12 @@ public class FrameNetXMLWriter implements SentenceWriter {
 							String label = p.getArgMap().get(a);
 							if (!label2spans.containsKey(label))
 								label2spans
-										.put(label, new LinkedList<Word[]>());
+										.put(label, new LinkedList<>());
 							label2spans.get(label).add(begin_end);
 
 						}
 
-						Map<String, List<Word[]>> newlabel2spans = new HashMap<String, List<Word[]>>();
+						Map<String, List<Word[]>> newlabel2spans = new HashMap<>();
 						for (String label : label2spans.keySet()) {
 							List<Word[]> begin_ends = DasFilter
 									.merge(label2spans.get(label));

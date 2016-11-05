@@ -24,7 +24,7 @@ public class Sentence extends ArrayList<Word> {
 	private Sentence() {
 		Word BOS = new Word(this);
 		super.add(BOS); // Add the root token
-		predicates = new ArrayList<Predicate>();
+		predicates = new ArrayList<>();
 	}
 
 	// generates copy of s -- but without SRL annotation

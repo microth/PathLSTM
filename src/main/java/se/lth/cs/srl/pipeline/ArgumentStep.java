@@ -47,7 +47,7 @@ public abstract class ArgumentStep extends AbstractStep {
 
 		Integer offset = 0;
 		boolean clear = false;
-		List<NNThread> nnfeats = new LinkedList<NNThread>(); 
+		List<NNThread> nnfeats = new LinkedList<>();
 
 		for (Feature f : featureSet.get(POSPrefix)) {			
 			if(f instanceof DependencyPathEmbedding) {
@@ -93,7 +93,7 @@ public abstract class ArgumentStep extends AbstractStep {
 			this.p = p;
 			this.a = a;
 			this.offset = offset;
-			this.feats = new HashMap<Integer, Double>();
+			this.feats = new HashMap<>();
 		}
 		
 		@Override
@@ -115,8 +115,8 @@ public abstract class ArgumentStep extends AbstractStep {
 		}
 		Model m = models.get(POSPrefix);
 
-		Collection<Integer> indices = new TreeSet<Integer>();
-		Map<Integer, Double> nonbinFeats = new TreeMap<Integer, Double>();
+		Collection<Integer> indices = new TreeSet<>();
+		Map<Integer, Double> nonbinFeats = new TreeMap<>();
 		collectFeatures(pred, arg, POSPrefix, indices, nonbinFeats);
 
 		if(Parse.parseOptions.externalNNs) {

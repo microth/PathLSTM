@@ -133,7 +133,7 @@ public class SimpleCompound extends AbstractWeightedCompound
 		if(!super.optimize())
 			return false;
 
-		final List<Component> activate = new ArrayList<Component>(2);
+		final List<Component> activate = new ArrayList<>(2);
 
 		if(net != null)
 			if(net.optimize())

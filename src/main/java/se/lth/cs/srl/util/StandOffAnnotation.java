@@ -36,7 +36,7 @@ public class StandOffAnnotation {
 				annos[i] = new SentenceAnnotation(i == 0 ? 0
 						: sentEndIndices.get(i - 1) + 1, sentEndIndices.get(i));
 
-			id2sent = new HashMap<String, Integer>();
+			id2sent = new HashMap<>();
 			readAnnotations(standoffFile);
 		} else {
 			Object[] objects = readSentencesAndFrames(standoffFile);
@@ -111,8 +111,8 @@ public class StandOffAnnotation {
 	}
 
 	private Object[] readSentencesAndFrames(File inputCorpus) {
-		List<String> retval = new LinkedList<String>();
-		List<SentenceAnnotation> anno = new LinkedList<SentenceAnnotation>();
+		List<String> retval = new LinkedList<>();
+		List<SentenceAnnotation> anno = new LinkedList<>();
 
 		// int offset = 0;
 		BufferedReader br = null;
@@ -210,8 +210,8 @@ public class StandOffAnnotation {
 	}
 
 	private List<String> readSentences(File inputCorpus) {
-		List<String> retval = new LinkedList<String>();
-		sentEndIndices = new LinkedList<Integer>();
+		List<String> retval = new LinkedList<>();
+		sentEndIndices = new LinkedList<>();
 		int offset = 0;
 		BufferedReader br = null;
 		try {

@@ -26,8 +26,8 @@ public class NetworkStat extends AbstractStat
 		all = new ConnectionStat();
 
 		// Do a deep dive into net to find all unique Connections
-		final Set<Connection> cs = new HashSet<Connection>();
-		final Queue<Component> q = new LinkedList<Component>();
+		final Set<Connection> cs = new HashSet<>();
+		final Queue<Component> q = new LinkedList<>();
 
 		q.add(net);
 

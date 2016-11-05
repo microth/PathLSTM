@@ -537,8 +537,8 @@ public class Network implements Component
 
 	public int nWeightsDeep()
 	{
-		final Map<Layer, Integer> map = new HashMap<Layer, Integer>();
-		final Queue<Component> q = new LinkedList<Component>();
+		final Map<Layer, Integer> map = new HashMap<>();
+		final Queue<Component> q = new LinkedList<>();
 
 		q.add(this);
 

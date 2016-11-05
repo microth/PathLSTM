@@ -41,13 +41,13 @@ public class FeatureGenerator implements Serializable {
 	
 	public FeatureGenerator() {
 		br = null;
-		cache = new HashMap<FeatureName, Feature>();
-		qcache = new HashMap<String, Feature>();
+		cache = new HashMap<>();
+		qcache = new HashMap<>();
 	}
 
 	public Map<Step, FeatureSet> readFeatureFiles(Map<Step, File> files,
 			BrownCluster bc, WordEmbedding we) throws IOException {
-		Map<Step, FeatureSet> featureSets = new HashMap<Step, FeatureSet>();
+		Map<Step, FeatureSet> featureSets = new HashMap<>();
 		Map<String, List<String>> piNames = FeatureFile.readFile(files
 				.get(Step.pi));
 		featureSets.put(Step.pi, createFeatureSet(piNames, true, bc, we));
@@ -61,9 +61,9 @@ public class FeatureGenerator implements Serializable {
 
 	private FeatureSet createFeatureSet(Map<String, List<String>> names,
 			boolean includeAllWords, BrownCluster bc, WordEmbedding we) {
-		Map<String, List<Feature>> fs = new HashMap<String, List<Feature>>();
+		Map<String, List<Feature>> fs = new HashMap<>();
 		for (String POSPrefix : names.keySet()) {
-			List<Feature> list = new ArrayList<Feature>();
+			List<Feature> list = new ArrayList<>();
 			fs.put(POSPrefix, list);
 			for (String featureNameStr : names.get(POSPrefix)) {
 				if (featureNameStr.contains("+")
@@ -87,7 +87,7 @@ public class FeatureGenerator implements Serializable {
 						String step = featureNameStr.substring(13/*,16*/);
 						if(nets==null) {
 							System.err.println("Creating DataConverter...");
-							nets = new TreeMap<String, EmbeddingNetwork>();			
+							nets = new TreeMap<>();
 						}
 						if(!nets.containsKey(step)) {
 							System.err.println("Loading network " + step);

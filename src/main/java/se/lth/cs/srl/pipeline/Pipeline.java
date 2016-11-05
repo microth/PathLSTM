@@ -49,7 +49,7 @@ public class Pipeline extends SemanticRoleLabeler {
 					featureSets.get(Step.pd).POSPrefixes);
 		}
 		if (featureSets.containsKey(Step.ac)) {
-			argLabels = new ArrayList<String>();
+			argLabels = new ArrayList<>();
 		}
 		/*
 		 * if(featureSets.containsKey(Step.ao)){ convArgLabels=new
@@ -76,7 +76,7 @@ public class Pipeline extends SemanticRoleLabeler {
 
 	private void setup(Map<Step, FeatureSet> featureSets,
 			PredicateReference predicateReference, List<String> argLabels) {
-		steps = new ArrayList<PipelineStep>();
+		steps = new ArrayList<>();
 		for (Step step : Step.values()) {
 			if (featureSets.containsKey(step)) {
 				switch (step) {
@@ -132,7 +132,7 @@ public class Pipeline extends SemanticRoleLabeler {
 		if (predicateReference == null && argLabels == null)
 			return;
 		System.out.println("Extracting argument labels and predicate senses.");
-		Set<String> argLabelSet = new HashSet<String>();
+		Set<String> argLabelSet = new HashSet<>();
 		for (Sentence s : reader) {
 			for (Predicate p : s.getPredicates()) {
 				if (predicateReference != null)
@@ -204,16 +204,16 @@ public class Pipeline extends SemanticRoleLabeler {
 		ois.close();
 
 		// Then read the featurefiles from the model
-		Map<Step, FeatureSet> featureSets = new HashMap<Step, FeatureSet>();
+		Map<Step, FeatureSet> featureSets = new HashMap<>();
 
 		for (Step s : steps) {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					zipFile.getInputStream(zipFile
 							.getEntry(s.toString()+".feats"))));
 			Map<String, List<String>> names = FeatureFile.readFile(in);
-			Map<String, List<Feature>> features = new HashMap<String, List<Feature>>();
+			Map<String, List<Feature>> features = new HashMap<>();
 			for (String POSPrefix : names.keySet()) {
-				List<Feature> list = new ArrayList<Feature>();
+				List<Feature> list = new ArrayList<>();
 				for (String name : names.get(POSPrefix))
 					list.add(fg.getCachedFeature(name));
 				features.put(POSPrefix, list);

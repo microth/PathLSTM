@@ -48,7 +48,7 @@ public class ArgumentClassifier extends ArgumentStep {
 	}
 
 	private Map<String, List<String>> createLexicon(String lexicondir) {
-		Map<String, List<String>> retval = new HashMap<String, List<String>>();
+		Map<String, List<String>> retval = new HashMap<>();
 		File[] files = new File(lexicondir).listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".xml");
@@ -61,7 +61,7 @@ public class ArgumentClassifier extends ArgumentStep {
 				br = new BufferedReader(new FileReader(f));
 				String framename = f.getName().replaceAll("\\..*", "");
 				String line = "";
-				List<String> FEs = new LinkedList<String>();
+				List<String> FEs = new LinkedList<>();
 				while ((line = br.readLine()) != null) {
 					if (!line.contains("<FE "))
 						continue;
@@ -105,7 +105,7 @@ public class ArgumentClassifier extends ArgumentStep {
 
 				Integer offset = 0;
 				for (String s : strings) {
-					indices = new TreeSet<Integer>();
+					indices = new TreeSet<>();
 					for (Feature f : featureSet.get(POSPrefix)) {
 						if (f.getName().equals(s)) {
 							f.addFeatures(indices, nonbinFeats, pred, arg,
@@ -136,8 +136,8 @@ public class ArgumentClassifier extends ArgumentStep {
 						POSPrefix = featureSet.POSPrefixes[0];
 					}
 					Model m = models.get(POSPrefix);
-					Collection<Integer> indices = new TreeSet<Integer>();
-					Map<Integer, Double> nonbinFeats = new TreeMap<Integer, Double>();
+					Collection<Integer> indices = new TreeSet<>();
+					Map<Integer, Double> nonbinFeats = new TreeMap<>();
 					collectFeatures(pred, arg, POSPrefix, indices,
 							nonbinFeats);
 					List<Label> labels = m.classifyProb(indices, nonbinFeats);
@@ -175,7 +175,7 @@ public class ArgumentClassifier extends ArgumentStep {
 
 	List<ArgMap> beamSearch(Predicate pred, List<ArgMap> candidates,
 			int beamSize) {
-		ArrayList<ArgMap> ret = new ArrayList<ArgMap>();
+		ArrayList<ArgMap> ret = new ArrayList<>();
 		String POSPrefix = super.getPOSPrefix(pred.getPOS());
 		if (POSPrefix == null)
 			POSPrefix = super.featureSet.POSPrefixes[0]; // TODO fix me. or
@@ -184,16 +184,16 @@ public class ArgumentClassifier extends ArgumentStep {
 															// POS-tags
 		Model model = models.get(POSPrefix);
 		for (ArgMap argMap : candidates) { // Candidates from AI module
-			ArrayList<ArgMap> branches = new ArrayList<ArgMap>();
+			ArrayList<ArgMap> branches = new ArrayList<>();
 			branches.add(argMap);
-			SortedSet<ArgMap> newBranches = new TreeSet<ArgMap>(
-					ArgMap.REVERSE_PROB_COMPARATOR);
+			SortedSet<ArgMap> newBranches = new TreeSet<>(
+                    ArgMap.REVERSE_PROB_COMPARATOR);
 			for (Word arg : argMap.keySet()) { // TODO we can optimize this
 												// severely by not computing the
 												// labels for the same arg more
 												// than once.
-				Collection<Integer> indices = new TreeSet<Integer>();
-				Map<Integer, Double> nonbinFeats = new HashMap<Integer, Double>();
+				Collection<Integer> indices = new TreeSet<>();
+				Map<Integer, Double> nonbinFeats = new HashMap<>();
 				super.collectFeatures(pred, arg, POSPrefix, indices,
 						nonbinFeats);
 				
@@ -214,7 +214,7 @@ public class ArgumentClassifier extends ArgumentStep {
 					}
 				}
 				if(numoutputs>0) {
-					probs = new ArrayList<Label>(outputs.length);
+					probs = new ArrayList<>(outputs.length);
 					for (int j = 0; j < outputs.length; ++j) {
 						probs.add(new Label(j, (double)(outputs[j]/(double)numoutputs)));
 					}

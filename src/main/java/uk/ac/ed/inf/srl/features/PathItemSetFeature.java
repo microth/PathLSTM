@@ -39,7 +39,7 @@ public class PathItemSetFeature extends SetFeature {
 	@Override
 	public String[] getFeatureStrings(Predicate pred, Word arg) {
 		if (arg == null) {
-			List<String> allvalues = new LinkedList<String>();
+			List<String> allvalues = new LinkedList<>();
 			for (int i = 1, size = pred.getMySentence().size(); i < size; ++i) {
 				for (String s : getFeatureStrings(pred.getMySentence(),
 						pred.getIdx(), i))
@@ -73,9 +73,9 @@ public class PathItemSetFeature extends SetFeature {
 	}
 
 	List<String> computeNGrams(List<Word> path) {
-		List<String> retval = new LinkedList<String>();
+		List<String> retval = new LinkedList<>();
 
-		List<String> steps = new ArrayList<String>();
+		List<String> steps = new ArrayList<>();
 		for (int j = 1; j < ngramlength; j++) {
 			steps.add("TAB");
 		}

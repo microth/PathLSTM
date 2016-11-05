@@ -17,7 +17,7 @@ public class StanfordPTBTokenizer implements Tokenizer {
 	public String[] tokenize(String sentence) {
 		Reader r = new StringReader(sentence);
 		PTBTokenizer<Word> tokenizer = PTBTokenizer.newPTBTokenizer(r);
-		List<String> l = new ArrayList<String>();
+		List<String> l = new ArrayList<>();
 		while (tokenizer.hasNext()) {
 			Word w = tokenizer.next();
 			l.add(w.word());
@@ -33,7 +33,7 @@ public class StanfordPTBTokenizer implements Tokenizer {
 	public StringInText[] tokenizeplus(String sentence) {
 		Reader r = new StringReader(sentence);
 		PTBTokenizer<Word> tokenizer = PTBTokenizer.newPTBTokenizer(r);
-		List<StringInText> l = new ArrayList<StringInText>();
+		List<StringInText> l = new ArrayList<>();
 		while (tokenizer.hasNext()) {
 			Word w = tokenizer.next();
 			l.add(new StringInText(w.word(), w.beginPosition() + startpos, w

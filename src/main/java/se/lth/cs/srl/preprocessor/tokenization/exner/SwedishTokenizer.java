@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class SwedishTokenizer {
 	public ArrayList<String> tokenize(String sentence, Charset charset) {
-		ArrayList<String> tokens = new ArrayList<String>();
+		ArrayList<String> tokens = new ArrayList<>();
 
 		try {
 			sentence = preProcessSentence(sentence);

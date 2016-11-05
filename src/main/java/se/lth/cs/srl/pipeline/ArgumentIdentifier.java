@@ -63,11 +63,11 @@ public class ArgumentIdentifier extends ArgumentStep {
 	}
 
 	List<ArgMap> beamSearch(Predicate pred, int beamSize) {
-		List<ArgMap> candidates = new ArrayList<ArgMap>();
+		List<ArgMap> candidates = new ArrayList<>();
 		candidates.add(new ArgMap());
 		Sentence s = pred.getMySentence();
-		SortedSet<ArgMap> newCandidates = new TreeSet<ArgMap>(
-				ArgMap.REVERSE_PROB_COMPARATOR);
+		SortedSet<ArgMap> newCandidates = new TreeSet<>(
+                ArgMap.REVERSE_PROB_COMPARATOR);
 		String POSPrefix = super.getPOSPrefix(pred.getPOS());
 		if (POSPrefix == null)
 			POSPrefix = super.featureSet.POSPrefixes[0]; // TODO fix me. or
@@ -79,8 +79,8 @@ public class ArgumentIdentifier extends ArgumentStep {
 		for (int i = 1, size = s.size(); i < size; ++i) {
 			newCandidates.clear();
 			Word arg = s.get(i);
-			Collection<Integer> indices = new TreeSet<Integer>();
-			Map<Integer, Double> nonbinFeats = new TreeMap<Integer, Double>();
+			Collection<Integer> indices = new TreeSet<>();
+			Map<Integer, Double> nonbinFeats = new TreeMap<>();
 			super.collectFeatures(pred, arg, POSPrefix, indices, nonbinFeats);
 
 			List<Label> probs = null;
@@ -100,7 +100,7 @@ public class ArgumentIdentifier extends ArgumentStep {
 				}
 			}
 			if(numoutputs>0) {
-				probs = new ArrayList<Label>(outputs.length);
+				probs = new ArrayList<>(outputs.length);
 				for (int j = 0; j < outputs.length; ++j) {
 					probs.add(new Label(j, (double)(outputs[j]/(double)numoutputs)));
 				}

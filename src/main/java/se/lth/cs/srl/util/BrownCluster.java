@@ -28,7 +28,7 @@ public class BrownCluster implements Serializable {
 	private final Map<String, ClusterEntry> map;
 
 	public BrownCluster(DataInput input) throws IOException {
-		map = new HashMap<String, ClusterEntry>();
+		map = new HashMap<>();
 		read(input);
 	}
 
@@ -38,7 +38,7 @@ public class BrownCluster implements Serializable {
 
 	public BrownCluster(File dataFile, int shortLen, int threshold)
 			throws IOException {
-		map = new HashMap<String, ClusterEntry>();
+		map = new HashMap<>();
 		if (dataFile != null) {
 			InputStream is = new FileInputStream(dataFile);
 			if (dataFile.toString().endsWith(".gz"))
@@ -54,8 +54,8 @@ public class BrownCluster implements Serializable {
 			int threshold) throws IOException {
 		int sInd = 1;
 		int lInd = 1;
-		Map<Integer, Integer> sM = new HashMap<Integer, Integer>();
-		Map<Integer, Integer> lM = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> sM = new HashMap<>();
+		Map<Integer, Integer> lM = new HashMap<>();
 		String line;
 		Pattern tab = Pattern.compile("\t");
 		int lineCount = 0;

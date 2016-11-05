@@ -15,7 +15,7 @@ public class StepRecord
 	public StepRecord(final Step step)
 	{
 		this.step = step;
-		this.recordings = new HashMap<Layer, float[]>();
+		this.recordings = new HashMap<>();
 
 		for(final Layer layer : step.getRecordLayers())
 			recordings.put(layer, layer.getActivations().clone());

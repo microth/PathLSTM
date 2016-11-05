@@ -34,9 +34,9 @@ public class NetworkCopier
 	public NetworkCopier(final String prefix, final String suffix, final boolean copyState,
 			final boolean copyWeights)
 	{
-		this.copies = new HashMap<String, Component>();
-		this.originals = new HashMap<String, Component>();
-		this.banks = new HashMap<String, WeightBank>();
+		this.copies = new HashMap<>();
+		this.originals = new HashMap<>();
+		this.banks = new HashMap<>();
 		this.prefix = prefix;
 		this.suffix = suffix;
 		this.copyState = copyState;

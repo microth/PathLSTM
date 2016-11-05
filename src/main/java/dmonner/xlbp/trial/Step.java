@@ -31,10 +31,10 @@ public class Step
 	{
 		this.trial = trial;
 		this.net = trial.getMetaNetwork();
-		this.inputs = new HashMap<InputLayer, Input>();
-		this.targets = new HashMap<TargetLayer, Target>();
-		this.checks = new HashMap<Layer, LayerCheck>();
-		this.recordLayers = new HashSet<Layer>();
+		this.inputs = new HashMap<>();
+		this.targets = new HashMap<>();
+		this.checks = new HashMap<>();
+		this.recordLayers = new HashSet<>();
 		this.evaluate = true;
 		this.record = true;
 	}

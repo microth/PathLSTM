@@ -56,8 +56,8 @@ public class DataConverter implements Serializable {
 	}
 
 	private void createIndicesAndEmbeddingsFromFile(int x, String filename) {
-		Map<Integer, Float[]> emb = new TreeMap<Integer, Float[]>();
-		Map<String, Integer> index = new HashMap<String, Integer>();
+		Map<Integer, Float[]> emb = new TreeMap<>();
+		Map<String, Integer> index = new HashMap<>();
 		
 		BufferedReader br = null;
 		int i = 0;
@@ -93,7 +93,7 @@ public class DataConverter implements Serializable {
 	}
 	
 	private Map<String, Integer> readIndices(File file) {
-		Map<String, Integer> retval = new HashMap<String, Integer>();
+		Map<String, Integer> retval = new HashMap<>();
 		BufferedReader br = null;
 		try {
 			System.err.println("\tReading file " + file.toString());
@@ -125,7 +125,7 @@ public class DataConverter implements Serializable {
 		int index = indices[layer].containsKey(input)?indices[layer].get(input):0;
 		//System.err.print(input + "(" + index + ") ");
 		
-		TreeMap<Integer, Float> retval = new TreeMap<Integer, Float>();
+		TreeMap<Integer, Float> retval = new TreeMap<>();
 		if(embeddings[layer] != null) {
 			if(embeddings[layer].containsKey(index)) {
 				for(int j=0; j<layersizes[layer]; j++)

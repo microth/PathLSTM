@@ -91,7 +91,7 @@ public class DasFilter {
 	}
 
 	public static List<Word[]> merge(List<Word[]> list) {
-		List<Word[]> retval = new LinkedList<Word[]>();
+		List<Word[]> retval = new LinkedList<>();
 		retval.add(list.remove(0));
 		LIST: for (Word[] begin_end : list) {
 			// for(Word w : begin_end) {

@@ -13,9 +13,9 @@ public class ConstituentBuilder {
 	}
 
 	public String toString() {
-		TreeSet<Integer> children = new TreeSet<Integer>();
+		TreeSet<Integer> children = new TreeSet<>();
 		children.add(head.getIdx());
-		TreeSet<Integer> processed = new TreeSet<Integer>();
+		TreeSet<Integer> processed = new TreeSet<>();
 		while (!children.isEmpty()) {
 			Word c = sen.get(children.pollFirst());
 			if (!processed.contains(c.getIdx())) {

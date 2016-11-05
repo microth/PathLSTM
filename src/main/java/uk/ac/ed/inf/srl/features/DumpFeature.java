@@ -16,7 +16,7 @@ public class DumpFeature {
 		FeatureGenerator fg = (FeatureGenerator) ois.readObject();
 		Feature f = fg.getQFeature(FeatureName.LeftPOS, FeatureName.ArgFeats,
 				true, "V", null, null);
-		ArrayList<String> values = new ArrayList<String>();
+		ArrayList<String> values = new ArrayList<>();
 		values.addAll(f.indices.keySet());
 		Collections.sort(values);
 		for (String value : values) {

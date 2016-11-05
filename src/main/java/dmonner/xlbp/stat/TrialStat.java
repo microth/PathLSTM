@@ -20,7 +20,7 @@ public class TrialStat extends AbstractStat
 	public TrialStat(final Trial trial)
 	{
 		this.trial = trial;
-		this.steps = new ArrayList<StepStat>(trial.size());
+		this.steps = new ArrayList<>(trial.size());
 		this.targets = new TargetSetStat();
 		this.stepsCorrect = new FractionStat("Steps");
 		this.trialCorrect = new FractionStat("Trial");

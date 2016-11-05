@@ -103,7 +103,7 @@ public class WeightBank implements Component
 			truncate = true;
 
 			// start just upstream of the weight sender
-			final Queue<UpstreamComponent> q = new LinkedList<UpstreamComponent>();
+			final Queue<UpstreamComponent> q = new LinkedList<>();
 			q.add(wsend.getUpstream());
 
 			// while there are more upstream components to look at

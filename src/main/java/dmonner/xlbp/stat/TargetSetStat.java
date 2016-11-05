@@ -18,7 +18,7 @@ public class TargetSetStat extends AbstractStat
 
 	public TargetSetStat()
 	{
-		this.targets = new TreeMap<Layer, TargetStat>();
+		this.targets = new TreeMap<>();
 		this.bits = new BitStat("TotalBits");
 		this.error = new ErrorStat("TotalError");
 		this.correct = new FractionStat("TotalCorrect");

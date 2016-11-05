@@ -29,9 +29,9 @@ public class SentenceAnnotation {
 	public SentenceAnnotation(int startIndex, int endIndex) {
 		this.startIndex = startIndex;
 		this.endIndex = endIndex;
-		conceptAnno = new LinkedList<String[]>();
-		relationAnno = new LinkedList<String[]>();
-		id2conceptAnno = new HashMap<String, Integer>();
+		conceptAnno = new LinkedList<>();
+		relationAnno = new LinkedList<>();
+		id2conceptAnno = new HashMap<>();
 	}
 
 	public void addAnnotation(String[] num_anno_word) {
@@ -71,7 +71,7 @@ public class SentenceAnnotation {
 	}
 
 	public void apply(Sentence sen, boolean framenet) {
-		wordids = new LinkedList<List<Integer>>();
+		wordids = new LinkedList<>();
 
 		int[] begins = new int[sen.size() - 1];
 		int[] ends = new int[sen.size() - 1];
@@ -86,11 +86,11 @@ public class SentenceAnnotation {
 		}
 		System.err.println();
 
-		concept2spans = new HashMap<String, List<Integer[]>>();
-		concept2word = new HashMap<String, Word>();
-		concept2words = new HashMap<String, List<Word>>();
-		concept2label = new HashMap<String, String>();
-		TreeMap<Integer, String> pred2sense = new TreeMap<Integer, String>();
+		concept2spans = new HashMap<>();
+		concept2word = new HashMap<>();
+		concept2words = new HashMap<>();
+		concept2label = new HashMap<>();
+		TreeMap<Integer, String> pred2sense = new TreeMap<>();
 
 		int last_target = -1;
 		for (String[] anno : conceptAnno) {
@@ -99,7 +99,7 @@ public class SentenceAnnotation {
 			String[] parts = anno[1].split(" ");
 			String label = parts[0];
 
-			List<Integer> currids = new LinkedList<Integer>();
+			List<Integer> currids = new LinkedList<>();
 			for (int i = 1; i + 1 < parts.length; i += 2) {
 				int startCharacter = Integer.parseInt(anno[1].split(" ")[i]);
 				int endCharacter = Integer.parseInt(anno[1].split(" ")[i + 1]);
@@ -136,7 +136,7 @@ public class SentenceAnnotation {
 			// System.out.println(anno[0]);
 
 			if (!concept2spans.containsKey(anno[0]))
-				concept2spans.put(anno[0], new LinkedList<Integer[]>());
+				concept2spans.put(anno[0], new LinkedList<>());
 			concept2spans.get(anno[0]).add(
 					currids.toArray(new Integer[currids.size()]));
 			concept2label.put(anno[0], label);
@@ -145,7 +145,7 @@ public class SentenceAnnotation {
 			String label = concept2label.get(anno);
 
 			if (framenet && anno.startsWith("F")) {
-				List<Integer> currids = new LinkedList<Integer>();
+				List<Integer> currids = new LinkedList<>();
 				for (Integer[] ids : concept2spans.get(anno))
 					for (Integer i : ids)
 						currids.add(i);
@@ -171,7 +171,7 @@ public class SentenceAnnotation {
 							concept2word.put(anno, w.getChildren().iterator()
 									.next());
 					} else {
-						concept2words.put(anno, new LinkedList<Word>());
+						concept2words.put(anno, new LinkedList<>());
 						for (Integer i : ws) {
 							Word w = sen.get(i + 1);
 							concept2words.get(anno).add(w);
@@ -226,7 +226,7 @@ public class SentenceAnnotation {
 		}
 
 		// mark predicates and collect predicate-argument relationships
-		List<Relation> relations = new LinkedList<Relation>();
+		List<Relation> relations = new LinkedList<>();
 
 		for (String[] anno : relationAnno) {
 			String[] rel_arg1_arg2 = anno[1].split(" ");
@@ -311,8 +311,8 @@ public class SentenceAnnotation {
 	}
 
 	private boolean contains(Sentence sen, int head, int last_target) {
-		List<Integer> todo = new LinkedList<Integer>();
-		List<Integer> done = new LinkedList<Integer>();
+		List<Integer> todo = new LinkedList<>();
+		List<Integer> done = new LinkedList<>();
 		todo.add(head);
 
 		while (!todo.isEmpty()) {

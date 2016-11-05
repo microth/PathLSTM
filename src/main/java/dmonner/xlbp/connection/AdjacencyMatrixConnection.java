@@ -72,7 +72,7 @@ public class AdjacencyMatrixConnection extends LayerConnection
 			final WeightSenderLayer from)
 	{
 		super(name, to, from);
-		responsibilities = new TreeSet<Integer>();
+		responsibilities = new TreeSet<>();
 
 		cleared = true;
 		overwrite = true;
@@ -81,7 +81,7 @@ public class AdjacencyMatrixConnection extends LayerConnection
 	public AdjacencyMatrixConnection(final WeightReceiverLayer to, final WeightSenderLayer from)
 	{
 		super(to, from);
-		responsibilities = new TreeSet<Integer>();
+		responsibilities = new TreeSet<>();
 		cleared = true;
 		overwrite = true;
 	}

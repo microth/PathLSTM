@@ -23,7 +23,7 @@ public class ANNWriter implements SentenceWriter {
 	public ANNWriter(File filename) {
 		tnum = 1;
 		rnum = 1;
-		word2id = new HashMap<Word, String>();
+		word2id = new HashMap<>();
 
 		System.out.println("Writing corpus to " + filename + "...");
 		try {

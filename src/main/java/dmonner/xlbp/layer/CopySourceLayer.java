@@ -123,7 +123,7 @@ public class CopySourceLayer extends AbstractInternalLayer
 	private void notifyUpstreamLayers()
 	{
 		// Set up pointers to this layer throughout the rest of the network
-		final Stack<UpstreamComponent> up = new Stack<UpstreamComponent>();
+		final Stack<UpstreamComponent> up = new Stack<>();
 		up.push(upstream);
 
 		while(!up.empty())

@@ -18,7 +18,7 @@ public class IndexAwareHeap<E extends Comparable<E>>
 {
 	public static void main(final String[] args)
 	{
-		final IndexAwareHeap<Integer> h = new IndexAwareHeap<Integer>(15);
+		final IndexAwareHeap<Integer> h = new IndexAwareHeap<>(15);
 		// for(int i = 0; i < 15; i++)
 		// {
 		// h.add((int) (Math.random() * 50));
@@ -117,7 +117,7 @@ public class IndexAwareHeap<E extends Comparable<E>>
 
 	public IndexAwareHeapNode<E> add(final E elem)
 	{
-		return add(new IndexAwareHeapNode<E>(elem));
+		return add(new IndexAwareHeapNode<>(elem));
 	}
 
 	public IndexAwareHeapNode<E> add(final IndexAwareHeapNode<E> node)

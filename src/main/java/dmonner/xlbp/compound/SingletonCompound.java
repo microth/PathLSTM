@@ -106,7 +106,7 @@ public class SingletonCompound extends AbstractWeightedCompound
 	@Override
 	public Component[] getComponents()
 	{
-		final List<Component> list = new ArrayList<Component>();
+		final List<Component> list = new ArrayList<>();
 		if(layer != null)
 			list.add(layer);
 		if(fan != null)

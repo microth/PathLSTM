@@ -122,7 +122,7 @@ public class InputCompound extends AbstractCompound implements InputComponent
 	@Override
 	public Component[] getComponents()
 	{
-		final List<Component> list = new ArrayList<Component>();
+		final List<Component> list = new ArrayList<>();
 		list.add(input);
 		if(fan != null)
 			list.add(fan);

@@ -38,7 +38,7 @@ public class WhiteSpaceTokenizer implements Tokenizer {
 	public StringInText[] tokenizeplus(String sentence) {
 		int offset = 0;
 		StringTokenizer tokenizer = new StringTokenizer(sentence);
-		List<StringInText> l = new ArrayList<StringInText>();
+		List<StringInText> l = new ArrayList<>();
 
 		while (tokenizer.hasMoreTokens()) {
 			String s = tokenizer.nextToken();
