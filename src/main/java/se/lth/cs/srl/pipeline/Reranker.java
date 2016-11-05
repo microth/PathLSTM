@@ -323,7 +323,7 @@ public class Reranker extends SemanticRoleLabeler {
 	 * 
 	 * @param pred
 	 *            the predicate
-	 * @param am
+	 * @param argMap
 	 *            the argmap
 	 * @param indices
 	 *            the container to add the index too

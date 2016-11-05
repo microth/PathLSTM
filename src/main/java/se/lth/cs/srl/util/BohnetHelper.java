@@ -16,7 +16,7 @@ public class BohnetHelper {
 	public static Lemmatizer getLemmatizer(File modelFile)
 			throws FileNotFoundException, IOException {
 		String[] argsL = { "-model", modelFile.toString() };
-		return new Lemmatizer(modelFile.toString());
+		return new Lemmatizer(modelFile.toString(), false);
 
 		// new is2.lemmatizer.Options(argsL));
 	}
