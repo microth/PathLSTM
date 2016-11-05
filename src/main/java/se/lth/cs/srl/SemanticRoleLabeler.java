@@ -1,10 +1,8 @@
 package se.lth.cs.srl;
 
 import java.util.Date;
-import java.util.List;
 
 import se.lth.cs.srl.corpus.Sentence;
-import se.lth.cs.srl.corpus.StringInText;
 import se.lth.cs.srl.util.Util;
 
 public abstract class SemanticRoleLabeler {

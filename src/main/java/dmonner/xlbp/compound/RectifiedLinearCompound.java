@@ -1,7 +1,6 @@
 package dmonner.xlbp.compound;
 
 import dmonner.xlbp.NetworkCopier;
-import dmonner.xlbp.layer.LogisticLayer;
 import dmonner.xlbp.layer.RectifiedLinearLayer;
 
 public class RectifiedLinearCompound extends FunctionCompound

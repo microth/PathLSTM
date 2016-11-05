@@ -1,16 +1,5 @@
 package uk.ac.ed.inf.srl.features;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import dmonner.xlbp.NetworkStringBuilder;
-import dmonner.xlbp.compound.AbstractWeightedCompound;
-import dmonner.xlbp.compound.FunctionCompound;
-import dmonner.xlbp.compound.MemoryCellCompound;
-import dmonner.xlbp.compound.RectifiedLinearCompound;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;

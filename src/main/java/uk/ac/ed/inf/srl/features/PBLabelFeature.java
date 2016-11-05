@@ -6,7 +6,6 @@ import java.util.Map;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.corpus.Word.WordData;
 
 public class PBLabelFeature extends SingleFeature {
 	private static final long serialVersionUID = 1L;

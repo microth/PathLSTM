@@ -2,8 +2,6 @@ package uk.ac.ed.inf.srl.features;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -16,9 +14,7 @@ import java.util.TreeMap;
 import java.util.zip.ZipFile;
 
 import dmonner.xlbp.compound.AbstractWeightedCompound;
-import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
-import se.lth.cs.srl.corpus.Word;
 import se.lth.cs.srl.corpus.Word.WordData;
 import se.lth.cs.srl.pipeline.Step;
 import se.lth.cs.srl.util.BrownCluster;

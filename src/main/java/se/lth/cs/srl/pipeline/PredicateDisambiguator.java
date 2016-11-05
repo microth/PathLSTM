@@ -5,10 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +21,7 @@ import se.lth.cs.srl.corpus.PredicateReference;
 import se.lth.cs.srl.corpus.Sentence;
 import uk.ac.ed.inf.srl.features.Feature;
 import uk.ac.ed.inf.srl.features.FeatureSet;
-import uk.ac.ed.inf.srl.ml.LearningProblem;
 import uk.ac.ed.inf.srl.ml.Model;
-import uk.ac.ed.inf.srl.ml.liblinear.LibLinearLearningProblem;
 
 public class PredicateDisambiguator implements PipelineStep {
 

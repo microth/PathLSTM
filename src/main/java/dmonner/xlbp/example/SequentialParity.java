@@ -6,9 +6,7 @@ import dmonner.xlbp.WeightUpdaterType;
 import dmonner.xlbp.compound.InputCompound;
 import dmonner.xlbp.compound.MemoryCellCompound;
 import dmonner.xlbp.compound.XEntropyTargetCompound;
-import dmonner.xlbp.stat.TestStat;
 import dmonner.xlbp.trial.Step;
-import dmonner.xlbp.trial.Trainer;
 import dmonner.xlbp.trial.Trial;
 import dmonner.xlbp.trial.TrialStreamAdapter;
 

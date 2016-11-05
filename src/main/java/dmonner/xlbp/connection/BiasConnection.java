@@ -1,7 +1,5 @@
 package dmonner.xlbp.connection;
 
-import java.util.Arrays;
-
 import dmonner.xlbp.AdadeltaBatchWeightUpdater;
 import dmonner.xlbp.BatchWeightUpdater;
 import dmonner.xlbp.NadamBatchWeightUpdater;

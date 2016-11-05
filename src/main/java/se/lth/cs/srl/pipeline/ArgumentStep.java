@@ -1,9 +1,6 @@
 package se.lth.cs.srl.pipeline;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,12 +12,9 @@ import java.util.TreeMap;
 import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Word;
-import uk.ac.ed.inf.srl.features.DependencyCPathEmbedding;
-import uk.ac.ed.inf.srl.features.DependencyIPathEmbedding;
 import uk.ac.ed.inf.srl.features.DependencyPathEmbedding;
 import uk.ac.ed.inf.srl.features.Feature;
 import uk.ac.ed.inf.srl.features.FeatureSet;
-import uk.ac.ed.inf.srl.features.PositionFeature;
 import uk.ac.ed.inf.srl.ml.Model;
 
 public abstract class ArgumentStep extends AbstractStep {

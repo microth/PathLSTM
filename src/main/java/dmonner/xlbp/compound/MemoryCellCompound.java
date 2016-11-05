@@ -15,7 +15,6 @@ import dmonner.xlbp.WeightInitializer;
 import dmonner.xlbp.WeightUpdaterType;
 import dmonner.xlbp.layer.CopyDestinationLayer;
 import dmonner.xlbp.layer.CopySourceLayer;
-import dmonner.xlbp.layer.DropoutPiLayer;
 import dmonner.xlbp.layer.FanOutLayer;
 import dmonner.xlbp.layer.FunctionLayer;
 import dmonner.xlbp.layer.Layer;

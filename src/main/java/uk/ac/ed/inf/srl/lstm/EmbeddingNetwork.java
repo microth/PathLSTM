@@ -6,26 +6,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
-import dmonner.xlbp.Component;
 import dmonner.xlbp.Network;
-import dmonner.xlbp.NormalWeightInitializer;
 import dmonner.xlbp.UniformWeightInitializer;
-import dmonner.xlbp.WeightInitializer;
 import dmonner.xlbp.WeightUpdaterType;
-import dmonner.xlbp.compound.AbstractWeightedCompound;
-import dmonner.xlbp.compound.FunctionCompound;
 import dmonner.xlbp.compound.InputCompound;
 import dmonner.xlbp.compound.MemoryCellCompound;
 import dmonner.xlbp.compound.RectifiedLinearCompound;
-import dmonner.xlbp.compound.TargetCompound;
 import dmonner.xlbp.compound.XEntropyTargetCompound;
-import dmonner.xlbp.layer.InputLayer;
 
 public class EmbeddingNetwork extends Network {
 

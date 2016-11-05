@@ -1,13 +1,9 @@
 package se.lth.cs.srl.pipeline;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TreeMap;
 import java.util.HashSet;
@@ -15,10 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.SemanticRoleLabeler;
@@ -26,22 +20,15 @@ import se.lth.cs.srl.corpus.ArgMap;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.io.AllCoNLL09Reader;
 import se.lth.cs.srl.languages.Language;
 import se.lth.cs.srl.languages.Language.L;
 import se.lth.cs.srl.options.ParseOptions;
-import se.lth.cs.srl.util.BrownCluster;
-import se.lth.cs.srl.util.DasFilter;
-import se.lth.cs.srl.util.WordEmbedding;
 import uk.ac.ed.inf.srl.features.DependencyPathEmbedding;
 import uk.ac.ed.inf.srl.features.Feature;
 import uk.ac.ed.inf.srl.features.FeatureGenerator;
 import uk.ac.ed.inf.srl.features.FeatureSet;
-import uk.ac.ed.inf.srl.ml.LearningProblem;
 import uk.ac.ed.inf.srl.ml.Model;
 import uk.ac.ed.inf.srl.ml.liblinear.Label;
-import uk.ac.ed.inf.srl.ml.liblinear.LibLinearLearningProblem;
-import uk.ac.ed.inf.srl.ml.liblinear.LibLinearModel;
 
 public class Reranker extends SemanticRoleLabeler {
 

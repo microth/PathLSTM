@@ -10,9 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.xml.bind.ParseConversionEvent;
-import javax.xml.crypto.Data;
-
 import se.lth.cs.srl.languages.Language;
 import se.lth.cs.srl.languages.Language.L;
 

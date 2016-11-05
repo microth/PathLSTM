@@ -1,6 +1,5 @@
 package dmonner.xlbp.layer;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import dmonner.xlbp.NetworkCopier;

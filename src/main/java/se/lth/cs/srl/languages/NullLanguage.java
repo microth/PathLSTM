@@ -1,10 +1,5 @@
 package se.lth.cs.srl.languages;
 
-import java.util.Map;
-
-import se.lth.cs.srl.corpus.Predicate;
-import se.lth.cs.srl.corpus.Sentence;
-import se.lth.cs.srl.corpus.Word;
 import se.lth.cs.srl.options.FullPipelineOptions;
 import se.lth.cs.srl.preprocessor.tokenization.StanfordPTBTokenizer;
 import se.lth.cs.srl.preprocessor.tokenization.Tokenizer;

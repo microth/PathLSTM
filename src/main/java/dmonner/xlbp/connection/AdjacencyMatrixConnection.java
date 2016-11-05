@@ -1,12 +1,9 @@
 package dmonner.xlbp.connection;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import dmonner.xlbp.AdadeltaBasicWeightUpdater;
 import dmonner.xlbp.AdadeltaBatchWeightUpdater;
 import dmonner.xlbp.BatchWeightUpdater;
 import dmonner.xlbp.NadamBatchWeightUpdater;

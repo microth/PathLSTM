@@ -5,18 +5,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import uk.ac.ed.inf.srl.lstm.DataReader.DataStream;
 import dmonner.xlbp.Input;
 import dmonner.xlbp.compound.InputCompound;
-import dmonner.xlbp.layer.InputLayer;
-import dmonner.xlbp.Network;
 import dmonner.xlbp.trial.Step;
 import dmonner.xlbp.trial.Trial;
 

@@ -1,7 +1,5 @@
 package dmonner.xlbp;
 
-import java.util.Arrays;
-
 import dmonner.xlbp.connection.Connection;
 
 public class AdamBasicWeightUpdater implements WeightUpdater

@@ -17,8 +17,6 @@ import se.lth.cs.srl.corpus.ArgMap;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import uk.ac.ed.inf.srl.features.DependencyCPathEmbedding;
-import uk.ac.ed.inf.srl.features.DependencyIPathEmbedding;
 import uk.ac.ed.inf.srl.features.DependencyPathEmbedding;
 import uk.ac.ed.inf.srl.features.Feature;
 import uk.ac.ed.inf.srl.features.FeatureSet;

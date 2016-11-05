@@ -2,7 +2,6 @@ package dmonner.xlbp.layer;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.TreeMap;
 
 import dmonner.xlbp.InputComponent;
 import dmonner.xlbp.NetworkCopier;

@@ -8,7 +8,6 @@ import dmonner.xlbp.NetworkStringBuilder;
 import dmonner.xlbp.TargetComponent;
 import dmonner.xlbp.layer.FunctionLayer;
 import dmonner.xlbp.layer.TargetLayer;
-import dmonner.xlbp.layer.XEntropyTargetLayer;
 
 public class TargetCompound extends FunctionCompound implements TargetComponent
 {

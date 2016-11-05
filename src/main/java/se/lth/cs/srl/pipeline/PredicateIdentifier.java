@@ -2,7 +2,6 @@ package se.lth.cs.srl.pipeline;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,10 +12,8 @@ import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
 import se.lth.cs.srl.languages.German;
 import se.lth.cs.srl.languages.Language;
-import se.lth.cs.srl.languages.Language.L;
 import uk.ac.ed.inf.srl.features.Feature;
 import uk.ac.ed.inf.srl.features.FeatureSet;
-import uk.ac.ed.inf.srl.ml.LearningProblem;
 import uk.ac.ed.inf.srl.ml.Model;
 
 public class PredicateIdentifier extends AbstractStep {

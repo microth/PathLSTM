@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.stanford.nlp.ling.Word;
-import edu.stanford.nlp.process.PTBTokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import se.lth.cs.srl.corpus.StringInText;

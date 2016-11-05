@@ -1,7 +1,5 @@
 package uk.ac.ed.inf.srl.features;
 
-import java.util.List;
-
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;

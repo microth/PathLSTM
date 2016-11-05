@@ -5,7 +5,6 @@ import java.util.List;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.corpus.Word.WordData;
 import se.lth.cs.srl.util.BrownCluster;
 import se.lth.cs.srl.util.BrownCluster.ClusterVal;
 

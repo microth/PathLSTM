@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;

@@ -9,10 +9,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import se.lth.cs.srl.CompletePipeline;
-import se.lth.cs.srl.options.CompletePipelineCMDLineOptions;
-import se.lth.cs.srl.options.FullPipelineOptions;
-
 public class Sentence extends ArrayList<Word> {
 
 	private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s+");

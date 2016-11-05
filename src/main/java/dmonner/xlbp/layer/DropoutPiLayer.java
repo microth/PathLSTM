@@ -1,13 +1,8 @@
 package dmonner.xlbp.layer;
 
-import java.util.Arrays;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import dmonner.xlbp.Component;
 import dmonner.xlbp.NetworkCopier;
-import dmonner.xlbp.NetworkStringBuilder;
-import dmonner.xlbp.Responsibilities;
 import dmonner.xlbp.util.MatrixTools;
 
 public class DropoutPiLayer extends PiLayer

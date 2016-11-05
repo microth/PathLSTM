@@ -1,7 +1,6 @@
 package dmonner.xlbp;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -11,11 +10,9 @@ import java.util.Queue;
 
 import dmonner.xlbp.compound.Compound;
 import dmonner.xlbp.compound.InputCompound;
-import dmonner.xlbp.compound.MemoryCellCompound;
 import dmonner.xlbp.compound.TargetCompound;
 import dmonner.xlbp.compound.WeightBank;
 import dmonner.xlbp.compound.WeightedCompound;
-import dmonner.xlbp.compound.XEntropyTargetCompound;
 import dmonner.xlbp.layer.InputLayer;
 import dmonner.xlbp.layer.Layer;
 import dmonner.xlbp.layer.TargetLayer;

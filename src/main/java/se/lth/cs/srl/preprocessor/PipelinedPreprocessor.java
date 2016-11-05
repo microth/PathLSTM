@@ -1,9 +1,5 @@
 package se.lth.cs.srl.preprocessor;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 
 import is2.data.SentenceData09;
@@ -12,10 +8,8 @@ import is2.parser.Parser;
 import is2.tag.Tagger;
 import is2.tools.Tool;
 
-import se.lth.cs.srl.corpus.StringInText;
 import se.lth.cs.srl.preprocessor.tokenization.StanfordPTBTokenizer;
 import se.lth.cs.srl.preprocessor.tokenization.Tokenizer;
-import se.lth.cs.srl.util.BohnetHelper;
 import se.lth.cs.srl.util.Util;
 
 public class PipelinedPreprocessor extends Preprocessor {
