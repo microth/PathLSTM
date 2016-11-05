@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # please download these models and adjust their locations accordingly
 LEMMA_MODEL=models/lemma-eng.model
 POS_MODEL=models/tagger-eng.model
