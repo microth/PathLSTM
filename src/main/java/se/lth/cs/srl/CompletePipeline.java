@@ -90,7 +90,7 @@ public class CompletePipeline {
 			s.get(i).setBegin(words.get(i).begin());
 			s.get(i).setEnd(words.get(i).end());
 		}
-		srl.parse(s);
+		srl.parseSentence(s);
 		return s;
 	}
 
