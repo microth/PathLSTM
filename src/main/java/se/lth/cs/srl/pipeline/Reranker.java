@@ -1,19 +1,5 @@
 package se.lth.cs.srl.pipeline;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.TreeMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
-
 import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.SemanticRoleLabeler;
 import se.lth.cs.srl.corpus.ArgMap;
@@ -29,6 +15,12 @@ import uk.ac.ed.inf.srl.features.FeatureGenerator;
 import uk.ac.ed.inf.srl.features.FeatureSet;
 import uk.ac.ed.inf.srl.ml.Model;
 import uk.ac.ed.inf.srl.ml.liblinear.Label;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.zip.ZipFile;
 
 public class Reranker extends SemanticRoleLabeler {
 
@@ -60,34 +52,34 @@ public class Reranker extends SemanticRoleLabeler {
 	private int zeroArgMapCount = 0;
 
 	@SuppressWarnings("unchecked")
-	public Reranker(ParseOptions parseOptions) throws ZipException,
-			IOException, ClassNotFoundException {
-		this(parseOptions.global_alfa, parseOptions.skipPI,
-				parseOptions.global_aiBeam, parseOptions.global_acBeam);
-		ZipFile zipFile = new ZipFile(parseOptions.modelFile);
-		pipeline = parseOptions.skipPD ? Pipeline.fromZipFile(zipFile,
-				new Step[] { Step.ai, Step.ac }) : noPI ? Pipeline.fromZipFile(
-				zipFile, new Step[] { Step.pd, Step.ai, Step.ac }) : Pipeline
-				.fromZipFile(zipFile);
-		System.out.println("Loading reranker from " + zipFile.getName());
-		if (noPI)
-			System.out
-					.println("Skipping predicate identification. Input is assumed to have predicates identified.");
-		argLabels = pipeline.getArgLabels();
-		populateRerankerFeatureSets(pipeline.getFeatureSets(), pipeline.getFg());
+	public Reranker(ParseOptions parseOptions)  {
+		this(parseOptions.global_alfa, parseOptions.skipPI, parseOptions.global_aiBeam, parseOptions.global_acBeam);
+        ZipFile zipFile = null;
+        try {
+            zipFile = new ZipFile(parseOptions.modelFile);
+            pipeline = parseOptions.skipPD ? Pipeline.fromZipFile(zipFile,
+                    new Step[] { Step.ai, Step.ac }) : noPI ? Pipeline.fromZipFile(
+                    zipFile, new Step[] { Step.pd, Step.ai, Step.ac }) : Pipeline
+                    .fromZipFile(zipFile);
+            System.out.println("Loading reranker from " + zipFile.getName());
+            if (noPI)
+                System.out
+                        .println("Skipping predicate identification. Input is assumed to have predicates identified.");
+            argLabels = pipeline.getArgLabels();
+            populateRerankerFeatureSets(pipeline.getFeatureSets(), pipeline.getFg());
 		
-		/** TODO: load model for each POSPrefix in union(step.ac, step.ai) **/
-		ObjectInputStream ois = new ObjectInputStream(
-				zipFile.getInputStream(zipFile.getEntry(FILENAME)));
-		model = (Model) ois.readObject();
-		////((LibLinearModel)model).printWeights();
-		
-		calsMap = (Map<String, Integer>) ois.readObject();
-		ois.close();
-		int i = parseOptions.skipPD ? 0 : noPI ? 1 : 2;
-		aiModule = (ArgumentIdentifier) pipeline.steps.get(i);
-		acModule = (ArgumentClassifier) pipeline.steps.get(i + 1);
-		zipFile.close();
+		    /* TODO: load model for each POSPrefix in union(step.ac, step.ai) */
+            ObjectInputStream ois = new ObjectInputStream(zipFile.getInputStream(zipFile.getEntry(FILENAME)));
+            model = (Model) ois.readObject();
+            calsMap = (Map<String, Integer>) ois.readObject();
+            ois.close();
+            int i = parseOptions.skipPD ? 0 : noPI ? 1 : 2;
+            aiModule = (ArgumentIdentifier) pipeline.steps.get(i);
+            acModule = (ArgumentClassifier) pipeline.steps.get(i + 1);
+            zipFile.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 	}
 
 	private Reranker(double alfa, boolean noPI, int aiBeam, int acBeam) {
@@ -107,32 +99,8 @@ public class Reranker extends SemanticRoleLabeler {
 		}
 		
 		for (Predicate pred : sen.getPredicates()) {
-		
-			List<ArgMap> candidates = acModule.beamSearch(pred,
-					aiModule.beamSearch(pred, aiBeam), acBeam);
-			List<Map<Integer, Double>> candidate_representations = new LinkedList<>();
-			for (ArgMap argMap : candidates) {
-				ArrayList<Integer> indices = new ArrayList<>();
-				Map<Integer, Double> nonbinFeats = new TreeMap<>();
-				
-				collectPipelineFeatureIndices(pred, argMap, indices,
-						nonbinFeats);
-				
-				collectGlobalFeatures(pred, argMap, indices, nonbinFeats);
-				
-				candidate_representations.add(nonbinFeats);
-				
-				List<Label> labels = model.classifyProb(indices, nonbinFeats);
-				for (Label label : labels) {
-					if (label.getLabel().equals(AbstractStep.NEGATIVE))
-						continue;								
-					argMap.setRerankProb(label.getProb());
-					argMap.resetProb();
-				}
-			}
-			int bestCandidateIndex = softMax(candidates); // Returns the index
-															// of the best
-															// argmap		
+            List<ArgMap> candidates = getArgMaps(pred);
+			int bestCandidateIndex = softMax(candidates); // Returns the index of the best argmap
 			if(bestCandidateIndex==-1) {
 				zeroArgMapCount++;
 				continue;
@@ -146,39 +114,37 @@ public class Reranker extends SemanticRoleLabeler {
 		}
 	}
 
-	private boolean equal(ArgMap newargs, Map<Word, String> oldargs) {
-		for (Word w : newargs.keySet()) {
-			if (!oldargs.containsKey(w)
-					|| !oldargs.get(w).equals(newargs.get(w)))
-				return false;
-		}
-		for (Word w : oldargs.keySet()) {
-			if (newargs.containsKey(w))
-				return false;
-		}
-		return true;
-	}
+    public List<ArgMap> getArgMaps(Predicate pred) {
+        List<ArgMap> candidates = acModule.beamSearch(pred, aiModule.beamSearch(pred, aiBeam), acBeam);
+        for (ArgMap argMap : candidates) {
+            ArrayList<Integer> indices = new ArrayList<>();
+            Map<Integer, Double> nonbinFeats = new TreeMap<>();
+            collectPipelineFeatureIndices(pred, argMap, indices, nonbinFeats);
+            collectGlobalFeatures(pred, argMap, indices, nonbinFeats);
+
+            List<Label> labels = model.classifyProb(indices, nonbinFeats);
+            for (Label label : labels) {
+                if (label.getLabel().equals(AbstractStep.NEGATIVE))
+                    continue;
+                argMap.setRerankProb(label.getProb());
+                argMap.resetProb();
+            }
+        }
+        return candidates;
+    }
 
 	private int softMax(List<ArgMap> argmaps) {
-		// To perform softmax on the reranking probabilities, uncomment the
-		// sumRR lines.
-		// double sumProbs=0;
-		// double sumRR=0;
 		for (ArgMap am : argmaps) {
 			double prob = am.getIdProb();
 			if (am.size() != 0) // Empty argmaps have P(Labeling)==1
 				prob *= Math.pow(am.getLblProb(), 1.0 / am.size());
 			am.setProb(prob);
-			// sumProbs+=prob;
-			// sumRR+=am.getRerankProb();
 		}
 		double bestScore = 0;
 		int bestIndex = -1;
 		for (int i = 0, size = argmaps.size(); i < size; ++i) {
 			ArgMap am = argmaps.get(i);
-			// double localProb=am.getProb()/sumProbs;
 			double localProb = am.getProb();
-			// am.setRerankProb(am.getRerankProb()/sumRR);
 			double weightedRerankProb = Math.pow(am.getRerankProb(), alfa);
 			
 		
@@ -231,9 +197,6 @@ public class Reranker extends SemanticRoleLabeler {
 				if(f instanceof DependencyPathEmbedding) {
 					if(!clear) acOffset = 0;
 					f.addFeatures(currentInstance, currentNonbinary, pred, arg, acOffset+(aiprefix*250000+500000+(processedargs.indexOf(argMap.get(arg))>-1?(Language.getLanguage().getL()==L.ont5?66:52):0 + argLabels.indexOf(argMap.get(arg)))*4000), false);
-//					NNThread t = new NNThread(f, currentInstance, pred, arg, acOffset+(aiprefix*250000+500000+(processedargs.indexOf(argMap.get(arg))>-1?(Language.getLanguage().getL()==L.ont5?66:52):0 + argLabels.indexOf(argMap.get(arg)))*4000));
-//					nnfeats.add(t);
-//					t.start();					
 					clear = true;
 				} else {
 					f.addFeatures(currentInstance, currentNonbinary, pred, arg, acOffset, false);
