@@ -160,25 +160,17 @@ public class Reranker extends SemanticRoleLabeler {
 	}
 
 	private int softMax(List<ArgMap> argmaps) {
-		// To perform softmax on the reranking probabilities, uncomment the
-		// sumRR lines.
-		// double sumProbs=0;
-		// double sumRR=0;
 		for (ArgMap am : argmaps) {
 			double prob = am.getIdProb();
 			if (am.size() != 0) // Empty argmaps have P(Labeling)==1
 				prob *= Math.pow(am.getLblProb(), 1.0 / am.size());
 			am.setProb(prob);
-			// sumProbs+=prob;
-			// sumRR+=am.getRerankProb();
 		}
 		double bestScore = 0;
 		int bestIndex = -1;
 		for (int i = 0, size = argmaps.size(); i < size; ++i) {
 			ArgMap am = argmaps.get(i);
-			// double localProb=am.getProb()/sumProbs;
 			double localProb = am.getProb();
-			// am.setRerankProb(am.getRerankProb()/sumRR);
 			double weightedRerankProb = Math.pow(am.getRerankProb(), alfa);
 			
 		
@@ -231,9 +223,6 @@ public class Reranker extends SemanticRoleLabeler {
 				if(f instanceof DependencyPathEmbedding) {
 					if(!clear) acOffset = 0;
 					f.addFeatures(currentInstance, currentNonbinary, pred, arg, acOffset+(aiprefix*250000+500000+(processedargs.indexOf(argMap.get(arg))>-1?(Language.getLanguage().getL()==L.ont5?66:52):0 + argLabels.indexOf(argMap.get(arg)))*4000), false);
-//					NNThread t = new NNThread(f, currentInstance, pred, arg, acOffset+(aiprefix*250000+500000+(processedargs.indexOf(argMap.get(arg))>-1?(Language.getLanguage().getL()==L.ont5?66:52):0 + argLabels.indexOf(argMap.get(arg)))*4000));
-//					nnfeats.add(t);
-//					t.start();					
 					clear = true;
 				} else {
 					f.addFeatures(currentInstance, currentNonbinary, pred, arg, acOffset, false);
