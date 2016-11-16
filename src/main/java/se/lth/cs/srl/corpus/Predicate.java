@@ -1,6 +1,7 @@
 package se.lth.cs.srl.corpus;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,6 +14,8 @@ public class Predicate extends Word {
 
 	private Map<Word, float[]> argCEmbeds;
 	private Map<Word, float[]> argIEmbeds;
+
+	private List<ArgMap> candArgMaps;
 
 
 	/**
@@ -111,5 +114,13 @@ public class Predicate extends Word {
 	public float[] getAIPathEmbedding(Word word) {
 		if(argIEmbeds==null) argIEmbeds = new HashMap<>();
 		return argIEmbeds.containsKey(word)?argIEmbeds.get(word):null;
+	}
+
+	public void setCandidates(List<ArgMap> candArgMaps) {
+		this.candArgMaps = candArgMaps;
+	}
+	
+	public List<ArgMap> getCandidates() {
+		return candArgMaps;
 	}
 }

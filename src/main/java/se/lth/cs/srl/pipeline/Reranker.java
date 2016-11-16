@@ -99,39 +99,46 @@ public class Reranker extends SemanticRoleLabeler {
 		}
 		
 		for (Predicate pred : sen.getPredicates()) {
-            List<ArgMap> candidates = getArgMaps(pred);
-			int bestCandidateIndex = softMax(candidates); // Returns the index of the best argmap
+			
+			List<ArgMap> candidates = acModule.beamSearch(pred,
+					aiModule.beamSearch(pred, aiBeam), acBeam);
+			List<Map<Integer, Double>> candidate_representations = new LinkedList<Map<Integer, Double>>(); 
+			for (ArgMap argMap : candidates) {
+				ArrayList<Integer> indices = new ArrayList<Integer>();
+				Map<Integer, Double> nonbinFeats = new TreeMap<Integer, Double>();
+				
+				collectPipelineFeatureIndices(pred, argMap, indices,
+						nonbinFeats);
+				
+				collectGlobalFeatures(pred, argMap, indices, nonbinFeats);
+				
+				candidate_representations.add(nonbinFeats);
+				
+				List<Label> labels = model.classifyProb(indices, nonbinFeats);
+				for (Label label : labels) {
+					if (label.getLabel().equals(AbstractStep.NEGATIVE))
+						continue;								
+					argMap.setRerankProb(label.getProb());
+					argMap.resetProb();
+				}
+			}
+
+			int bestCandidateIndex = softMax(candidates);
+			
+			// statistics for final output 
 			if(bestCandidateIndex==-1) {
 				zeroArgMapCount++;
 				continue;
-			}	
-			
+			}
 			rankCount[bestCandidateIndex]++;
 			ArgMap bestCandidate = candidates.get(bestCandidateIndex);
 			if (bestCandidate.size() == 0)
 				zeroArgMapCount++;
 			pred.setArgMap(bestCandidate);
+			pred.setCandidates(candidates);
 		}
 	}
 
-    public List<ArgMap> getArgMaps(Predicate pred) {
-        List<ArgMap> candidates = acModule.beamSearch(pred, aiModule.beamSearch(pred, aiBeam), acBeam);
-        for (ArgMap argMap : candidates) {
-            ArrayList<Integer> indices = new ArrayList<>();
-            Map<Integer, Double> nonbinFeats = new TreeMap<>();
-            collectPipelineFeatureIndices(pred, argMap, indices, nonbinFeats);
-            collectGlobalFeatures(pred, argMap, indices, nonbinFeats);
-
-            List<Label> labels = model.classifyProb(indices, nonbinFeats);
-            for (Label label : labels) {
-                if (label.getLabel().equals(AbstractStep.NEGATIVE))
-                    continue;
-                argMap.setRerankProb(label.getProb());
-                argMap.resetProb();
-            }
-        }
-        return candidates;
-    }
 
 	private int softMax(List<ArgMap> argmaps) {
 		for (ArgMap am : argmaps) {
@@ -146,9 +153,12 @@ public class Reranker extends SemanticRoleLabeler {
 			ArgMap am = argmaps.get(i);
 			double localProb = am.getProb();
 			double weightedRerankProb = Math.pow(am.getRerankProb(), alfa);
-			
-		
+					
 			double score = localProb * weightedRerankProb;
+			
+			// NEW (MR, Nov 16): store final score
+			am.setProb(score);
+			
 			if (score > bestScore) {
 				bestIndex = i;
 				bestScore = score;
