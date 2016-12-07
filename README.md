@@ -4,11 +4,21 @@ This repository contains code for the PathLSTM semantic role labeler introduced 
 
 # Dependencies
 
-The following libraries and model files need to be downloaded in order to run PathLSTM on English text:
+The following libraries and model files need to be downloaded in order to run the PathLSTM PropBank/NomBank model on English text:
 
- * Bernd Bohnet's dependency parser and model files ([`anna-3.3.jar` and `CoNLL2009-ST-English*.model`](http://code.google.com/p/mate-tools/downloads/))<sup>1</sup>
+ * Bernd Bohnet's dependency parser and model files ([`anna-3.3.jar` and `CoNLL2009-ST-English*.model`](http://code.google.com/p/mate-tools/downloads/)<sup>1</sup>
  * The WSJ tokenizer from Stanford CoreNLP ([`stanford-corenlp-3.x.jar`](http://nlp.stanford.edu/software/corenlp.shtml)) 
- * The most recent _PathLSTM_ SRL model (July 2016), available from Google Drive [here][3] 
+ * The most recent _PathLSTM_ SRL model file (July 2016), available on Google Drive [here][3] 
+
+For Frame-Semantic Role Labeling, text files should be preprocessed using the following toolkits:
+
+ * Emory NLP4J for POS tagging (https://github.com/emorynlp/nlp4j)
+ * BISTparser for dependency parsing (https://github.com/elikip/bist-parser)
+ 
+In addition, the following dependencies are required to run the Frame-SRL model:
+ 
+ * A copy of FrameNet version 1.5 (http://framenet.icsi.berkeley.edu/
+ * The most recent _PathLSTM_ Frame-SRL model file (October 2016), available on Google Drive [here][4]
 
 # Running PathLSTM  
 
@@ -21,12 +31,17 @@ It is also possible to apply the PathLSTM model on already preprocessed text in 
 [1]: http://arxiv.org/abs/1605.07515 
 [2]: http://code.google.com/p/mate-tools/
 [3]: http://drive.google.com/uc?id=0B5aLxfs6OvZBYUk2b0hLZjNqY3c&export=download
+[4]: http://drive.google.com/uc?id=0B5aLxfs6OvZBOXRCbGUtN2JLZlk&export=download
 
-If you are using PathLSTM in your work--and we highly recommend you do!--please cite the following publication:
+If you are using the PathLSTM SRL model in your work--and we highly recommend you do!--please cite the following publication:
 
-Michael Roth and Mirella Lapata (2016). Neural Semantic Role Labelling with Dependency Path Embeddings. In Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics. To appear.
+Michael Roth and Mirella Lapata (2016). Neural semantic role labelling with dependency path embeddings. In Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics. Berlin, Germany, August, pp. 1192--1202.
 
-If you are using the built-in preprocessing pipeline, please also cite the following publication: 
+For the Frame-SRL model, please cite the following publication:
+
+Michael Roth (2016). Improving frame semantic parsing via dependency path embeddings. Book of Abstracts of the 9th International Conference on Construction Grammar, Juiz de Fora, Brazil, October, pp. 165--167.
+
+For the built-in preprocessing pipeline, please also cite the following publication: 
 
 Bernd Bohnet (2010). Very high accuracy and fast dependency parsing is not a contradiction. The 23rd International Conference on Computational Linguistics (COLING), Beijing, China. 
 
