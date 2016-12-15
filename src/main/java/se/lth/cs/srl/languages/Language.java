@@ -23,7 +23,7 @@ import se.lth.cs.srl.util.BohnetHelper;
 public abstract class Language {
 
 	public enum L {
-		cat, chi, cze, eng, ger, jap, spa, swe, fre, nul, ont5
+		cat, chi, cze, eng, ger, jap, spa, swe, fre, nul, ont5, fnet, uiuc,
 	}
 
 	private static Language language;
@@ -53,6 +53,14 @@ public abstract class Language {
 		case ont5:
 			language = new English();
 			((English)language).setL(L.ont5);
+			break;
+		case fnet:
+			language = new English();
+			((English)language).setL(L.fnet);
+			break;
+		case uiuc:
+			language = new English();
+			((English)language).setL(L.uiuc);
 			break;
 		case ger:
 			language = new German();
