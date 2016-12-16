@@ -39,6 +39,7 @@ public abstract class FullPipelineOptions {
 	// links to external tools/servers/resources
 	public String glovedir = null;
 	public String mstserver = null;
+	public String uiucparser = null;
 	public String semaforserver = null;
 	public String framenetdir = null;
 	
@@ -168,6 +169,9 @@ public abstract class FullPipelineOptions {
 		} else if (args[ai].equals("-semafor")) {
 			ai++;
 			semaforserver = args[ai++];
+		} else if (args[ai].equals("-uiucparser")) {
+			ai++;
+			uiucparser = args[ai++];
 		} else if (args[ai].equals("-framenet")) {
 			ai++;
 			framenetdir = args[ai++];

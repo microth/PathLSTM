@@ -37,6 +37,16 @@
             <artifactId>LBJava</artifactId>
             <version>1.2.26</version>
         </dependency>
+        <dependency>
+        	<groupId>edu.illinois.cs.cogcomp</groupId>
+        	<artifactId>illinois-depparse</artifactId>
+        	<version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>net.sf.trove4j</groupId>
+        	<artifactId>trove4j</artifactId>
+        	<version>3.0.3</version>
+        </dependency>
     </dependencies>
 
     <build>

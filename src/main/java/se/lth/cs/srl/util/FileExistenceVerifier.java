@@ -33,7 +33,7 @@ public class FileExistenceVerifier {
 
 	public static String verifyCompletePipelineAlwaysNecessaryFiles(
 			FullPipelineOptions options) {
-		return verifyFiles(/* options.tagger, */options.parser, options.srl);
+		return verifyFiles(/* options.tagger, options.parser,*/ options.srl);
 	}
 
 	public static String verifyCompletePipelineAllNecessaryModelFiles(

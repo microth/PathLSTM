@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Word;
 import se.lth.cs.srl.options.FullPipelineOptions;
+import se.lth.cs.srl.preprocessor.IllinoisPreprocessor;
 import se.lth.cs.srl.preprocessor.PipelinedPreprocessor;
 import se.lth.cs.srl.preprocessor.Preprocessor;
 import se.lth.cs.srl.preprocessor.tokenization.Tokenizer;
@@ -113,6 +114,8 @@ public abstract class Language {
 					return new StringBuilder();
 				}
 			};
+		} else if(options.uiucparser != null) {
+			pp = new IllinoisPreprocessor(options.uiucparser);
 		} else {
 			Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? getTokenizer(options.tokenizer)
 					: null);
