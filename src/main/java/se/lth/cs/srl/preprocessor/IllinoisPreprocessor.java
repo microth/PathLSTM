@@ -36,7 +36,8 @@ public class IllinoisPreprocessor extends Preprocessor {
 	protected final AnnotatorService as;
 	protected final SLModel parser;
 	
-	public IllinoisPreprocessor(String modelfile) {
+	public IllinoisPreprocessor(Tokenizer tokenizer, String modelfile) {
+		this.tokenizer = tokenizer;
 		AnnotatorService temp1 = null;
 		SLModel temp2 = null;
 		try {
@@ -87,8 +88,8 @@ public class IllinoisPreprocessor extends Preprocessor {
 		tokens.add(tmp);		
 		TextAnnotation annotation = BasicTextAnnotationBuilder.createTextAnnotationFromTokens("", "", tokens);
 		try {
-			as.addView(annotation, ViewNames.LEMMA);
 			as.addView(annotation, ViewNames.POS);
+			as.addView(annotation, ViewNames.LEMMA);
 			//as.addView(annotation, ViewNames.SHALLOW_PARSE);
 		} catch (AnnotatorException e) {
 			e.printStackTrace();

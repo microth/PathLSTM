@@ -115,7 +115,9 @@ public abstract class Language {
 				}
 			};
 		} else if(options.uiucparser != null) {
-			pp = new IllinoisPreprocessor(options.uiucparser);
+			Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? getTokenizer(options.tokenizer)
+					: null);
+			pp = new IllinoisPreprocessor(tokenizer, options.uiucparser);
 		} else {
 			Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? getTokenizer(options.tokenizer)
 					: null);
