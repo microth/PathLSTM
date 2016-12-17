@@ -1,12 +1,11 @@
 package se.lth.cs.srl.pipeline;
 
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
-
-import is2.data.SentenceData09;
 import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.corpus.ArgMap;
 import se.lth.cs.srl.corpus.Predicate;
@@ -27,8 +26,9 @@ public class LBJavaArgumentClassifier extends Learner {
     private Reranker srl;
     private Preprocessor pp;
     
-    public LBJavaArgumentClassifier() {
+    public LBJavaArgumentClassifier(String[] args) {
     	CompletePipelineCMDLineOptions options = new CompletePipelineCMDLineOptions();
+    	options.parseCmdLineArgs(args);
     	try {
 			pp = Language.getLanguage().getPreprocessor(options);
 		} catch (IOException e) {
@@ -42,7 +42,8 @@ public class LBJavaArgumentClassifier extends Learner {
 
     @Override
     public ScoreSet scores(Object example) {
-    	TextAnnotation anno = (TextAnnotation)example;
+		Constituent constituent = (Constituent) example;
+    	TextAnnotation anno = constituent.getTextAnnotation();
     	
     	Sentence s = anno.sentences().get(0);
     	se.lth.cs.srl.corpus.Sentence parse = new se.lth.cs.srl.corpus.Sentence(pp.preprocess(s.getTokens()), false);  
