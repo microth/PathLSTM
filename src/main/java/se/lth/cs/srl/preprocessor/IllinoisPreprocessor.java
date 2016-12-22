@@ -17,9 +17,9 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.depparse.DepInst;
 import edu.illinois.cs.cogcomp.depparse.DepStruct;
 import edu.illinois.cs.cogcomp.depparse.io.CONLLReader;
-import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
-import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
+import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
 import is2.data.SentenceData09;
 import is2.lemmatizer.Lemmatizer;
@@ -41,19 +41,20 @@ public class IllinoisPreprocessor extends Preprocessor {
 		AnnotatorService temp1 = null;
 		SLModel temp2 = null;
 		try {
-			Properties defaultProps = new Properties();
-			defaultProps.put(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
-			defaultProps.put(PipelineConfigurator.USE_LEMMA.key, Configurator.TRUE);
-			defaultProps.put(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
-			defaultProps.put(PipelineConfigurator.USE_NER_CONLL.key, Configurator.FALSE);
-			defaultProps.put(PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE);
-			defaultProps.put(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.FALSE);
-			defaultProps.put(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.FALSE);
-			defaultProps.put(PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE);
-			defaultProps.put(PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE);
-	   		ResourceManager rm = new ResourceManager(defaultProps);
+			Properties nonDefaultProps = new Properties();
+			nonDefaultProps.put(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
+			nonDefaultProps.put(PipelineConfigurator.USE_LEMMA.key, Configurator.TRUE);
+			nonDefaultProps.put(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
+			nonDefaultProps.put(PipelineConfigurator.USE_NER_CONLL.key, Configurator.FALSE);
+			nonDefaultProps.put(PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE);
+			nonDefaultProps.put(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.FALSE);
+			nonDefaultProps.put(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.FALSE);
+			nonDefaultProps.put(PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE);
+			nonDefaultProps.put(PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE);
+	   		ResourceManager rm = Configurator.mergeProperties(new PipelineConfigurator().getDefaultConfig(),
+					new ResourceManager(nonDefaultProps));
 	        
-			temp1 = IllinoisPipelineFactory.buildPipeline(rm);
+			temp1 = PipelineFactory.buildPipeline(rm);
 			temp2 = SLModel.loadModel(modelfile);
 		} catch (IOException e) {
 			e.printStackTrace();
