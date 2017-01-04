@@ -10,6 +10,8 @@ The following libraries and model files need to be downloaded in order to run th
  * The WSJ tokenizer from Stanford CoreNLP ([`stanford-corenlp-3.x.jar`](http://nlp.stanford.edu/software/corenlp.shtml)) 
  * The most recent _PathLSTM_ SRL model file (July 2016), available on Google Drive [here][3] 
 
+The SRL classes can easily be compiled using maven (`mvn compile`).
+
 For Frame-Semantic Role Labeling, text files should be preprocessed using the following toolkits:
 
  * Emory NLP4J for POS tagging (https://github.com/emorynlp/nlp4j)
