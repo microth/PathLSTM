@@ -18,8 +18,8 @@ import edu.illinois.cs.cogcomp.depparse.DepInst;
 import edu.illinois.cs.cogcomp.depparse.DepStruct;
 import edu.illinois.cs.cogcomp.depparse.io.CONLLReader;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
-import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
-import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+//import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
+//import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
 import is2.data.SentenceData09;
 import is2.lemmatizer.Lemmatizer;
@@ -42,7 +42,7 @@ public class IllinoisPreprocessor extends Preprocessor {
 		SLModel temp2 = null;
 		try {
 			Properties nonDefaultProps = new Properties();
-			nonDefaultProps.put(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
+/*			nonDefaultProps.put(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
 			nonDefaultProps.put(PipelineConfigurator.USE_LEMMA.key, Configurator.TRUE);
 			nonDefaultProps.put(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
 			nonDefaultProps.put(PipelineConfigurator.USE_NER_CONLL.key, Configurator.FALSE);
@@ -54,13 +54,9 @@ public class IllinoisPreprocessor extends Preprocessor {
 	   		ResourceManager rm = Configurator.mergeProperties(new PipelineConfigurator().getDefaultConfig(),
 					new ResourceManager(nonDefaultProps));
 	        
-			temp1 = PipelineFactory.buildPipeline(rm);
+			temp1 = PipelineFactory.buildPipeline(rm);*/
 			temp2 = SLModel.loadModel(modelfile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (AnnotatorException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		as = temp1;
