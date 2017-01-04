@@ -14,9 +14,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.depparse.DepInst;
-import edu.illinois.cs.cogcomp.depparse.DepStruct;
-import edu.illinois.cs.cogcomp.depparse.io.CONLLReader;
+//import edu.illinois.cs.cogcomp.depparse.DepInst;
+//import edu.illinois.cs.cogcomp.depparse.DepStruct;
+//import edu.illinois.cs.cogcomp.depparse.io.CONLLReader;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
 //import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 //import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
@@ -60,7 +60,7 @@ public class IllinoisPreprocessor extends Preprocessor {
 			e.printStackTrace();
 		}
 		as = temp1;
-		CONLLReader.as = as;
+//		CONLLReader.as = as;
 		parser = temp2;
 	}
 
@@ -100,10 +100,10 @@ public class IllinoisPreprocessor extends Preprocessor {
 		}
 		
 		// dependency parse preprocessed text
-		DepInst sent = new DepInst(annotation);
-		DepStruct struct = null;
+//		DepInst sent = new DepInst(annotation);
+//		DepStruct struct = null;
 		try {
-			struct = (DepStruct) parser.infSolver.getBestStructure(parser.wv, sent);
+//			struct = (DepStruct) parser.infSolver.getBestStructure(parser.wv, sent);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -113,11 +113,11 @@ public class IllinoisPreprocessor extends Preprocessor {
 		instance.plabels = new String[instance.forms.length];
 		instance.pfeats = new String[instance.forms.length];
 		instance.pheads[0] = -1;
-		for (int i = 1; i < sent.forms.length; i++) {
-			instance.pheads[i] = struct.heads[i];
-			instance.plabels[i] = struct.deprels[i];
-			instance.pfeats[i] = "_";
-		}
+//		for (int i = 1; i < sent.forms.length; i++) {
+//			instance.pheads[i] = struct.heads[i];
+//			instance.plabels[i] = struct.deprels[i];
+//			instance.pfeats[i] = "_";
+//		}
 		return instance;
 	}
 
