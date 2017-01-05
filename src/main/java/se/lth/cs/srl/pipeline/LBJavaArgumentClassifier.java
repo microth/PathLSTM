@@ -1,22 +1,27 @@
 package se.lth.cs.srl.pipeline;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.depparse.DepInst;
+import edu.illinois.cs.cogcomp.depparse.DepStruct;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
+import edu.illinois.cs.cogcomp.sl.core.SLModel;
+import is2.data.SentenceData09;
 import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.corpus.ArgMap;
 import se.lth.cs.srl.corpus.Predicate;
+import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.languages.Language;
 import se.lth.cs.srl.options.CompletePipelineCMDLineOptions;
-import se.lth.cs.srl.preprocessor.Preprocessor;
+import se.lth.cs.srl.options.ParseOptions;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -24,34 +29,118 @@ import java.util.List;
  */
 public class LBJavaArgumentClassifier extends Learner {
     private Reranker srl;
-    private Preprocessor pp;
+	protected final SLModel parser;
+    private final String POS;
+	
+    public static void main(String[] args) {
+    	new LBJavaArgumentClassifier(args);
+    }
     
-    public LBJavaArgumentClassifier(String[] args) {
-    	CompletePipelineCMDLineOptions options = new CompletePipelineCMDLineOptions();
-    	options.parseCmdLineArgs(args);
+    public LBJavaArgumentClassifier(String[] args) {   	
+    	/* BEGIN: Check for -pos parameter to do VerbSRL / NounSRL separately */
+    	String temp1 = "";
+    	int x = -1;
+    	for(int i=0; i<args.length; i++) {
+    		if(args[i].equals("-pos")) {
+    			// commandline paramaters should contain "-pos N" or "-pos V" (or none of the two)
+    			temp1 = args[i+1];
+    			x = i;
+    			break;
+    		}
+    	}
+    	POS = temp1;
+    	if(!POS.equals("")) {
+    		String[] newargs = new String[args.length-2];
+    		for(int i=0; i<x; i++)
+    			newargs[i] = args[i];
+    		for(int i=x+2; i<args.length; i++)
+    			newargs[i-2] = args[i];
+    		args = newargs;
+    	}
+    	/* END */
+    	  	
+    	
+    	/* BEGIN: Check for -parser parameter to load dependency parser model */
+    	SLModel temp2 = null;
+    	x = -1;
+    	for(int i=0; i<args.length; i++) {
+    		if(args[i].equals("-parse")) {
+    			temp1 = args[i+1];
+    			x = i;
+    			break;
+    		}
+    	}
     	try {
-			pp = Language.getLanguage().getPreprocessor(options);
-		} catch (IOException e) {
-			// throw exception if model files for preprocessing cannot be read
+			temp2 = SLModel.loadModel(temp1);
+		} catch (Exception e) {
 			e.printStackTrace();
-			System.exit(1);
 		}
-    	Parse.parseOptions = options.getParseOptions();    	
+   		String[] newargs = new String[args.length-2];
+   		for(int i=0; i<x; i++)
+   			newargs[i] = args[i];
+   		for(int i=x+2; i<args.length; i++)
+   			newargs[i-2] = args[i];
+    	parser = temp2;
+    	/* END */
+
+    	// load actual SRL pipeline + reranker 
+    	Parse.parseOptions = new ParseOptions(newargs);   	
         srl = new Reranker(Parse.parseOptions);
     }
 
     @Override
     public ScoreSet scores(Object example) {
 		Constituent constituent = (Constituent) example;
-    	TextAnnotation anno = constituent.getTextAnnotation();
-    	
-    	Sentence s = anno.sentences().get(0);
-    	se.lth.cs.srl.corpus.Sentence parse = new se.lth.cs.srl.corpus.Sentence(pp.preprocess(s.getTokens()), false);  
+    	TextAnnotation annotation = constituent.getTextAnnotation();
+
+    	// initialize internal representation
+    	String[] forms = annotation.getTokens();
+		SentenceData09 instance = new SentenceData09();
+		instance.init(forms);
+		
+		// re-use POS and lemma information from preprocessing		
+		TokenLabelView POSView = (TokenLabelView) annotation.getView(ViewNames.POS);
+		TokenLabelView LemmaView = (TokenLabelView) annotation.getView(ViewNames.LEMMA);
+		for (int i = 1; i < instance.ppos.length; i++) {
+			instance.ppos[i] = POSView.getLabel(i-1);
+			instance.plemmas[i] = LemmaView.getLabel(i-1);
+		}
+		
+		// run dependency parser (not part of preprocessing?)
+		DepInst sent = new DepInst(annotation);
+		DepStruct struct = null;
+		try {
+			struct = (DepStruct) parser.infSolver.getBestStructure(parser.wv, sent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// add parsing information to internal sentenec representation
+		instance.pheads = new int[instance.forms.length];
+		instance.plabels = new String[instance.forms.length];
+		instance.pfeats = new String[instance.forms.length];
+		instance.pheads[0] = -1;
+		for (int i = 1; i < sent.forms.length; i++) {
+			instance.pheads[i] = struct.heads[i];
+			instance.plabels[i] = struct.deprels[i];
+			instance.pfeats[i] = "_";
+		}
+		
+		// finalize internal representation
+		Sentence parse = new Sentence(instance, false);
+		
+		// perform actual role labeling step 
     	srl.parse(parse);
 
     	// number of SRL candidate outputs is #candidates(pred_1) * ... * #candidates(pred_n)
     	int size = 1;
-    	List<Predicate> predicates = parse.getPredicates();
+    	List<Predicate> predicates = new LinkedList<Predicate>();
+    	// only consider predicates that match -pos option (if specified)
+    	for(Predicate p : parse.getPredicates()) {
+    		// note that this is exactly how the noun/verb models are separated
+    		if(POS.equals("") || p.getPOS().startsWith(POS))
+    			predicates.add(p);
+    	}
     	int preds = predicates.size();
     	int[] offsets = new int[preds];
 		for(int i=0; i<preds; i++) {
