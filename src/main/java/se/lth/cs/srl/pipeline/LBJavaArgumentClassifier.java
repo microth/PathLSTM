@@ -86,6 +86,8 @@ public class LBJavaArgumentClassifier extends Learner {
     	// load actual SRL pipeline + reranker 
     	Parse.parseOptions = new ParseOptions(newargs);   	
         srl = new Reranker(Parse.parseOptions);
+        // Required by LBJava
+		name = "PathLSTMClassifier" + POS;
     }
 
     @Override
