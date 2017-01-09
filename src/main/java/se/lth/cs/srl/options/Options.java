@@ -76,9 +76,8 @@ public abstract class Options {
 		// Ok, were done parsing the command line, now lets verify that the
 		// arguments make sense.
 		if (!inputCorpus.exists() || !inputCorpus.canRead()) {
-			System.err.println("Input corpus" + inputCorpus
+			System.err.println("WARNING: Input corpus " + inputCorpus
 					+ " does not exist or can not be read, aborting.");
-			System.exit(1);
 		}
 		verifyArguments();
 	}
