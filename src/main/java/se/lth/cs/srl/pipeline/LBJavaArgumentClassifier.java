@@ -1,14 +1,21 @@
 package se.lth.cs.srl.pipeline;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.depparse.DepInst;
 import edu.illinois.cs.cogcomp.depparse.DepStruct;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
+import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
 import is2.data.SentenceData09;
 import se.lth.cs.srl.Parse;
@@ -16,13 +23,13 @@ import se.lth.cs.srl.corpus.ArgMap;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.options.CompletePipelineCMDLineOptions;
 import se.lth.cs.srl.options.ParseOptions;
 
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * A wrapper of {@link ArgumentClassifier} into CogComp's LBJava {@link Learner}
@@ -33,7 +40,44 @@ public class LBJavaArgumentClassifier extends Learner {
     private final String POS;
 	
     public static void main(String[] args) {
-    	new LBJavaArgumentClassifier(args);
+    	// put a test sentence here
+    	String test = "";
+    	String[] forms = test.split(" ");
+    	
+		Properties nonDefaultProps = new Properties();
+		nonDefaultProps.put(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
+		nonDefaultProps.put(PipelineConfigurator.USE_LEMMA.key, Configurator.TRUE);
+		nonDefaultProps.put(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
+		nonDefaultProps.put(PipelineConfigurator.USE_NER_CONLL.key, Configurator.FALSE);
+		nonDefaultProps.put(PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE);
+		nonDefaultProps.put(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.FALSE);
+		nonDefaultProps.put(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.FALSE);
+		nonDefaultProps.put(PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE);
+		nonDefaultProps.put(PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE);
+   		ResourceManager rm = Configurator.mergeProperties(new PipelineConfigurator().getDefaultConfig(),
+				new ResourceManager(nonDefaultProps));
+        
+   		AnnotatorService as = null;
+   		try {
+			as = PipelineFactory.buildPipeline(rm);
+		} catch (Exception e) {
+			e.printStackTrace();			
+		}
+   		
+   		List<String[]> tokens = new LinkedList<String[]>();
+   		tokens.add(forms);
+		TextAnnotation annotation = BasicTextAnnotationBuilder.createTextAnnotationFromTokens("", "", tokens);
+		try {
+			as.addView(annotation, ViewNames.POS);
+			as.addView(annotation, ViewNames.LEMMA);
+			as.addView(annotation, ViewNames.SHALLOW_PARSE);
+		} catch (AnnotatorException e) {
+			e.printStackTrace();
+		} 		
+		
+		LBJavaArgumentClassifier lbj = new LBJavaArgumentClassifier(args);
+		Constituent con = new Constituent("", "", annotation, 0, test.length());
+		lbj.scores(con);
     }
     
     public LBJavaArgumentClassifier(String[] args) {   	
@@ -103,9 +147,12 @@ public class LBJavaArgumentClassifier extends Learner {
 		// re-use POS and lemma information from preprocessing		
 		TokenLabelView POSView = (TokenLabelView) annotation.getView(ViewNames.POS);
 		TokenLabelView LemmaView = (TokenLabelView) annotation.getView(ViewNames.LEMMA);
-		for (int i = 1; i < instance.ppos.length; i++) {
-			instance.ppos[i] = POSView.getLabel(i-1);
-			instance.plemmas[i] = LemmaView.getLabel(i-1);
+		
+		// XXX: temporary fix (Jan 11): instance has no dummy token in anna version 3.5
+		// -> start indexing at 0
+		for (int i = 0; i < instance.ppos.length; i++) {
+			instance.ppos[i] = POSView.getLabel(i);
+			instance.plemmas[i] = LemmaView.getLabel(i);
 		}
 		
 		// run dependency parser (not part of preprocessing?)
@@ -117,19 +164,23 @@ public class LBJavaArgumentClassifier extends Learner {
 			e.printStackTrace();
 		}
 		
+		
 		// add parsing information to internal sentenec representation
 		instance.pheads = new int[instance.forms.length];
 		instance.plabels = new String[instance.forms.length];
 		instance.pfeats = new String[instance.forms.length];
 		instance.pheads[0] = -1;
+		// XXX: temporary fix (Jan 11): instance has no dummy token in anna version 3.5 
+		// -> use struct index i-1
 		for (int i = 1; i < sent.forms.length; i++) {
-			instance.pheads[i] = struct.heads[i];
-			instance.plabels[i] = struct.deprels[i];
-			instance.pfeats[i] = "_";
+			instance.pheads[i-1] = struct.heads[i];
+			instance.plabels[i-1] = struct.deprels[i];
+			instance.pfeats[i-1] = "_";
 		}
 		
 		// finalize internal representation
 		Sentence parse = new Sentence(instance, false);
+		System.err.println(parse);
 		
 		// perform actual role labeling step 
     	srl.parse(parse);
