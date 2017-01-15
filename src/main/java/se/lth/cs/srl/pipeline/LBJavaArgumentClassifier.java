@@ -64,7 +64,7 @@ public class LBJavaArgumentClassifier extends Learner {
 			e.printStackTrace();			
 		}
    		
-   		List<String[]> tokens = new LinkedList<String[]>();
+   		List<String[]> tokens = new LinkedList<>();
    		tokens.add(forms);
 		TextAnnotation annotation = BasicTextAnnotationBuilder.createTextAnnotationFromTokens("", "", tokens);
 		try {
@@ -180,14 +180,14 @@ public class LBJavaArgumentClassifier extends Learner {
 		
 		// finalize internal representation
 		Sentence parse = new Sentence(instance, false);
-		System.err.println(parse);
+		//System.err.println(parse);
 		
 		// perform actual role labeling step 
     	srl.parse(parse);
 
     	// number of SRL candidate outputs is #candidates(pred_1) * ... * #candidates(pred_n)
     	int size = 1;
-    	List<Predicate> predicates = new LinkedList<Predicate>();
+    	List<Predicate> predicates = new LinkedList<>();
     	// only consider predicates that match -pos option (if specified)
     	for(Predicate p : parse.getPredicates()) {
     		// note that this is exactly how the noun/verb models are separated
@@ -252,6 +252,12 @@ public class LBJavaArgumentClassifier extends Learner {
     	}
         return new ScoreSet(values, scores);
     }
+
+    @Override
+	public String discreteValue(Object example) {
+    	ScoreSet scoreSet = scores(example);
+    	return scoreSet.highScoreValue();
+	}
 
     @Override
     public FeatureVector classify(int[] exampleFeatures, double[] exampleValues) {
