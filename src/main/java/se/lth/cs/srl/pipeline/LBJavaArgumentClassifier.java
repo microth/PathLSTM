@@ -27,8 +27,10 @@ import se.lth.cs.srl.options.ParseOptions;
 
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -39,6 +41,9 @@ public class LBJavaArgumentClassifier extends Learner {
 	protected final SLModel parser;
     private final String POS;
 	
+	private String prv_annoid;
+	private Sentence prv_parse;
+    
     public static void main(String[] args) {
     	// put a test sentence here
     	String test = "";
@@ -154,106 +159,100 @@ public class LBJavaArgumentClassifier extends Learner {
 			instance.ppos[i] = POSView.getLabel(i);
 			instance.plemmas[i] = LemmaView.getLabel(i);
 		}
-		
-		// run dependency parser (not part of preprocessing?)
-		DepInst sent = new DepInst(annotation);
-		DepStruct struct = null;
-		try {
-			struct = (DepStruct) parser.infSolver.getBestStructure(parser.wv, sent);
-		} catch (Exception e) {
-			e.printStackTrace();
+				
+		Sentence parse = null;
+		int predIndex = 1+constituent.getIncomingRelations().get(0).getSource().getSpan().getFirst();
+
+		// reuse previous parse, if possible
+		if(annotation.getId().equals(prv_annoid)) {
+			parse = prv_parse;
+		} else {
+			// run dependency parser (not part of preprocessing?)
+			DepInst sent = new DepInst(annotation);
+			DepStruct struct = null;
+			try {
+				struct = (DepStruct) parser.infSolver.getBestStructure(parser.wv, sent);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+				
+			// add parsing information to internal sentenec representation
+			instance.pheads = new int[instance.forms.length];
+			instance.plabels = new String[instance.forms.length];
+			instance.pfeats = new String[instance.forms.length];
+			instance.pheads[0] = -1;
+			// XXX: temporary fix (Jan 11): instance has no dummy token in anna version 3.5 
+			// -> use struct index i-1
+			for (int i = 1; i < sent.forms.length; i++) {
+				instance.pheads[i-1] = struct.heads[i];
+				instance.plabels[i-1] = struct.deprels[i];
+				instance.pfeats[i-1] = "_";
+			}
+			
+			// finalize internal representation
+			parse = new Sentence(instance, false);
+			prv_parse = parse;
 		}
 		
-		
-		// add parsing information to internal sentenec representation
-		instance.pheads = new int[instance.forms.length];
-		instance.plabels = new String[instance.forms.length];
-		instance.pfeats = new String[instance.forms.length];
-		instance.pheads[0] = -1;
-		// XXX: temporary fix (Jan 11): instance has no dummy token in anna version 3.5 
-		// -> use struct index i-1
-		for (int i = 1; i < sent.forms.length; i++) {
-			instance.pheads[i-1] = struct.heads[i];
-			instance.plabels[i-1] = struct.deprels[i];
-			instance.pfeats[i-1] = "_";
+		// perform actual role labeling of given predicate
+		// (if predicate has not been assigned a PAS before) 
+		if(parse.get(predIndex).getClass() != Predicate.class) {
+			parse.getPredicates().clear();
+			parse.makePredicate(predIndex);
+			srl.parse(parse);
 		}
 		
-		// finalize internal representation
-		Sentence parse = new Sentence(instance, false);
-		//System.err.println(parse);
-		
-		// perform actual role labeling step 
-    	srl.parse(parse);
+		// store for future reference
+		prv_annoid = annotation.getId();
 
-    	// number of SRL candidate outputs is #candidates(pred_1) * ... * #candidates(pred_n)
-    	int size = 1;
-    	List<Predicate> predicates = new LinkedList<>();
-    	// only consider predicates that match -pos option (if specified)
-    	for(Predicate p : parse.getPredicates()) {
-    		// note that this is exactly how the noun/verb models are separated
-    		if(POS.equals("") || p.getPOS().startsWith(POS))
-    			predicates.add(p);
-    	}
-    	int preds = predicates.size();
-    	int[] offsets = new int[preds];
-		for(int i=0; i<preds; i++) {
-			List<ArgMap> candidateStructures = predicates.get(i).getCandidates();
-			offsets[i] = size;
-			size *= candidateStructures.size();		
+		// find head of constituent => i.e., word that is actually labeled in this model
+		int argBegin = 1+constituent.getStartSpan();
+		int argEnd   = 1+constituent.getEndSpan();
+		int argIndex = argBegin;
+		for(int i=argBegin+1; i<argEnd; i++) {
+			if(parse.get(i).getHead().getIdx()<argBegin || parse.get(i).getHead().getIdx()>=argEnd) {
+				argIndex = i;
+				break;
+			}				
 		}
-        double[] scores = new double[size];
-        Arrays.fill(scores, 1.0);
-        
-        String[][] valuePerWord = new String[size][parse.size()];
-
-        // iterate through all combinations i of candidate predicate--argument structures 
-        for(int i=0; i<size; i++) {
-        	int rest = i;
-        	for(int j=preds-1; j>=0; j--) {
-        		Predicate pred = predicates.get(j);        		
-        		ArgMap candidate = pred.getCandidates().get(rest/offsets[j]);
-        		
-        		// compute score of candidate SRL output as average over selected PAS  
-        		scores[i] *= candidate.getProb()/(double)preds;
-        		
-        		for(Word w : candidate.keySet()) {
-        			int k = w.getIdx();
-
-        			// one word can be part of multiple predicate--argument structures 
-        			if(valuePerWord[i][k]!=null)
-        				valuePerWord[i][k] += ",";
-        			else
-        				valuePerWord[i][k] = "";
-        			
-        			// each label assignment is a combination of the predicate lemma
-        			// and the argument label for a word as predicated in the candidate structure
-        			valuePerWord[i][k] += predicates.get(j).getLemma()+"--"+candidate.get(w);
-        		}
-        		
-        		rest = rest%offsets[j];
-        	}
-    	}
-
-        // for each combination i of candidates, 
-        //     output label assignments over all words j in the sentence 
-    	String[] values = new String[size];
-    	for(int i=0; i<values.length; i++) {
-    		StringBuffer sb = new StringBuffer();
-    		// start at j=1 to skip root token
-    		for(int j=1; j<valuePerWord[i].length; j++) {
-    			if(j>0) sb.append(" ");
-    			sb.append(j);
-    			sb.append(":");
-    			
-    			// output "0" in case no role was assigned to word j 
-    			sb.append(valuePerWord[i][j]==null?"0":valuePerWord[i][j]);
+		// Predicate and argument objects after SRL
+		Predicate p = (Predicate)parse.get(predIndex);
+		Word  a = parse.get(argIndex);
+   	
+    	double total = 0.0;
+    	// iterate over reranker's n-best output 
+    	Map<String, Double> label2unnormalized_score = new HashMap<String, Double>();
+    	for(ArgMap candidate : p.getCandidates()) {
+    		// sum up total score of all candidate
+    		total += candidate.getProb();
+    		
+    		// assume no label as default
+    		String label = "";
+    		if(candidate.containsKey(a)) {
+    			label = candidate.get(a);
     		}
-    		values[i] = sb.toString();
+    		
+    		// sum up score of all candidates that assign specific label to constituent
+    		if(!label2unnormalized_score.containsKey(label))
+    			label2unnormalized_score.put(label, candidate.getProb());
+    		else
+    			label2unnormalized_score.put(label, candidate.getProb() + label2unnormalized_score.get(label) );
+		}
+   
+    	// normalize score for constituent label
+    	String[] values = new String[label2unnormalized_score.size()];
+    	double[] scores = new double[label2unnormalized_score.size()];    	
+    	int i=0;
+    	for(String label : label2unnormalized_score.keySet()) {
+    		values[i] = label;
+    		scores[i] = label2unnormalized_score.get(label)/total; 
+    		i++;
     	}
+    	
         return new ScoreSet(values, scores);
     }
 
-    @Override
+	@Override
 	public String discreteValue(Object example) {
     	ScoreSet scoreSet = scores(example);
     	return scoreSet.highScoreValue();
