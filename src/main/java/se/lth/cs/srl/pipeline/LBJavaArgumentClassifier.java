@@ -27,11 +27,15 @@ import se.lth.cs.srl.options.ParseOptions;
 
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * A wrapper of {@link ArgumentClassifier} into CogComp's LBJava {@link Learner}
@@ -205,16 +209,7 @@ public class LBJavaArgumentClassifier extends Learner {
 		// store for future reference
 		prv_annoid = annotation.getId();
 
-		// find head of constituent => i.e., word that is actually labeled in this model
-		int argBegin = 1+constituent.getStartSpan();
-		int argEnd   = 1+constituent.getEndSpan();
-		int argIndex = argBegin;
-		for(int i=argBegin+1; i<argEnd; i++) {
-			if(parse.get(i).getHead().getIdx()<argBegin || parse.get(i).getHead().getIdx()>=argEnd) {
-				argIndex = i;
-				break;
-			}				
-		}
+		int argIndex = 1+constituent.getStartSpan();
 		// Predicate and argument objects after SRL
 		Predicate p = (Predicate)parse.get(predIndex);
 		Word  a = parse.get(argIndex);
@@ -228,8 +223,11 @@ public class LBJavaArgumentClassifier extends Learner {
     		
     		// assume no label as default
     		String label = "";
-    		if(candidate.containsKey(a)) {
-    			label = candidate.get(a);
+    		for(Word w : candidate.keySet()) {
+    			if( (predIndex==argIndex && argIndex==w.getIdx()) 
+    					|| (predIndex!=argIndex && getDominated(Collections.singleton(w)).contains(a))) {
+    				label = candidate.get(w); 
+    			}
     		}
     		
     		// sum up score of all candidates that assign specific label to constituent
@@ -250,6 +248,14 @@ public class LBJavaArgumentClassifier extends Learner {
     	}
     	
         return new ScoreSet(values, scores);
+    }
+    
+    // compute set of all words governed by (singleton) set w
+    private static Collection<Word> getDominated(Set<Word> w) {
+		Collection<Word> ret = new HashSet<>(w);
+		for (Word c : w)
+			ret.addAll(getDominated(c.getChildren()));
+		return ret;
     }
 
 	@Override
