@@ -21,6 +21,19 @@ public enum FeatureName {
 	
 	ContinuousFeatureFromFile,
 	
+	PathEmbeddingaiN_FNET_seed1, //-data aiN -language FNET -alpha 0.00511979968423424 -hidden1 1 -hidden2 388 -dropout 0.5 -gates IOUT
+	PathEmbeddingaiN_FNET_seed2,
+	PathEmbeddingaiN_FNET_seed3,
+	PathEmbeddingaiV_FNET_seed1, //-data aiV -language FNET -alpha 0.00358926654399116 -hidden1 8 -hidden2 319 -dropout 0.4141845703125 -gates IOPT
+	PathEmbeddingaiV_FNET_seed2,
+	PathEmbeddingaiV_FNET_seed3,
+	PathEmbeddingacN_FNET_seed1, //-data acN -language FNET -alpha 0.0295980595515617 -hidden1 1 -hidden2 143 -dropout 0.5 -gates IOFUPT
+	PathEmbeddingacN_FNET_seed2,
+	PathEmbeddingacN_FNET_seed3,
+	PathEmbeddingacV_FNET_seed1, //-data acV -language FNET -alpha 0.0193160753904859 -hidden1 1 -hidden2 500 -dropout 0.5 -gates IOFUP
+	PathEmbeddingacV_FNET_seed2,
+	PathEmbeddingacV_FNET_seed3,
+	
 	PathEmbeddingai_SRLNetwork_wIOUP__25hid_90hid2_wSuppFeats_GER_seed1,
 	PathEmbeddingai_SRLNetwork_wIOUP__25hid_90hid2_wSuppFeats_SPA_seed1,
 	PathEmbeddingai_SRLNetwork_wIOUP__25hid_90hid2_wSuppFeats_CHI_seed1,
