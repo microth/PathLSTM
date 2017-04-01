@@ -5,11 +5,10 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.depparse.DepAnnotator;
-import edu.illinois.cs.cogcomp.depparse.core.DepInst;
-import edu.illinois.cs.cogcomp.depparse.core.DepStruct;
 import edu.illinois.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import is2.data.SentenceData09;
@@ -69,29 +68,18 @@ public class IllinoisPreprocessor extends Preprocessor {
 		}
 		
 		// dependency parse preprocessed text
-		Tree<Constituent> depTree = ((TreeView) annotation.getView(ViewNames.DEPENDENCY)).getConstituentTree(0);
-		for (Tree<Constituent> child : depTree.childrenIterator()) {
-			int head = child.getParent().getLabel().getStartSpan();
-			String label = child.getLabel().getLabel();
-		}
-//		DepInst sent = new DepInst(annotation);
-//		DepStruct struct = null;
-//		try {
-//			struct = (DepStruct) parser.infSolver.getBestStructure(parser.wv, sent);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
 		// add parsing information to return value object
 		instance.pheads = new int[instance.forms.length];
 		instance.plabels = new String[instance.forms.length];
 		instance.pfeats = new String[instance.forms.length];
 		instance.pheads[0] = -1;
-//		for (int i = 1; i < sent.forms.length; i++) {
-//			instance.pheads[i] = struct.heads[i];
-//			instance.plabels[i] = struct.deprels[i];
-//			instance.pfeats[i] = "_";
-//		}
+		for (Constituent node : annotation.getView(ViewNames.DEPENDENCY).getConstituents()) {
+			int position = node.getStartSpan();
+			int head = (node.getIncomingRelations().size() > 0) ?
+					node.getIncomingRelations().get(0).getSource().getStartSpan() : -1;
+			instance.pheads[position] = head + 1;
+			instance.plabels[position] = node.getLabel();
+		}
 		return instance;
 	}
 
