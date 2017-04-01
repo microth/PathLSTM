@@ -137,12 +137,43 @@ public class ArgumentClassifier extends ArgumentStep {
 					Map<Integer, Double> nonbinFeats = new TreeMap<>();
 					collectFeatures(pred, arg, POSPrefix, indices,
 							nonbinFeats);
-					List<Label> labels = m.classifyProb(indices, nonbinFeats);
+					
+					List<Label> labels = null;
 
-					for (Label l : labels) {
+					if(!Parse.parseOptions.externalNNs)
+						labels = m.classifyProb(indices, nonbinFeats);
+					else {
+						float[] outputs = null; 
+						for(Feature f : featureSet.get(POSPrefix)) {
+							if(f instanceof DependencyPathEmbedding) {
+								if(outputs==null) outputs = pred.getPathPreds(f.getName(), arg);
+								else {
+									float[] tmp = pred.getPathPreds(f.getName(), arg);
+									for(int j=0; j<outputs.length; j++)
+										outputs[j] += tmp[j];
+								}
+							}				
+						}
+						float max = outputs[1];
+						int label = 1;
+						List<String> frame = roles.get(pred.getSense());
+						for (int j = 2; j < outputs.length; ++j) {
+							if(outputs[j]>max && 
+								(frame==null || frame.contains(argLabels.get(j-1)))) {
+								max = outputs[j];
+								label = j;
+							}
+						}
+						argMap.put(arg, argLabels.get(label-1));
+						continue;
+					}
+					
+					for (uk.ac.ed.inf.srl.ml.liblinear.Label l : labels) {
+						// uk.ac.ed.inf.srl.ml.liblinear.Label l =
+						// labels.get(0);
 						String tmp = argLabels.get(l.getLabel());
+						// System.err.println(pred.getSense());
 						if (!roles.containsKey(pred.getSense())) {
-							argMap.put(arg, tmp);
 							System.err.println("Frame not found: "
 									+ pred.getSense());
 							break;

@@ -72,80 +72,86 @@ public abstract class DependencyPathEmbedding extends ContinuousSetFeature {
 	}
 		
 	public float[] getFeatureValue(Collection<Integer> indices, Predicate pred, Word arg) {
-		net.clear();
-		
-		List<Word> path = Word.findPath(pred, arg);
-		int length = path.size();
-		
-		boolean up = true;
-		
-		StringBuffer path2string = new StringBuffer();
-		for(int i=0; i<length; i++) {
-			Word w = path.get(i);
+		float[] emb = pred.getPathEmbedding(name.toString(), arg);
+		if(emb==null) {
 			
+			net.clear();
 			
-			if( (Parse.parseOptions!=null && Parse.parseOptions.noPathEmbs)) {
-				HashMap<Integer, Float> ix = new HashMap<>();
-				for(int x : indices)
-					ix.put(x, 1.0F);		
-				net.getInputLayer(0).setInput(ix);
-				net.activateTest();				
-				break;
-			}							
+			List<Word> path = Word.findPath(pred, arg);
+			int length = path.size();
 			
-			if(net.getInputLayers().length>0) {
-				if(i>0) path2string.append(":");
-				net.getInputLayer(1).setInput( dc.createTrial(w.getPOS(), "pos")  );
-				path2string.append(w.getPOS());
-				path2string.append(":");
-				path2string.append(w.getForm().toLowerCase());
-				net.activateFirstTest();
-				net.getInputLayer(1).setInput( dc.createTrial(w.getForm().toLowerCase(), "words")  );
-			}						
+			boolean up = true;
 			
-			if(i==length-1) {
-				HashMap<Integer, Float> in = new HashMap<>();
-				for(int x : indices)
-					in.put(x, 1.0F);
-		
-				net.getInputLayer(0).setInput(in);
-				net.activateTest();					
+			StringBuffer path2string = new StringBuffer();
+			for(int i=0; i<length; i++) {
+				Word w = path.get(i);
 				
-			} else if(net.getInputLayers().length>1) { 
-				net.activateFirstTest();
-				String dep = null;
-				if (up) {
-					if (w.getHead() == path.get(i + 1)) { // Arrow up
-						dep = path.get(i).getDeprel() + "v";
-					} else { // Arrow down
-						dep = path.get(i+1).getDeprel()  + "^";
-						up = false;
-					}
-				} else {
-					dep = path.get(i+1).getDeprel() + "^";
-				}
-				net.getInputLayer(1).setInput( dc.createTrial(dep, "rels")  );
-				path2string.append(":");
-				path2string.append(dep);
-				net.activateFirstTest();
-			}
-		}
-
-		int hid1 = 0;
-		if(net.getComponentByName("Hidden")!=null)
-			hid1 = ((AbstractWeightedCompound)net.getComponentByName("Hidden")).getOutput().getActivations().length;
-		int hid2 = 0;
-		if(net.getComponentByName("ExtraHidden")!=null)
-			hid2 = ((AbstractWeightedCompound)net.getComponentByName("ExtraHidden")).getOutput().getActivations().length;
-		
-		float[] emb = new float[hid1+hid2];
-		Arrays.fill(emb, 0.0F);
-		
-		if(hid1>0 && !(Parse.parseOptions!=null && Parse.parseOptions.noPathEmbs))
-			System.arraycopy(((AbstractWeightedCompound)net.getComponentByName("Hidden")).getOutput().getActivations(), 0, emb, 0, hid1);
-		if(hid2>0)
-			System.arraycopy(((AbstractWeightedCompound)net.getComponentByName("ExtraHidden")).getOutput().getActivations(), 0, emb, hid1, hid2);
+				
+				if( (Parse.parseOptions!=null && Parse.parseOptions.noPathEmbs)) {
+					HashMap<Integer, Float> ix = new HashMap<>();
+					for(int x : indices)
+						ix.put(x, 1.0F);		
+					net.getInputLayer(0).setInput(ix);
+					net.activateTest();				
+					break;
+				}							
+				
+				if(net.getInputLayers().length>0) {
+					if(i>0) path2string.append(":");
+					net.getInputLayer(1).setInput( dc.createTrial(w.getPOS(), "pos")  );
+					path2string.append(w.getPOS());
+					path2string.append(":");
+					path2string.append(w.getForm().toLowerCase());
+					net.activateFirstTest();
+					net.getInputLayer(1).setInput( dc.createTrial(w.getForm().toLowerCase(), "words")  );
+				}						
+				
+				if(i==length-1) {
+					HashMap<Integer, Float> in = new HashMap<>();
+					for(int x : indices)
+						in.put(x, 1.0F);
+			
+					net.getInputLayer(0).setInput(in);
+					net.activateTest();					
 					
+				} else if(net.getInputLayers().length>1) { 
+					net.activateFirstTest();
+					String dep = null;
+					if (up) {
+						if (w.getHead() == path.get(i + 1)) { // Arrow up
+							dep = path.get(i).getDeprel() + "v";
+						} else { // Arrow down
+							dep = path.get(i+1).getDeprel()  + "^";
+							up = false;
+						}
+					} else {
+						dep = path.get(i+1).getDeprel() + "^";
+					}
+					net.getInputLayer(1).setInput( dc.createTrial(dep, "rels")  );
+					path2string.append(":");
+					path2string.append(dep);
+					net.activateFirstTest();
+				}
+			}
+	
+			int hid1 = 0;
+			if(net.getComponentByName("Hidden")!=null)
+				hid1 = ((AbstractWeightedCompound)net.getComponentByName("Hidden")).getOutput().getActivations().length;
+			int hid2 = 0;
+			if(net.getComponentByName("ExtraHidden")!=null)
+				hid2 = ((AbstractWeightedCompound)net.getComponentByName("ExtraHidden")).getOutput().getActivations().length;
+			
+			emb = new float[hid1+hid2];
+			Arrays.fill(emb, 0.0F);
+			
+			if(hid1>0 && !(Parse.parseOptions!=null && Parse.parseOptions.noPathEmbs))
+				System.arraycopy(((AbstractWeightedCompound)net.getComponentByName("Hidden")).getOutput().getActivations(), 0, emb, 0, hid1);
+			if(hid2>0)
+				System.arraycopy(((AbstractWeightedCompound)net.getComponentByName("ExtraHidden")).getOutput().getActivations(), 0, emb, hid1, hid2);
+					
+			pred.putPathEmbedding(name.toString(), arg, emb);
+			pred.putPathPrediction(name.toString(), arg, net.getTargetLayer().getActivations().clone());
+		}
 	
 		return emb;
 	}

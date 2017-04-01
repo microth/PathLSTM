@@ -12,8 +12,8 @@ public class Predicate extends Word {
 	private String sense; // This is PredLemmaSense in CoNLL2008
 	private String upsense; // This is the lemma sense from the ontology(!)
 
-	private Map<Word, float[]> argCEmbeds;
-	private Map<Word, float[]> argIEmbeds;
+	private Map<String, Map<Integer, float[]>> argEmbeds;
+	private Map<String, Map<Integer, float[]>> argPreds;
 
 	private List<ArgMap> candArgMaps;
 
@@ -98,26 +98,24 @@ public class Predicate extends Word {
 		return super.toString() + "\tY\t" + sense;
 	}
 
-	public void putCPathEmbedding(Word word, float[] emb) {
-		argCEmbeds.put(word, emb);
+	public void putPathEmbedding(String featname, Word arg, float[] emb) {
+		argEmbeds.putIfAbsent(featname, new TreeMap<Integer, float[]>());
+		argEmbeds.get(featname).put(arg.getIdx(), emb);
+	}
+	public void putPathPrediction(String featname, Word arg, float[] emb) {
+		argPreds.putIfAbsent(featname, new TreeMap<Integer, float[]>());
+		argPreds.get(featname).put(arg.getIdx(), emb);
+	}	
+	
+	public float[] getPathEmbedding(String featname, Word arg) {
+		if(!argEmbeds.containsKey(featname) ||
+				!argEmbeds.get(featname).containsKey(arg.getIdx()))
+			return null;
+		return argEmbeds.get(featname).get(arg.getIdx());
 	}
 	
-	public void putIPathEmbedding(Word word, float[] emb) {
-		argIEmbeds.put(word, emb);
-	}
-	
-	public float[] getACPathEmbedding(Word word) {
-		if(argCEmbeds==null) argCEmbeds = new HashMap<>();
-		return argCEmbeds.containsKey(word)?argCEmbeds.get(word):null;
-	}
-	
-	public float[] getAIPathEmbedding(Word word) {
-		if(argIEmbeds==null) argIEmbeds = new HashMap<>();
-		return argIEmbeds.containsKey(word)?argIEmbeds.get(word):null;
-	}
-
-	public void setCandidates(List<ArgMap> candArgMaps) {
-		this.candArgMaps = candArgMaps;
+	public float[] getPathPreds(String featname, Word arg) {
+		return argPreds.get(featname).get(arg.getIdx()).clone();
 	}
 	
 	public List<ArgMap> getCandidates() {
