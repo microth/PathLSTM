@@ -1,8 +1,13 @@
+# News
+
+April 2017: Please note that an incorrect package name caused incompatibility errors with `srl-ACL16-eng.model`. This has now been fixed. The repository now also contains a compiled archive (`pathlstm.jar`) of the PathLSTM source code. Feel free to use this if you are unable or unwilling to compile the code yourself.
+
+
 # PathLSTM 
 
 This repository contains code for the PathLSTM semantic role labeler introduced in [Roth and Lapata, 2016][1]. It is built on top of the [mate-tools semantic role labeler][2]. The PathLSTM model achieves state-of-the-art results on the in-domain (87.9) and out-of-domain (76.6) test sets of the CoNLL-2009 data set.
 
-# Dependencies
+## Dependencies
 
 The following libraries and model files need to be downloaded in order to run the PathLSTM PropBank/NomBank model on English text:
 
@@ -22,13 +27,13 @@ In addition, the following dependencies are required to run the Frame-SRL model:
  * A copy of FrameNet version 1.5 (http://framenet.icsi.berkeley.edu/
  * The most recent _PathLSTM_ Frame-SRL model file (October 2016), available on Google Drive [here][4]
 
-# Running PathLSTM  
+## Running PathLSTM  
 
 If copies of all required libraries and models are available in the subdirectories `lib/` and `models/`, respectively, PathLSTM can simply be executed as a standalone application using the script `scripts/parse.sh`. These scripts run necessary preprocessing tools on a given input text file (assuming one sentence per line), and apply our state-of-the-art model for identifying and role labeling of semantic predicate-argument structures.
 
 It is also possible to apply the PathLSTM model on already preprocessed text in the CoNLL 2009 format, using the Java class `se.lth.cs.srl.Parse`. Since PathLSTM is trained based on preprocessed input from specific pipelines, however, we strongly recommend to use the complete pipeline to achieve best performance. 
 
-# References
+## References
 
 [1]: http://arxiv.org/abs/1605.07515 
 [2]: http://code.google.com/p/mate-tools/
