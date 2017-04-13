@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.zip.ZipFile;
 
 import se.lth.cs.srl.corpus.Sentence;
-import uk.ac.ed.inf.srl.features.FeatureSet;
+import se.lth.cs.srl.features.FeatureSet;
 import uk.ac.ed.inf.srl.ml.Model;
 
 public abstract class AbstractStep implements PipelineStep {

@@ -10,10 +10,10 @@ import java.util.zip.ZipOutputStream;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
+import se.lth.cs.srl.features.Feature;
+import se.lth.cs.srl.features.FeatureSet;
 import se.lth.cs.srl.languages.German;
 import se.lth.cs.srl.languages.Language;
-import uk.ac.ed.inf.srl.features.Feature;
-import uk.ac.ed.inf.srl.features.FeatureSet;
 import uk.ac.ed.inf.srl.ml.Model;
 
 public class PredicateIdentifier extends AbstractStep {

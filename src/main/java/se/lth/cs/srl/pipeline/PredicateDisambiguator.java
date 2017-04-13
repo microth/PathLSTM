@@ -19,8 +19,8 @@ import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.PredicateReference;
 import se.lth.cs.srl.corpus.Sentence;
-import uk.ac.ed.inf.srl.features.Feature;
-import uk.ac.ed.inf.srl.features.FeatureSet;
+import se.lth.cs.srl.features.Feature;
+import se.lth.cs.srl.features.FeatureSet;
 import uk.ac.ed.inf.srl.ml.Model;
 
 public class PredicateDisambiguator implements PipelineStep {
