@@ -67,7 +67,6 @@ public class IllinoisPreprocessor extends Preprocessor {
 			instance.plemmas[i] = LemmaView.getLabel(i-1);
 		}
 		
-		// dependency parse preprocessed text
 		// add parsing information to return value object
 		instance.pheads = new int[instance.forms.length];
 		instance.plabels = new String[instance.forms.length];
