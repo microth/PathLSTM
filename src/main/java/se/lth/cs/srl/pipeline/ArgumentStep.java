@@ -45,18 +45,18 @@ public abstract class ArgumentStep extends AbstractStep {
 
 		for (Feature f : featureSet.get(POSPrefix)) {			
 			if(f instanceof DependencyPathEmbedding) {
-				NNThread t = new NNThread(f, indices, pred, arg, offset);
+				/*NNThread t = new NNThread(f, indices, pred, arg, offset);
 				nnfeats.add(t);
-				t.start();
+				t.start();*/
 				clear = true;
-			} else
-				f.addFeatures(indices, nonbinFeats, pred, arg, offset, false);
+			} //else
+			f.addFeatures(indices, nonbinFeats, pred, arg, offset, false);
 			
 			offset += f.size(false);
 		}
 		
 		if(clear) {
-			for(NNThread t : nnfeats) {
+			/*for(NNThread t : nnfeats) {
 				try {
 					t.join();
 				} catch (InterruptedException e) {
@@ -67,7 +67,7 @@ public abstract class ArgumentStep extends AbstractStep {
 				for(Entry<Integer, Double> e : t.getFeats().entrySet()) {
 					if(e.getValue()!=0.0) nonbinFeats.put(e.getKey(), e.getValue());
 				}
-			}						
+			}	*/					
 			indices.clear(); // only use NN hidden states instead		
 		}
 		return;
