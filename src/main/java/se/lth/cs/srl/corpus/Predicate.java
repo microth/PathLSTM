@@ -32,6 +32,8 @@ public class Predicate extends Word {
 	public Predicate(Word w, Sentence s) {
 		super(w, s);
 		argmap = new TreeMap<>(mySentence.wordComparator);
+		argEmbeds = new TreeMap<>();
+		argPreds = new TreeMap<>();
 	}
 
 	/**
@@ -116,6 +118,10 @@ public class Predicate extends Word {
 	
 	public float[] getPathPreds(String featname, Word arg) {
 		return argPreds.get(featname).get(arg.getIdx()).clone();
+	}
+	
+	public void setCandidates(List<ArgMap> candidates) {
+		this.candArgMaps = candidates;
 	}
 	
 	public List<ArgMap> getCandidates() {
