@@ -1,67 +1,34 @@
 package se.lth.cs.srl.preprocessor;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-//import edu.illinois.cs.cogcomp.depparse.DepInst;
-//import edu.illinois.cs.cogcomp.depparse.DepStruct;
-//import edu.illinois.cs.cogcomp.depparse.io.CONLLReader;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
-//import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
-//import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
-import edu.illinois.cs.cogcomp.sl.core.SLModel;
+import edu.illinois.cs.cogcomp.depparse.DepAnnotator;
+import edu.illinois.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
+import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import is2.data.SentenceData09;
-import is2.lemmatizer.Lemmatizer;
-import is2.parser.Parser;
-import is2.tag.Tagger;
-import is2.tools.Tool;
-
 import se.lth.cs.srl.preprocessor.tokenization.StanfordPTBTokenizer;
 import se.lth.cs.srl.preprocessor.tokenization.Tokenizer;
 import se.lth.cs.srl.util.Util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class IllinoisPreprocessor extends Preprocessor {
 
-	protected final AnnotatorService as;
-	protected final SLModel parser;
+	protected final Annotator pos, lemma, chunk, parser;
 	
 	public IllinoisPreprocessor(Tokenizer tokenizer, String modelfile) {
 		this.tokenizer = tokenizer;
-		AnnotatorService temp1 = null;
-		SLModel temp2 = null;
-		try {
-			Properties nonDefaultProps = new Properties();
-/*			nonDefaultProps.put(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
-			nonDefaultProps.put(PipelineConfigurator.USE_LEMMA.key, Configurator.TRUE);
-			nonDefaultProps.put(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
-			nonDefaultProps.put(PipelineConfigurator.USE_NER_CONLL.key, Configurator.FALSE);
-			nonDefaultProps.put(PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE);
-			nonDefaultProps.put(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.FALSE);
-			nonDefaultProps.put(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.FALSE);
-			nonDefaultProps.put(PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE);
-			nonDefaultProps.put(PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE);
-	   		ResourceManager rm = Configurator.mergeProperties(new PipelineConfigurator().getDefaultConfig(),
-					new ResourceManager(nonDefaultProps));
-	        
-			temp1 = PipelineFactory.buildPipeline(rm);*/
-			temp2 = SLModel.loadModel(modelfile);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		as = temp1;
-//		CONLLReader.as = as;
-		parser = temp2;
+		parser = new DepAnnotator();
+		pos = new POSAnnotator();
+		lemma = new IllinoisLemmatizer();
+		chunk = new ChunkerAnnotator();
 	}
 
 	public long tagTime = 0;
@@ -85,9 +52,10 @@ public class IllinoisPreprocessor extends Preprocessor {
 		tokens.add(tmp);		
 		TextAnnotation annotation = BasicTextAnnotationBuilder.createTextAnnotationFromTokens("", "", tokens);
 		try {
-			as.addView(annotation, ViewNames.POS);
-			as.addView(annotation, ViewNames.LEMMA);
-			//as.addView(annotation, ViewNames.SHALLOW_PARSE);
+			annotation.addView(pos);
+			annotation.addView(lemma);
+			annotation.addView(chunk);
+			annotation.addView(parser);
 		} catch (AnnotatorException e) {
 			e.printStackTrace();
 		}
@@ -99,25 +67,18 @@ public class IllinoisPreprocessor extends Preprocessor {
 			instance.plemmas[i] = LemmaView.getLabel(i-1);
 		}
 		
-		// dependency parse preprocessed text
-//		DepInst sent = new DepInst(annotation);
-//		DepStruct struct = null;
-		try {
-//			struct = (DepStruct) parser.infSolver.getBestStructure(parser.wv, sent);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
 		// add parsing information to return value object
 		instance.pheads = new int[instance.forms.length];
 		instance.plabels = new String[instance.forms.length];
 		instance.pfeats = new String[instance.forms.length];
 		instance.pheads[0] = -1;
-//		for (int i = 1; i < sent.forms.length; i++) {
-//			instance.pheads[i] = struct.heads[i];
-//			instance.plabels[i] = struct.deprels[i];
-//			instance.pfeats[i] = "_";
-//		}
+		for (Constituent node : annotation.getView(ViewNames.DEPENDENCY).getConstituents()) {
+			int position = node.getStartSpan();
+			int head = (node.getIncomingRelations().size() > 0) ?
+					node.getIncomingRelations().get(0).getSource().getStartSpan() : -1;
+			instance.pheads[position] = head + 1;
+			instance.plabels[position] = node.getLabel();
+		}
 		return instance;
 	}
 

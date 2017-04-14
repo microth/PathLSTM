@@ -1,115 +1,212 @@
 package se.lth.cs.srl.pipeline;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.depparse.DepAnnotator;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
+import edu.illinois.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
+import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import is2.data.SentenceData09;
 import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.corpus.ArgMap;
 import se.lth.cs.srl.corpus.Predicate;
+import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.languages.Language;
-import se.lth.cs.srl.options.CompletePipelineCMDLineOptions;
-import se.lth.cs.srl.preprocessor.Preprocessor;
+import se.lth.cs.srl.options.ParseOptions;
 
-import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * A wrapper of {@link ArgumentClassifier} into CogComp's LBJava {@link Learner}
  */
 public class LBJavaArgumentClassifier extends Learner {
     private Reranker srl;
-    private Preprocessor pp;
+    private final String POS;
+	
+	private String prv_annoid;
+	private Sentence prv_parse;
     
-    public LBJavaArgumentClassifier(String[] args) {
-    	CompletePipelineCMDLineOptions options = new CompletePipelineCMDLineOptions();
-    	options.parseCmdLineArgs(args);
-    	try {
-			pp = Language.getLanguage().getPreprocessor(options);
-		} catch (IOException e) {
-			// throw exception if model files for preprocessing cannot be read
+    public static void main(String[] args) {
+    	// put a tokenized test sentence here
+    	String test = "Michael went to Chicago by train .";
+    	String[] forms = test.split(" ");
+
+		Annotator pos = new POSAnnotator();
+		Annotator lemma = new IllinoisLemmatizer();
+		Annotator chunk = new ChunkerAnnotator();
+		Annotator parser = new DepAnnotator();
+   		
+   		List<String[]> tokens = new LinkedList<>();
+   		tokens.add(forms);
+		TextAnnotation annotation = BasicTextAnnotationBuilder.createTextAnnotationFromTokens("", "", tokens);
+		try {
+			annotation.addView(pos);
+			annotation.addView(lemma);
+			annotation.addView(chunk);
+			annotation.addView(parser);
+		} catch (AnnotatorException e) {
 			e.printStackTrace();
-			System.exit(1);
-		}
-    	Parse.parseOptions = options.getParseOptions();    	
+		} 		
+		
+		LBJavaArgumentClassifier lbj = new LBJavaArgumentClassifier(args);
+		Constituent con = annotation.getView(ViewNames.TOKENS).getConstituents().get(0);
+		Constituent pred = annotation.getView(ViewNames.TOKENS).getConstituents().get(1);
+		new Relation("O", pred, con, 1.0);
+		System.out.println(lbj.scores(con));
+    }
+    
+    public LBJavaArgumentClassifier(String[] args) {   	
+    	/* BEGIN: Check for -pos parameter to do VerbSRL / NounSRL separately */
+    	String temp1 = "";
+    	int x = -1;
+    	for(int i=0; i<args.length; i++) {
+    		if(args[i].equals("-pos")) {
+    			// commandline paramaters should contain "-pos N" or "-pos V" (or none of the two)
+    			temp1 = args[i+1];
+    			x = i;
+    			break;
+    		}
+    	}
+    	POS = temp1;
+    	if(!POS.equals("")) {
+    		String[] newargs = new String[args.length-2];
+			System.arraycopy(args, 0, newargs, 0, x);
+			System.arraycopy(args, x + 2, newargs, x + 2 - 2, args.length - (x + 2));
+    		args = newargs;
+    	}
+    	/* END */
+
+    	// load actual SRL pipeline + reranker 
+    	Parse.parseOptions = new ParseOptions(args);
         srl = new Reranker(Parse.parseOptions);
+        // Required by LBJava
+		name = "PathLSTMClassifier" + POS;
     }
 
     @Override
     public ScoreSet scores(Object example) {
 		Constituent constituent = (Constituent) example;
-    	TextAnnotation anno = constituent.getTextAnnotation();
-    	
-    	Sentence s = anno.sentences().get(0);
-    	se.lth.cs.srl.corpus.Sentence parse = new se.lth.cs.srl.corpus.Sentence(pp.preprocess(s.getTokens()), false);  
-    	srl.parse(parse);
+    	TextAnnotation annotation = constituent.getTextAnnotation();
 
-    	// number of SRL candidate outputs is #candidates(pred_1) * ... * #candidates(pred_n)
-    	int size = 1;
-    	List<Predicate> predicates = parse.getPredicates();
-    	int preds = predicates.size();
-    	int[] offsets = new int[preds];
-		for(int i=0; i<preds; i++) {
-			List<ArgMap> candidateStructures = predicates.get(i).getCandidates();
-			offsets[i] = size;
-			size *= candidateStructures.size();		
+    	// initialize internal representation
+    	String[] forms = annotation.getTokens();
+		SentenceData09 instance = new SentenceData09();
+		instance.init(forms);
+		
+		// re-use POS and lemma information from preprocessing		
+		TokenLabelView POSView = (TokenLabelView) annotation.getView(ViewNames.POS);
+		TokenLabelView LemmaView = (TokenLabelView) annotation.getView(ViewNames.LEMMA);
+		
+		// XXX: temporary fix (Jan 11): instance has no dummy token in anna version 3.5
+		// -> start indexing at 0
+		for (int i = 0; i < instance.ppos.length; i++) {
+			instance.ppos[i] = POSView.getLabel(i);
+			instance.plemmas[i] = LemmaView.getLabel(i);
 		}
-        double[] scores = new double[size];
-        Arrays.fill(scores, 1.0);
-        
-        String[][] valuePerWord = new String[size][parse.size()];
+				
+		Sentence parse = null;
 
-        // iterate through all combinations i of candidate predicate--argument structures 
-        for(int i=0; i<size; i++) {
-        	int rest = i;
-        	for(int j=preds-1; j>=0; j--) {
-        		Predicate pred = predicates.get(j);        		
-        		ArgMap candidate = pred.getCandidates().get(rest/offsets[j]);
-        		
-        		// compute score of candidate SRL output as average over selected PAS  
-        		scores[i] *= candidate.getProb()/(double)preds;
-        		
-        		for(Word w : candidate.keySet()) {
-        			int k = w.getIdx();
+		// reuse previous parse, if possible
+		if(annotation.getId().equals(prv_annoid)) {
+			parse = prv_parse;
+		} else {
+			// assume the dependency parse already exists (part of preprocessing)
+			// add parsing information to internal sentence representation
+			instance.pheads = new int[instance.forms.length];
+			instance.plabels = new String[instance.forms.length];
+			instance.pfeats = new String[instance.forms.length];
+			instance.pheads[0] = -1;
+			// XXX: temporary fix (Jan 11): instance has no dummy token in anna version 3.5 
+			// -> use struct index i-1
+			for (Constituent node : annotation.getView(ViewNames.DEPENDENCY).getConstituents()) {
+				int position = node.getStartSpan();
+				int head = (node.getIncomingRelations().size() > 0) ?
+						node.getIncomingRelations().get(0).getSource().getStartSpan() : -1;
+				instance.pheads[position] = head + 1;
+				instance.plabels[position] = node.getLabel();
+			}
+			
+			// finalize internal representation
+			parse = new Sentence(instance, false);
+			prv_parse = parse;
+		}
+		
+		// perform actual role labeling of given predicate
+		// (if predicate has not been assigned a PAS before)
+		int predIndex = 1+constituent.getIncomingRelations().get(0).getSource().getSpan().getFirst();
+		if(parse.get(predIndex).getClass() != Predicate.class) {
+			parse.getPredicates().clear();
+			parse.makePredicate(predIndex);
+			srl.parse(parse);
+		}
+		
+		// store for future reference
+		prv_annoid = annotation.getId();
 
-        			// one word can be part of multiple predicate--argument structures 
-        			if(valuePerWord[i][k]!=null)
-        				valuePerWord[i][k] += ",";
-        			else
-        				valuePerWord[i][k] = "";
-        			
-        			// each label assignment is a combination of the predicate lemma
-        			// and the argument label for a word as predicated in the candidate structure
-        			valuePerWord[i][k] += predicates.get(j).getLemma()+"--"+candidate.get(w);
-        		}
-        		
-        		rest = rest%offsets[j];
-        	}
-    	}
-
-        // for each combination i of candidates, 
-        //     output label assignments over all words j in the sentence 
-    	String[] values = new String[size];
-    	for(int i=0; i<values.length; i++) {
-    		StringBuffer sb = new StringBuffer();
-    		// start at j=1 to skip root token
-    		for(int j=1; j<valuePerWord[i].length; j++) {
-    			if(j>0) sb.append(" ");
-    			sb.append(j);
-    			sb.append(":");
-    			
-    			// output "0" in case no role was assigned to word j 
-    			sb.append(valuePerWord[i][j]==null?"0":valuePerWord[i][j]);
+		int argIndex = 1+constituent.getStartSpan();
+		// Predicate and argument objects after SRL
+		Predicate p = (Predicate)parse.get(predIndex);
+		Word  a = parse.get(argIndex);
+   	
+    	double total = 0.0;
+    	// iterate over reranker's n-best output 
+    	Map<String, Double> label2unnormalized_score = new HashMap<String, Double>();
+    	for(ArgMap candidate : p.getCandidates()) {
+    		// sum up total score of all candidate
+    		total += candidate.getProb();
+    		
+    		// assume no label as default
+    		String label = "";
+    		for(Word w : candidate.keySet()) {
+    			if( (predIndex==argIndex && argIndex==w.getIdx()) 
+    					|| (predIndex!=argIndex && getDominated(Collections.singleton(w)).contains(a))) {
+    				label = candidate.get(w); 
+    			}
     		}
-    		values[i] = sb.toString();
+    		
+    		// sum up score of all candidates that assign specific label to constituent
+    		if(!label2unnormalized_score.containsKey(label))
+    			label2unnormalized_score.put(label, candidate.getProb());
+    		else
+    			label2unnormalized_score.put(label, candidate.getProb() + label2unnormalized_score.get(label) );
+		}
+   
+    	// normalize score for constituent label
+    	String[] values = new String[label2unnormalized_score.size()];
+    	double[] scores = new double[label2unnormalized_score.size()];    	
+    	int i=0;
+    	for(String label : label2unnormalized_score.keySet()) {
+    		values[i] = label.equals("") ? "O" : label;
+    		scores[i] = label2unnormalized_score.get(label)/total; 
+    		i++;
     	}
+    	
         return new ScoreSet(values, scores);
     }
+    
+    // compute set of all words governed by (singleton) set w
+    private static Collection<Word> getDominated(Set<Word> w) {
+		Collection<Word> ret = new HashSet<>(w);
+		for (Word c : w)
+			ret.addAll(getDominated(c.getChildren()));
+		return ret;
+    }
+
+	@Override
+	public String discreteValue(Object example) {
+    	ScoreSet scoreSet = scores(example);
+    	return scoreSet.highScoreValue();
+	}
 
     @Override
     public FeatureVector classify(int[] exampleFeatures, double[] exampleValues) {
