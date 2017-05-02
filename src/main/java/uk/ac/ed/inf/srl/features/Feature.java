@@ -1,4 +1,4 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -8,6 +8,7 @@ import java.util.Map;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
+import se.lth.cs.srl.features.FeatureName;
 
 public abstract class Feature implements Serializable {
 	private static final long serialVersionUID = 1L;

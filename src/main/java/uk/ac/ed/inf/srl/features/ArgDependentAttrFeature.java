@@ -1,4 +1,4 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 import java.util.Collection;
 import java.util.Map;
@@ -7,6 +7,9 @@ import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
 import se.lth.cs.srl.corpus.Word.WordData;
+import se.lth.cs.srl.features.AttrFeature;
+import se.lth.cs.srl.features.FeatureName;
+import se.lth.cs.srl.features.TargetWord;
 
 public class ArgDependentAttrFeature extends AttrFeature {
 	private static final long serialVersionUID = 1L;

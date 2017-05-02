@@ -18,10 +18,10 @@ import se.lth.cs.srl.SemanticRoleLabeler;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.PredicateReference;
 import se.lth.cs.srl.corpus.Sentence;
-import se.lth.cs.srl.features.Feature;
-import se.lth.cs.srl.features.FeatureFile;
-import se.lth.cs.srl.features.FeatureGenerator;
-import se.lth.cs.srl.features.FeatureSet;
+import uk.ac.ed.inf.srl.features.Feature;
+import uk.ac.ed.inf.srl.features.FeatureFile;
+import uk.ac.ed.inf.srl.features.FeatureGenerator;
+import uk.ac.ed.inf.srl.features.FeatureSet;
 
 public class Pipeline extends SemanticRoleLabeler {
 

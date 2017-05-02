@@ -1,4 +1,4 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 public interface QuadraticFeature {
 

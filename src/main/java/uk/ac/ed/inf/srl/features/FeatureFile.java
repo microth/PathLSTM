@@ -1,4 +1,4 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import se.lth.cs.srl.features.Feature;
+import se.lth.cs.srl.features.FeatureSet;
 
 public class FeatureFile {
 

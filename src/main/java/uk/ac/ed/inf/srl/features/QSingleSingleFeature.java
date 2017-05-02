@@ -1,8 +1,11 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
+import se.lth.cs.srl.features.FeatureGenerator;
+import se.lth.cs.srl.features.QuadraticFeature;
+import se.lth.cs.srl.features.SingleFeature;
 
 public class QSingleSingleFeature extends SingleFeature implements
 		QuadraticFeature {

@@ -1,4 +1,9 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
+
+import se.lth.cs.srl.features.FeatureName;
+import se.lth.cs.srl.features.SetFeature;
+import se.lth.cs.srl.features.TargetWord;
+import se.lth.cs.srl.features.WordExtractor;
 
 public abstract class FeatsFeature extends SetFeature {
 	private static final long serialVersionUID = 1L;

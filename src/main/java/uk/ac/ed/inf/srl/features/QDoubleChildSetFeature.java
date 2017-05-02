@@ -1,10 +1,14 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 import java.util.Set;
 
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
+import se.lth.cs.srl.features.ChildSetFeature;
+import se.lth.cs.srl.features.FeatureGenerator;
+import se.lth.cs.srl.features.QuadraticFeature;
+import se.lth.cs.srl.features.SetFeature;
 
 public class QDoubleChildSetFeature extends SetFeature implements
 		QuadraticFeature {

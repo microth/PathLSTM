@@ -1,10 +1,12 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 import java.util.List;
 
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
+import se.lth.cs.srl.features.FeatureName;
+import se.lth.cs.srl.features.SingleFeature;
 import se.lth.cs.srl.util.BrownCluster;
 import se.lth.cs.srl.util.BrownCluster.ClusterVal;
 

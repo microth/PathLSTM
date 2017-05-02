@@ -6,13 +6,13 @@ import se.lth.cs.srl.corpus.ArgMap;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.features.DependencyPathEmbedding;
-import se.lth.cs.srl.features.Feature;
-import se.lth.cs.srl.features.FeatureGenerator;
-import se.lth.cs.srl.features.FeatureSet;
 import se.lth.cs.srl.languages.Language;
 import se.lth.cs.srl.languages.Language.L;
 import se.lth.cs.srl.options.ParseOptions;
+import uk.ac.ed.inf.srl.features.DependencyPathEmbedding;
+import uk.ac.ed.inf.srl.features.Feature;
+import uk.ac.ed.inf.srl.features.FeatureGenerator;
+import uk.ac.ed.inf.srl.features.FeatureSet;
 import uk.ac.ed.inf.srl.ml.Model;
 import uk.ac.ed.inf.srl.ml.liblinear.Label;
 

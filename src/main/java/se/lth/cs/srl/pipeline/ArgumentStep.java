@@ -12,9 +12,9 @@ import java.util.TreeMap;
 import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.features.DependencyPathEmbedding;
-import se.lth.cs.srl.features.Feature;
-import se.lth.cs.srl.features.FeatureSet;
+import uk.ac.ed.inf.srl.features.DependencyPathEmbedding;
+import uk.ac.ed.inf.srl.features.Feature;
+import uk.ac.ed.inf.srl.features.FeatureSet;
 import uk.ac.ed.inf.srl.ml.Model;
 
 public abstract class ArgumentStep extends AbstractStep {

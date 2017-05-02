@@ -1,4 +1,4 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 public enum FeatureName {
 	PredWord, PredLemma, PredPOS, PredDeprel, PredLemmaSense, OntPredLemmaSense, PredFeats, PredUPOS, PredParentWord, PredParentPOS, PredParentFeats, PredParentLemma, PredLeftWord, PredRightWord, PredLeftPOS, PredRightPOS, PredLeftSiblingWord, PredRightSiblingWord, PredLeftSiblingPOS, PredRightSiblingPOS,

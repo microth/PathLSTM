@@ -1,10 +1,14 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.zip.ZipFile;
+
+import se.lth.cs.srl.features.Feature;
+import se.lth.cs.srl.features.FeatureGenerator;
+import se.lth.cs.srl.features.FeatureName;
 
 public class DumpFeature {
 

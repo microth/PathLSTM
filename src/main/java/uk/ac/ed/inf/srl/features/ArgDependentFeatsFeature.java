@@ -1,4 +1,4 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 import java.util.Collection;
 import java.util.Map;
@@ -6,6 +6,9 @@ import java.util.Map;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
+import se.lth.cs.srl.features.FeatsFeature;
+import se.lth.cs.srl.features.FeatureName;
+import se.lth.cs.srl.features.TargetWord;
 import se.lth.cs.srl.languages.Language;
 
 public class ArgDependentFeatsFeature extends FeatsFeature {

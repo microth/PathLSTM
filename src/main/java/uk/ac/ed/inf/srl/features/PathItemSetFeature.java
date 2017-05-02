@@ -1,4 +1,4 @@
-package se.lth.cs.srl.features;
+package uk.ac.ed.inf.srl.features;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -8,6 +8,8 @@ import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
 import se.lth.cs.srl.corpus.Word.WordData;
+import se.lth.cs.srl.features.FeatureName;
+import se.lth.cs.srl.features.SetFeature;
 
 public class PathItemSetFeature extends SetFeature {
 	private static final long serialVersionUID = 1L;
