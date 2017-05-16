@@ -5,10 +5,10 @@ import java.util.Set;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.features.ChildSetFeature;
-import se.lth.cs.srl.features.FeatureGenerator;
-import se.lth.cs.srl.features.QuadraticFeature;
-import se.lth.cs.srl.features.SetFeature;
+import uk.ac.ed.inf.srl.features.ChildSetFeature;
+import uk.ac.ed.inf.srl.features.FeatureGenerator;
+import uk.ac.ed.inf.srl.features.QuadraticFeature;
+import uk.ac.ed.inf.srl.features.SetFeature;
 
 public class QDoubleChildSetFeature extends SetFeature implements
 		QuadraticFeature {

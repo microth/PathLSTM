@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.zip.ZipFile;
 
-import se.lth.cs.srl.features.Feature;
-import se.lth.cs.srl.features.FeatureGenerator;
-import se.lth.cs.srl.features.FeatureName;
+import uk.ac.ed.inf.srl.features.Feature;
+import uk.ac.ed.inf.srl.features.FeatureGenerator;
+import uk.ac.ed.inf.srl.features.FeatureName;
 
 public class DumpFeature {
 

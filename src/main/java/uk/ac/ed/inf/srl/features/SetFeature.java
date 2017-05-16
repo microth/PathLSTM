@@ -6,8 +6,8 @@ import java.util.Map;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.features.Feature;
-import se.lth.cs.srl.features.FeatureName;
+import uk.ac.ed.inf.srl.features.Feature;
+import uk.ac.ed.inf.srl.features.FeatureName;
 
 public abstract class SetFeature extends Feature {
 	private static final long serialVersionUID = 1L;

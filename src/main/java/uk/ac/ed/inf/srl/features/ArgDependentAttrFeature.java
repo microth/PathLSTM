@@ -7,9 +7,9 @@ import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
 import se.lth.cs.srl.corpus.Word.WordData;
-import se.lth.cs.srl.features.AttrFeature;
-import se.lth.cs.srl.features.FeatureName;
-import se.lth.cs.srl.features.TargetWord;
+import uk.ac.ed.inf.srl.features.AttrFeature;
+import uk.ac.ed.inf.srl.features.FeatureName;
+import uk.ac.ed.inf.srl.features.TargetWord;
 
 public class ArgDependentAttrFeature extends AttrFeature {
 	private static final long serialVersionUID = 1L;

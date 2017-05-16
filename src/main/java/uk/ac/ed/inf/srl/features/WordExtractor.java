@@ -4,19 +4,8 @@ import java.io.Serializable;
 
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.features.Arg;
-import se.lth.cs.srl.features.FirstWord;
-import se.lth.cs.srl.features.LastWord;
-import se.lth.cs.srl.features.LeftDep;
-import se.lth.cs.srl.features.LeftSibling;
-import se.lth.cs.srl.features.Pred;
-import se.lth.cs.srl.features.PredParent;
-import se.lth.cs.srl.features.RightDep;
-import se.lth.cs.srl.features.RightSibling;
-import se.lth.cs.srl.features.SecondWord;
-import se.lth.cs.srl.features.Subj;
-import se.lth.cs.srl.features.TargetWord;
-import se.lth.cs.srl.features.WordExtractor;
+import uk.ac.ed.inf.srl.features.TargetWord;
+import uk.ac.ed.inf.srl.features.WordExtractor;
 
 public abstract class WordExtractor implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import se.lth.cs.srl.features.Feature;
-import se.lth.cs.srl.features.FeatureSet;
+import uk.ac.ed.inf.srl.features.Feature;
+import uk.ac.ed.inf.srl.features.FeatureSet;
 
 public class FeatureFile {
 

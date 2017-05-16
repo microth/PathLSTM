@@ -6,9 +6,9 @@ import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
 import se.lth.cs.srl.corpus.Word.WordData;
-import se.lth.cs.srl.features.FeatureName;
-import se.lth.cs.srl.features.NumFeature;
-import se.lth.cs.srl.features.SingleFeature;
+import uk.ac.ed.inf.srl.features.FeatureName;
+import uk.ac.ed.inf.srl.features.NumFeature;
+import uk.ac.ed.inf.srl.features.SingleFeature;
 
 public class PathLengthFeature extends SingleFeature {
 	private static final long serialVersionUID = 1L;

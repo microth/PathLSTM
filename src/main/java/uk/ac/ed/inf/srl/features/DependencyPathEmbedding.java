@@ -11,9 +11,9 @@ import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.features.ContinuousSetFeature;
-import se.lth.cs.srl.features.FeatureName;
-import se.lth.cs.srl.features.TargetWord;
+import uk.ac.ed.inf.srl.features.ContinuousSetFeature;
+import uk.ac.ed.inf.srl.features.FeatureName;
+import uk.ac.ed.inf.srl.features.TargetWord;
 import uk.ac.ed.inf.srl.lstm.DataConverter;
 import uk.ac.ed.inf.srl.lstm.EmbeddingNetwork;
 

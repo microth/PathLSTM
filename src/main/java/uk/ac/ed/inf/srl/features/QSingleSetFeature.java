@@ -3,10 +3,10 @@ package uk.ac.ed.inf.srl.features;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.features.FeatureGenerator;
-import se.lth.cs.srl.features.QuadraticFeature;
-import se.lth.cs.srl.features.SetFeature;
-import se.lth.cs.srl.features.SingleFeature;
+import uk.ac.ed.inf.srl.features.FeatureGenerator;
+import uk.ac.ed.inf.srl.features.QuadraticFeature;
+import uk.ac.ed.inf.srl.features.SetFeature;
+import uk.ac.ed.inf.srl.features.SingleFeature;
 
 public class QSingleSetFeature extends SetFeature implements QuadraticFeature {
 	private static final long serialVersionUID = 1L;

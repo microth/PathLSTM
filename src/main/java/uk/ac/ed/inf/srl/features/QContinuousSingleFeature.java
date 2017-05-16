@@ -6,11 +6,11 @@ import java.util.Map;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
-import se.lth.cs.srl.features.ContinuousFeature;
-import se.lth.cs.srl.features.Feature;
-import se.lth.cs.srl.features.FeatureGenerator;
-import se.lth.cs.srl.features.QuadraticFeature;
-import se.lth.cs.srl.features.SingleFeature;
+import uk.ac.ed.inf.srl.features.ContinuousFeature;
+import uk.ac.ed.inf.srl.features.Feature;
+import uk.ac.ed.inf.srl.features.FeatureGenerator;
+import uk.ac.ed.inf.srl.features.QuadraticFeature;
+import uk.ac.ed.inf.srl.features.SingleFeature;
 
 public class QContinuousSingleFeature extends Feature implements
 		QuadraticFeature {

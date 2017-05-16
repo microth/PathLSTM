@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import se.lth.cs.srl.features.Feature;
+import uk.ac.ed.inf.srl.features.Feature;
 
 /**
  * A feature set is basically a Map<String,List<Feature>>, where String is a
