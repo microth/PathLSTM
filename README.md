@@ -1,7 +1,8 @@
 # News
 
-April 2017: Please note that an incorrect package name caused incompatibility errors with `srl-ACL16-eng.model`. This has now been fixed. The repository now also contains a compiled archive (`pathlstm.jar`) of the PathLSTM source code. Feel free to use this if you are unable or unwilling to compile the code yourself.
+April 2017: The repository now also contains a compiled archive (`pathlstm.jar`) of the PathLSTM source code. Feel free to use this if you are unable or unwilling to compile the code yourself.
 
+May 2017: The source code and pre-compiled jar file are updated with additional code to support the FrameNet-based SRL model described in Roth (ICCG 2016). Note that this model requires syntactic preprocessing using external tools.  
 
 # PathLSTM 
 
