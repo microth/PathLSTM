@@ -56,6 +56,24 @@ public enum FeatureName {
 	PathEmbeddingaiV_SRLNetwork_wIOUP_25hid_90hid2_wSuppFeats_ONT5_seed2,
 	PathEmbeddingaiV_SRLNetwork_wIOUP_25hid_90hid2_wSuppFeats_ONT5_seed3,
 	
+	PathEmbeddingaiN_ONT5_seed1, // -data aiN -language ONT5 -alpha 0.00253310756922363 -hidden1 66 -hidden2 325 -dropout 0.337905883789 -gates IOUT
+	PathEmbeddingaiV_ONT5_seed1, // -data aiV -language ONT5 -alpha 0.00547821138091652 -hidden1 1 -hidden2 63 -dropout 0.260192871094 -gates IOFU
+	PathEmbeddingacN_ONT5_seed1, // -data acN -language ONT5 -alpha 0.0163861269751915 -hidden1 11 -hidden2 170 -dropout 0.2049560546875 -gates IOFUP
+	PathEmbeddingacV_ONT5_seed1, // -data acV -language ONT5 -alpha 0.00167639677523254 -hidden1 29 -hidden2 375 -dropout 0.0960693359375 -gates IOFPT
+	
+	PathEmbeddingaiN_FNET_seed1, //-data aiN -language FNET -alpha 0.00511979968423424 -hidden1 1 -hidden2 388 -dropout 0.5 -gates IOUT
+	PathEmbeddingaiN_FNET_seed2,
+	PathEmbeddingaiN_FNET_seed3,
+	PathEmbeddingaiV_FNET_seed1, //-data aiV -language FNET -alpha 0.00358926654399116 -hidden1 8 -hidden2 319 -dropout 0.4141845703125 -gates IOPT
+	PathEmbeddingaiV_FNET_seed2,
+	PathEmbeddingaiV_FNET_seed3,
+	PathEmbeddingacN_FNET_seed1, //-data acN -language FNET -alpha 0.0295980595515617 -hidden1 1 -hidden2 143 -dropout 0.5 -gates IOFUPT
+	PathEmbeddingacN_FNET_seed2,
+	PathEmbeddingacN_FNET_seed3,
+	PathEmbeddingacV_FNET_seed1, //-data acV -language FNET -alpha 0.0193160753904859 -hidden1 1 -hidden2 500 -dropout 0.5 -gates IOFUP
+	PathEmbeddingacV_FNET_seed2,
+	PathEmbeddingacV_FNET_seed3,
+	
 	// /usr/lib/jvm/java-1.8.0/bin/java -Xmx6g -cp bin/ uk/ac/ed/inf/srl/lstm/NetworkRunner -data aiN -alpha 0.000896860647852131 -hidden1 16 -hidden2 125 -dropout 0.4183349609375 -gates IOU
 	PathEmbeddingaiN_SRLNetwork_wIOU_16hid_125hid2_wSuppFeats_best,
 	PathEmbeddingaiN_SRLNetwork_wIOU_16hid_125hid2_wSuppFeats_seed2,

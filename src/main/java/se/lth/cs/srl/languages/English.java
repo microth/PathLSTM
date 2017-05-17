@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import se.lth.cs.srl.Parse;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
@@ -40,7 +41,9 @@ public class English extends Language {
 				// argument
 			if (proposition.containsKey(word)) {
 				String label = proposition.get(word);
-				if (CALSPattern.matcher(label).matches())
+				if ((Parse.parseOptions != null
+						&& Parse.parseOptions.globalFeats && Parse.parseOptions.framenetdir != null)
+						|| CALSPattern.matcher(label).matches())
 					ret.append(" " + label);
 			}
 		}
