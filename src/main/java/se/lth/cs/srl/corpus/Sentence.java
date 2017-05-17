@@ -247,8 +247,13 @@ public class Sentence extends ArrayList<Word> {
 
 			if (cols.length > 14 && cols[14].matches("^[0-9].*"))
 				nextWord.setCorefId(Integer.parseInt(cols[14]));
-			if (cols.length > 15 && cols[15].matches("^[0-9].*"))
-				nextWord.setCorefId(Integer.parseInt(cols[15]));
+			if (cols.length > 15 && cols[15].matches("^[0-9].*")) {
+				// word can be part of multiple coref chains
+				for(String cc : cols[15].split(",")) {
+					// XXX: stupid hack, please fix me!
+					nextWord.setCorefId(Integer.parseInt(cc));
+				}
+			}
 
 			ret.add(nextWord);
 		}
@@ -291,7 +296,11 @@ public class Sentence extends ArrayList<Word> {
 			}
 
 			if (corefid != null)
-				nextWord.setCorefId(Integer.parseInt(corefid));
+				// word can be part of multiple coref chains
+				for(String cc : corefid.split(",")) {
+					// XXX: stupid hack, please fix me!
+					nextWord.setCorefId(Integer.parseInt(cc));
+				}				
 
 			ret.add(nextWord);
 		}
