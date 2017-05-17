@@ -123,8 +123,8 @@ public class ArgumentClassifier extends ArgumentStep {
 			Map<Word, String> argMap = pred.getArgMap();
 			/** if(pred.getCandSenses()<2) { **/
 			for (Word arg : argMap.keySet()) {
-				if ((Parse.parseOptions != null && Parse.parseOptions.framenetdir ==null)) {
-						Integer label = super.classifyInstance(pred, arg);
+				if (Parse.parseOptions != null && Parse.parseOptions.framenetdir ==null) {
+					Integer label = super.classifyInstance(pred, arg);
 					argMap.put(arg, argLabels.get(label));
 				} else {
 					// modified
@@ -133,14 +133,45 @@ public class ArgumentClassifier extends ArgumentStep {
 						POSPrefix = featureSet.POSPrefixes[0];
 					}
 					Model m = models.get(POSPrefix);
-					Collection<Integer> indices = new TreeSet<>();
-					Map<Integer, Double> nonbinFeats = new TreeMap<>();
-					collectFeatures(pred, arg, POSPrefix, indices,
-							nonbinFeats);
-					List<Label> labels = m.classifyProb(indices, nonbinFeats);
-
-					for (Label l : labels) {
+					Collection<Integer> indices = new TreeSet<Integer>();
+					Map<Integer, Double> nonbinFeats = new TreeMap<Integer, Double>();
+					collectFeatures(pred, arg, POSPrefix, indices, nonbinFeats);
+					
+					
+					List<uk.ac.ed.inf.srl.ml.liblinear.Label> labels = null;
+					if(!Parse.parseOptions.externalNNs)
+						labels = m.classifyProb(indices, nonbinFeats);
+					else {
+						float[] outputs = null; 
+						for(Feature f : featureSet.get(POSPrefix)) {
+							if(f instanceof DependencyPathEmbedding) {
+								if(outputs==null) outputs = pred.getPathPreds(f.getName(), arg);
+								else {
+									float[] tmp = pred.getPathPreds(f.getName(), arg);
+									for(int j=0; j<outputs.length; j++)
+										outputs[j] += tmp[j];
+								}
+							}				
+						}
+						float max = outputs[1];
+						int label = 1;
+						List<String> frame = roles.get(pred.getSense());
+						for (int j = 2; j < outputs.length; ++j) {
+							if(outputs[j]>max && 
+								(frame==null || frame.contains(argLabels.get(j-1)))) {
+								max = outputs[j];
+								label = j;
+							}
+						}
+						argMap.put(arg, argLabels.get(label-1));
+						continue;
+					}
+					
+					for (uk.ac.ed.inf.srl.ml.liblinear.Label l : labels) {
+						// uk.ac.ed.inf.srl.ml.liblinear.Label l =
+						// labels.get(0);
 						String tmp = argLabels.get(l.getLabel());
+						// System.err.println(pred.getSense());
 						if (!roles.containsKey(pred.getSense())) {
 							argMap.put(arg, tmp);
 							System.err.println("Frame not found: "
@@ -154,7 +185,6 @@ public class ArgumentClassifier extends ArgumentStep {
 						}
 					}
 				}
-
 			}
 		}
 	}
@@ -212,9 +242,17 @@ public class ArgumentClassifier extends ArgumentStep {
 				}
 				if(numoutputs>0) {
 					probs = new ArrayList<>(outputs.length);
-					for (int j = 0; j < outputs.length; ++j) {
-						probs.add(new Label(j, (double)(outputs[j]/(double)numoutputs)));
-					}
+                    if (Parse.parseOptions != null && Parse.parseOptions.framenetdir ==null)
+                            for (int j = 0; j < outputs.length; ++j)                                            
+                                probs.add(new Label(j, outputs[j]/numoutputs));
+                        else {
+                            List<String> frame = roles.get(pred.getSense());
+                            //                                            System.err.println(frame.toString());
+                            for (int j = 1; j < outputs.length; ++j) {
+                                if(frame==null || frame.contains(argLabels.get(j-1)))
+                                    probs.add(new Label(j-1,outputs[j]/numoutputs));
+                            }
+                        }
 					Collections.sort(probs, Collections.reverseOrder());
 				} else
 					probs = model.classifyProb(indices, nonbinFeats);
@@ -231,7 +269,7 @@ public class ArgumentClassifier extends ArgumentStep {
 						Label label = probs.get(i);
 						ArgMap newBranch = new ArgMap(branch);
 						
-						// HACK to prevent index out of bound?!
+						// Hack to avoid unknown labels
 						if(label.getLabel()>=argLabels.size())
 							continue;
 						
