@@ -37,11 +37,19 @@ public class ArgumentClassifier extends ArgumentStep {
 
 	private Map<String, List<String>> roles;
 
+	boolean framenet15 = false;
+	boolean framenet17 = false;
+	
 	public ArgumentClassifier(FeatureSet fs, List<String> argLabels) {
 		super(fs);
 		this.argLabels = argLabels;
-		if (Parse.parseOptions != null && Parse.parseOptions.framenetdir != null)
+		if (Parse.parseOptions != null && Parse.parseOptions.framenetdir != null) {
 			roles = createLexicon(Parse.parseOptions.framenetdir + "/frame/");
+			if(Parse.parseOptions.framenetdir.contains("1.5"))
+				framenet15 = true;
+			else
+				framenet17 = true;
+		}
 	}
 
 	private Map<String, List<String>> createLexicon(String lexicondir) {
@@ -123,7 +131,7 @@ public class ArgumentClassifier extends ArgumentStep {
 			Map<Word, String> argMap = pred.getArgMap();
 			/** if(pred.getCandSenses()<2) { **/
 			for (Word arg : argMap.keySet()) {
-				if (Parse.parseOptions != null && Parse.parseOptions.framenetdir ==null) {
+				if (!framenet15 && !framenet17) {
 					Integer label = super.classifyInstance(pred, arg);
 					argMap.put(arg, argLabels.get(label));
 				} else {
@@ -153,17 +161,19 @@ public class ArgumentClassifier extends ArgumentStep {
 								}
 							}				
 						}
-						float max = outputs[1];
-						int label = 1;
+						int label = framenet15?1:0;
+						float max = outputs[label];
+						
 						List<String> frame = roles.get(pred.getSense());
-						for (int j = 2; j < outputs.length; ++j) {
+						//System.err.print(pred.getSense() + "\t" + frame.toString());
+						for (int j = 1 + (framenet15?1:0); j < outputs.length; ++j) {
 							if(outputs[j]>max && 
-								(frame==null || frame.contains(argLabels.get(j-1)))) {
+								(frame==null || frame.contains(argLabels.get(j - (framenet15?1:0))))) {
 								max = outputs[j];
 								label = j;
 							}
 						}
-						argMap.put(arg, argLabels.get(label-1));
+						argMap.put(arg, argLabels.get(label - (framenet15?1:0)));
 						continue;
 					}
 					
@@ -242,17 +252,17 @@ public class ArgumentClassifier extends ArgumentStep {
 				}
 				if(numoutputs>0) {
 					probs = new ArrayList<>(outputs.length);
-                    if (Parse.parseOptions != null && Parse.parseOptions.framenetdir ==null)
-                            for (int j = 0; j < outputs.length; ++j)                                            
-                                probs.add(new Label(j, outputs[j]/numoutputs));
-                        else {
-                            List<String> frame = roles.get(pred.getSense());
-                            //                                            System.err.println(frame.toString());
-                            for (int j = 1; j < outputs.length; ++j) {
-                                if(frame==null || frame.contains(argLabels.get(j-1)))
-                                    probs.add(new Label(j-1,outputs[j]/numoutputs));
-                            }
+                    if (!framenet15 && !framenet17)
+                        for (int j = 0; j < outputs.length; ++j)                                            
+                            probs.add(new Label(j, outputs[j]/numoutputs));
+                    else {
+                        List<String> frame = roles.get(pred.getSense());
+                        int offset = framenet15?1:0;
+                        for (int j = offset; j < outputs.length; ++j) {
+                            if(frame==null || frame.contains(argLabels.get(j-offset)))
+                                probs.add(new Label(j-offset,outputs[j]/numoutputs));
                         }
+                    }
 					Collections.sort(probs, Collections.reverseOrder());
 				} else
 					probs = model.classifyProb(indices, nonbinFeats);
