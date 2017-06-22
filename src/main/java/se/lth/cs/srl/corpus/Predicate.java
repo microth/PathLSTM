@@ -32,6 +32,9 @@ public class Predicate extends Word {
 	public Predicate(Word w, Sentence s) {
 		super(w, s);
 		argmap = new TreeMap<>(mySentence.wordComparator);
+		
+		argEmbeds = new TreeMap<String, Map<Integer, float[]>>();
+		argPreds = new TreeMap<String, Map<Integer, float[]>>();
 	}
 
 	/**
