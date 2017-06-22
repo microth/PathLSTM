@@ -58,6 +58,7 @@ public abstract class FullPipelineOptions {
 		parseOptions.printANN = printANN;
 		parseOptions.externalNNs = externalNNs;
 		parseOptions.globalFeats = globalFeats;
+		parseOptions.framenetdir = framenetdir;
 		return parseOptions;
 	}
 

@@ -137,7 +137,8 @@ public abstract class ArgumentStep extends AbstractStep {
 					}
 				}
 				return label;
-			}
+			} else
+				throw new Error("No NN outputs available for " + this.getClass());
 		}
 		
 		return m.classify(indices, nonbinFeats);

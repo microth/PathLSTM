@@ -75,8 +75,8 @@ public abstract class DependencyPathEmbedding extends ContinuousSetFeature {
 	}
 		
 	public float[] getFeatureValue(Collection<Integer> indices, Predicate pred, Word arg) {
-		float[] emb = pred.getPathEmbedding(name.toString(), arg);
-		if(emb==null) {
+		float[] emb = null; // pred.getPathEmbedding(name.toString(), arg);
+		//if(emb==null) {
 			net.clear();
 			
 			List<Word> path = Word.findPath(pred, arg);
@@ -151,9 +151,9 @@ public abstract class DependencyPathEmbedding extends ContinuousSetFeature {
 			if(hid2>0)
 				System.arraycopy(((AbstractWeightedCompound)net.getComponentByName("ExtraHidden")).getOutput().getActivations(), 0, emb, hid1, hid2);
 						
-			pred.putPathEmbedding(name.toString(), arg, emb);
-			pred.putPathPrediction(name.toString(), arg, net.getTargetLayer().getActivations().clone());
-		}
+			//pred.putPathEmbedding(name.toString(), arg, emb);
+			//pred.putPathPrediction(name.toString(), arg, net.getTargetLayer().getActivations().clone());
+		//}
 			
 		return emb;
 	}
