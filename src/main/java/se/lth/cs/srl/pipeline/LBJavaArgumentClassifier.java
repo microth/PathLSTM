@@ -159,17 +159,17 @@ public class LBJavaArgumentClassifier extends Learner {
 		Word  a = parse.get(argIndex);
    	
     	double total = 0.0;
-    	// iterate over reranker's n-best output 
+    	// iterate over reranker's n-best output
     	Map<String, Double> label2unnormalized_score = new HashMap<String, Double>();
     	for(ArgMap candidate : p.getCandidates()) {
     		// sum up total score of all candidate
     		total += candidate.getProb();
     		
     		// assume no label as default
-    		String label = "";
+    		String label = "O";
     		for(Word w : candidate.keySet()) {
     			if( (predIndex==argIndex && argIndex==w.getIdx()) 
-    					|| (predIndex!=argIndex && getDominated(Collections.singleton(w)).contains(a))) {
+    					|| (predIndex!=argIndex && w.getYield(p, candidate.get(w), candidate.keySet()).contains(a))) {
     				label = candidate.get(w); 
     			}
     		}
@@ -179,6 +179,9 @@ public class LBJavaArgumentClassifier extends Learner {
     			label2unnormalized_score.put(label, candidate.getProb());
     		else
     			label2unnormalized_score.put(label, candidate.getProb() + label2unnormalized_score.get(label) );
+    			//if(candidate.getProb() > label2unnormalized_score.get(label))
+        		//	label2unnormalized_score.put(label, candidate.getProb());
+
 		}
    
     	// normalize score for constituent label
@@ -186,7 +189,7 @@ public class LBJavaArgumentClassifier extends Learner {
     	double[] scores = new double[label2unnormalized_score.size()];    	
     	int i=0;
     	for(String label : label2unnormalized_score.keySet()) {
-    		values[i] = label.equals("") ? "O" : label;
+    		values[i] = label;
     		scores[i] = label2unnormalized_score.get(label)/total; 
     		i++;
     	}
