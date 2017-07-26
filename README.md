@@ -25,8 +25,8 @@ For Frame-Semantic Role Labeling, text files should be preprocessed using the fo
  
 In addition, the following dependencies are required to run the Frame-SRL model:
  
- * A copy of FrameNet version 1.5 (http://framenet.icsi.berkeley.edu/
- * The most recent _PathLSTM_ Frame-SRL model file (October 2016), available on Google Drive [here][4]
+ * A copy of FrameNet version 1.7 (http://framenet.icsi.berkeley.edu/
+ * The most recent _PathLSTM_ Frame-SRL model file (July 2017), available on Google Drive [here][4]
 
 ## Running PathLSTM  
 
@@ -39,7 +39,7 @@ It is also possible to apply the PathLSTM model on already preprocessed text in 
 [1]: http://arxiv.org/abs/1605.07515 
 [2]: http://code.google.com/p/mate-tools/
 [3]: http://drive.google.com/uc?id=0B5aLxfs6OvZBYUk2b0hLZjNqY3c&export=download
-[4]: http://drive.google.com/uc?id=0B5aLxfs6OvZBOXRCbGUtN2JLZlk&export=download
+[4]: http://drive.google.com/uc?id=0B5aLxfs6OvZBZG5JbG1pblpvVjA&export=download
 
 If you are using the PathLSTM SRL model in your work--and we highly recommend you do!--please cite the following publication:
 
