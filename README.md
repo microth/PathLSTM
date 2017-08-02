@@ -22,6 +22,7 @@ For Frame-Semantic Role Labeling, text files should be preprocessed using the fo
 
  * Emory NLP4J for POS tagging (https://github.com/emorynlp/nlp4j)
  * BISTparser for dependency parsing (https://github.com/elikip/bist-parser)
+ * Dependency parsing model trained on OntoNotes 5.0 (available [here](https://drive.google.com/file/d/0B5aLxfs6OvZBa21uQU9Lal9qZ28/view?usp=sharing))
  
 In addition, the following dependencies are required to run the Frame-SRL model:
  
