@@ -28,6 +28,8 @@ In addition, the following dependencies are required to run the Frame-SRL model:
  
  * A copy of FrameNet version 1.7 (http://framenet.icsi.berkeley.edu/
  * The most recent _PathLSTM_ Frame-SRL model file (July 2017), available on Google Drive [here][4]
+ 
+To replicate the results from the abstract published at ICCG 2016, please use FrameNet version 1.5 and the _PathLSTM_ Frame-SRL model file [here][5].
 
 ## Running PathLSTM  
 
@@ -41,6 +43,7 @@ It is also possible to apply the PathLSTM model on already preprocessed text in 
 [2]: http://code.google.com/p/mate-tools/
 [3]: http://drive.google.com/uc?id=0B5aLxfs6OvZBYUk2b0hLZjNqY3c&export=download
 [4]: http://drive.google.com/uc?id=0B5aLxfs6OvZBZG5JbG1pblpvVjA&export=download
+[5]: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/8DY73F
 
 If you are using the PathLSTM SRL model in your work--and we highly recommend you do!--please cite the following publication:
 
