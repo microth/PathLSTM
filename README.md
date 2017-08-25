@@ -22,8 +22,8 @@ The SRL classes can easily be compiled using maven (`mvn compile`).
 
 For Frame-Semantic Role Labeling, the following dependencies are required: 
 
- * Stanford CoreNLP 3.8.0 (https://stanfordnlp.github.io/CoreNLP/)
- * A copy of FrameNet version 1.7 (http://framenet.icsi.berkeley.edu/)
+ * Stanford CoreNLP 3.8.0 (https://stanfordnlp.github.io/CoreNLP/, make sure to use `-stanford`!)
+ * A copy of FrameNet version 1.7 (http://framenet.icsi.berkeley.edu/, make sure to use `-framenet [FNDIR]`!)
  * The most recent _PathLSTM_ Frame-SRL model file (August 2017), available on Google Drive [here][4]
  
 To replicate the results from the abstract published at ICCG 2016, please contact me personally.
