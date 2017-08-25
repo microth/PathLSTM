@@ -16,6 +16,7 @@ import se.lth.cs.srl.options.FullPipelineOptions;
 import se.lth.cs.srl.preprocessor.IllinoisPreprocessor;
 import se.lth.cs.srl.preprocessor.PipelinedPreprocessor;
 import se.lth.cs.srl.preprocessor.Preprocessor;
+import se.lth.cs.srl.preprocessor.StanfordPreprocessor;
 import se.lth.cs.srl.preprocessor.tokenization.Tokenizer;
 import se.lth.cs.srl.preprocessor.tokenization.WhiteSpaceTokenizer;
 import se.lth.cs.srl.preprocessor.tokenization.OpenNLPToolsTokenizerWrapper;
@@ -114,6 +115,11 @@ public abstract class Language {
 					return new StringBuilder();
 				}
 			};
+		} else if(options.stanford) {
+			/*Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? getTokenizer(options.tokenizer)
+					: null);*/
+			Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? new WhiteSpaceTokenizer() : null);
+			pp = new StanfordPreprocessor(tokenizer);
 		} else if(options.uiucparser != null) {
 			Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? getTokenizer(options.tokenizer)
 					: null);

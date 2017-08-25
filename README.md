@@ -1,5 +1,7 @@
 # News
 
+August 2017: The FrameNet-based model has been updated to FrameNet 1.7 and now uses Stanford CoreNLP for preprocessing. 
+
 April 2017: The repository now also contains a compiled archive (`pathlstm.jar`) of the PathLSTM source code. Feel free to use this if you are unable or unwilling to compile the code yourself.
 
 May 2017: The source code and pre-compiled jar file are updated with additional code to support the FrameNet-based SRL model described in Roth (ICCG 2016). Note that this model requires syntactic preprocessing using external tools.  
@@ -18,18 +20,13 @@ The following libraries and model files need to be downloaded in order to run th
 
 The SRL classes can easily be compiled using maven (`mvn compile`).
 
-For Frame-Semantic Role Labeling, text files should be preprocessed using the following toolkits:
+For Frame-Semantic Role Labeling, the following dependencies are required: 
 
- * Emory NLP4J for POS tagging (https://github.com/emorynlp/nlp4j)
- * BISTparser for dependency parsing (https://github.com/elikip/bist-parser)
- * Dependency parsing model trained on OntoNotes 5.0 (available [here](https://drive.google.com/file/d/0B5aLxfs6OvZBa21uQU9Lal9qZ28/view?usp=sharing))
+ * Stanford CoreNLP 3.8.0 (https://stanfordnlp.github.io/CoreNLP/)
+ * A copy of FrameNet version 1.7 (http://framenet.icsi.berkeley.edu/)
+ * The most recent _PathLSTM_ Frame-SRL model file (August 2017), available on Google Drive [here][4]
  
-In addition, the following dependencies are required to run the Frame-SRL model:
- 
- * A copy of FrameNet version 1.7 (http://framenet.icsi.berkeley.edu/
- * The most recent _PathLSTM_ Frame-SRL model file (July 2017), available on Google Drive [here][4]
- 
-To replicate the results from the abstract published at ICCG 2016, please use FrameNet version 1.5 and the _PathLSTM_ Frame-SRL model file [here][5].
+To replicate the results from the abstract published at ICCG 2016, please contact me personally.
 
 ## Running PathLSTM  
 
@@ -42,7 +39,7 @@ It is also possible to apply the PathLSTM model on already preprocessed text in 
 [1]: http://arxiv.org/abs/1605.07515 
 [2]: http://code.google.com/p/mate-tools/
 [3]: http://drive.google.com/uc?id=0B5aLxfs6OvZBYUk2b0hLZjNqY3c&export=download
-[4]: http://drive.google.com/uc?id=0B5aLxfs6OvZBZG5JbG1pblpvVjA&export=download
+[4]: https://drive.google.com/file/d/0B5aLxfs6OvZBV3BJendwdXZGaW8/view?usp=sharing
 [5]: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/8DY73F
 
 If you are using the PathLSTM SRL model in your work--and we highly recommend you do!--please cite the following publication:

@@ -42,6 +42,7 @@ public abstract class FullPipelineOptions {
 	public String uiucparser = null;
 	public String semaforserver = null;
 	public String framenetdir = null;
+	public boolean stanford = false;
 	
 	public static String NULL_LANGUAGE_NAME = "Unk";
 
@@ -129,6 +130,9 @@ public abstract class FullPipelineOptions {
 			ai++;
 			morph = new File(args[ai]);
 			ai++;
+		} else if(args[ai].equals("-stanford")) {
+			ai++;
+			stanford = true;
 		} else if (args[ai].equals("-parser")) {
 			ai++;
 			parser = new File(args[ai]);
@@ -182,7 +186,7 @@ public abstract class FullPipelineOptions {
 		} else if (args[ai].equals("-globalFeats")) {
 			ai++;
 			globalFeats=true;
-		}
+		} 
 		return ai;
 	}
 

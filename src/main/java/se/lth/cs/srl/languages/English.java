@@ -85,9 +85,9 @@ public class English extends Language {
 		// files=new File[2];
 		// files[1]=options.tokenizer;
 		// } else {
-		files = new File[1];
+		files = new File[0];
 		// }
-		files[0] = options.lemmatizer;
+		//files[0] = options.lemmatizer;
 		return options.uiucparser!=null?null:FileExistenceVerifier.verifyFiles(files);
 	}
 
