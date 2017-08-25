@@ -39,7 +39,7 @@ It is also possible to apply the PathLSTM model on already preprocessed text in 
 [1]: http://arxiv.org/abs/1605.07515 
 [2]: http://code.google.com/p/mate-tools/
 [3]: http://drive.google.com/uc?id=0B5aLxfs6OvZBYUk2b0hLZjNqY3c&export=download
-[4]: https://drive.google.com/file/d/0B5aLxfs6OvZBV3BJendwdXZGaW8/view?usp=sharing
+[4]: https://drive.google.com/file/d/0B5aLxfs6OvZBU0MzdFhrT1F4cXc/view?usp=sharing
 [5]: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/8DY73F
 
 If you are using the PathLSTM SRL model in your work--and we highly recommend you do!--please cite the following publication:
