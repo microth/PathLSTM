@@ -18,6 +18,7 @@ import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.StringInText;
 import se.lth.cs.srl.io.ANNWriter;
 import se.lth.cs.srl.io.CoNLL09Writer;
+import se.lth.cs.srl.io.FrameNetXMLWriter;
 import se.lth.cs.srl.io.SentenceWriter;
 import se.lth.cs.srl.languages.Language;
 import se.lth.cs.srl.options.CompletePipelineCMDLineOptions;
@@ -128,7 +129,9 @@ public class CompletePipeline {
 
 		if (options.printANN)
 			writer = new ANNWriter(options.output);
-		else
+		else if(options.printXML)
+			writer = new FrameNetXMLWriter(options.output);
+		else 
 			writer = new CoNLL09Writer(options.output);
 
 		long start = System.currentTimeMillis();

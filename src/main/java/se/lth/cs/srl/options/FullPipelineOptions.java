@@ -30,6 +30,7 @@ public abstract class FullPipelineOptions {
 
 	public boolean printRDF = false;
 	public boolean printANN = false;
+	public boolean printXML = false;
 	public boolean hybrid = false;
 	public boolean external = false;
 	
@@ -57,6 +58,7 @@ public abstract class FullPipelineOptions {
 		parseOptions.skipAI = skipAI;
 		parseOptions.printRDF = printRDF;
 		parseOptions.printANN = printANN;
+		parseOptions.printXML = printXML;
 		parseOptions.externalNNs = externalNNs;
 		parseOptions.globalFeats = globalFeats;
 		parseOptions.framenetdir = framenetdir;
@@ -150,6 +152,9 @@ public abstract class FullPipelineOptions {
 		} else if (args[ai].equals("-printANN")) {
 			ai++;
 			printANN = true;
+		} else if (args[ai].equals("-printXML")) {
+			ai++;
+			printXML = true;
 		} else if (args[ai].equals("-aiBeam")) {
 			ai++;
 			aiBeam = Integer.valueOf(args[ai]);
