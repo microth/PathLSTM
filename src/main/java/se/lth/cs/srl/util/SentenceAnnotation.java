@@ -1,6 +1,7 @@
 package se.lth.cs.srl.util;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.TreeMap;
 import se.lth.cs.srl.corpus.Predicate;
 import se.lth.cs.srl.corpus.Sentence;
 import se.lth.cs.srl.corpus.Word;
+import se.lth.cs.srl.corpus.Yield;
 
 public class SentenceAnnotation {
 
@@ -137,6 +139,9 @@ public class SentenceAnnotation {
 
 			if (!concept2spans.containsKey(anno[0]))
 				concept2spans.put(anno[0], new LinkedList<>());
+			else {
+				System.err.println("Concept appeared twice?! " + anno[0]);
+			}
 			concept2spans.get(anno[0]).add(
 					currids.toArray(new Integer[currids.size()]));
 			concept2label.put(anno[0], label);
@@ -157,10 +162,16 @@ public class SentenceAnnotation {
 				// System.err.print("Frame ("+anno[1].split(" ")[0]+"): " +
 				// sen.get(head(sen, currids)+1).getForm());
 			} else {
-				for (Integer[] ids : concept2spans.get(anno)) {
-					List<Integer> currids = (List<Integer>) Arrays.asList(ids);
-
+				/*for (Integer[] ids : concept2spans.get(anno)) {
+					List<Integer> currids = new LinkedList<Integer>();
+					
+					for(int i : ids) {
+						if(sen.get(i+1).getDeprel().equals("PUNCT")) continue;
+						currids.add(i);
+					}
+									
 					int[] ws = heads(sen, currids);
+					
 					if (ws.length == 1) {
 						Word w = sen.get(ws[0] + 1);
 						concept2word.put(anno, w);
@@ -177,51 +188,7 @@ public class SentenceAnnotation {
 							concept2words.get(anno).add(w);
 						}
 					}
-					/**
-					 * System.err.println(anno[1]);
-					 * System.err.print(anno[0]+" (gold):"); for(Integer i :
-					 * currids) { System.err.print(" ");
-					 * System.err.print(sen.get(i+1).getForm()); }
-					 * System.err.println();
-					 * 
-					 * System.err.print(anno[0]+" (deps):"); int head =
-					 * head(sen, currids); if(last_target==head) { int i = head;
-					 * System.err.print((head==i?"(":"") +
-					 * (last_target==i?"*":"") + sen.get(i+1).getForm() +
-					 * (last_target==i?"*":"") + (head==i?")":""));
-					 * System.err.println("\n---"); continue; }
-					 * 
-					 * int min=head; int max=head;
-					 * 
-					 * List<Integer> todo = new LinkedList<Integer>();
-					 * List<Integer> done = new LinkedList<Integer>();
-					 * todo.add(head);
-					 * 
-					 * while(!todo.isEmpty()) { int curr = todo.remove(0);
-					 * done.add(curr); for(Word w :
-					 * sen.get(curr+1).getChildren()) { int child =
-					 * w.getIdx()-1; if(done.contains(child)) continue;
-					 **/
-					/*
-					 * if(child<min && head<last_target) { min = child;
-					 * todo.add(child); } if(child>max && head>last_target) {
-					 * max = child; todo.add(child); }
-					 */
-					/**
-					 * if(!contains(sen, child, last_target)) { todo.add(child);
-					 * if(child<min && (min<last_target || (min>last_target &&
-					 * child>last_target))) min = child; if(child>max &&
-					 * (max>last_target || (max<last_target &&
-					 * child<last_target))) max = child; } } }
-					 * 
-					 * for(int i=min; i<=max; i++) { System.err.print(" ");
-					 * System.err.print((head==i?"(":"") +
-					 * (last_target==i?"*":"") + sen.get(i+1).getForm() +
-					 * (last_target==i?"*":"") + (head==i?")":"")); }
-					 * 
-					 * System.err.println("\n---");
-					 **/
-				}
+				}*/
 			}
 		}
 
@@ -236,19 +203,64 @@ public class SentenceAnnotation {
 
 			if (framenet) {
 				if (concept2word.containsKey(arg1)) {
-					pred2sense.put(concept2word.get(arg1).getIdx(),
-							rel.split(":")[0]);
-
-					if (concept2word.containsKey(arg2)) {
-						relations.add(new Relation(concept2word.get(arg1)
-								.getIdx(), concept2word.get(arg2).getIdx(), rel
-								.split(":")[1]));
-					} else {
-						for (Word w : concept2words.get(arg2)) {
-							relations.add(new Relation(concept2word.get(arg1)
-									.getIdx(), w.getIdx(), rel.split(":")[1]));
+					int predIndex = concept2word.get(arg1).getIdx();
+					/*sen.makePredicate(predIndex);
+					pred2sense.put(predIndex, rel.split(":")[0]);
+					((Predicate) sen.get(predIndex)).setSense(pred2sense.get(predIndex));*/
+					
+					//System.err.print(sen.get(predIndex).getForm() + "[" + rel.split(":")[0] + "] --" + rel.split(":")[1] + "-> ");
+					
+					List<Word> currids = new LinkedList<Word>();
+					for (Integer[] ids : concept2spans.get(arg2))
+						for (Integer i : ids) {
+							// skip punctuation
+							if(!sen.get(i+1).getDeprel().equals("PUNCT")) 
+								currids.add(sen.get(i+1));
+						}
+					
+					boolean fail = true;
+					for(Word w : currids) {
+						Yield y = w.getYield(sen.get(predIndex), "", Collections.singleton(w));
+						if(y.containsAll(currids)) {
+							//System.err.println(" " + w.getForm());
+							concept2word.put(arg2, w);
+							relations.add(new Relation(concept2word.get(arg1).getIdx(), concept2word.get(arg2).getIdx(), 
+									rel.split(":")[1]));
+							fail = false;
+							break;
 						}
 					}
+					if(!fail) continue;
+						
+					boolean phrases = false;
+					for(Word w : currids) {
+						if(w.getChildren().size()>0) { phrases = true; break; }
+					}
+					
+					if(!phrases) {
+						for(Word w : currids) {
+							relations.add(new Relation(concept2word.get(arg1).getIdx(), w.getIdx(), rel.split(":")[1]));
+							//System.err.print(" " + w.getForm());
+						}
+						fail = false;
+						//System.err.println();
+					}
+					if(!fail) continue;
+
+					// last resort: first "highest" word in span
+					int highest = Integer.MAX_VALUE;
+					Word best = null;
+					for(Word w : currids) {
+						int depth = w.pathToRoot(w, new LinkedList<Word>()).size();
+						if(depth < highest) {
+							highest = depth;
+							best = w;
+						}
+							
+					}
+					relations.add(new Relation(concept2word.get(arg1).getIdx(), best.getIdx(), rel.split(":")[1]));			
+					
+					//System.err.println("? " + best.getForm()  + " " +Arrays.toString(concept2spans.get(arg2).get(0)));
 				}
 			} else {
 
@@ -303,8 +315,7 @@ public class SentenceAnnotation {
 
 		// add predicate-argument relationships
 		for (Relation r : relations) {
-			((Predicate) sen.get(r.head)).addArgMap(sen.get(r.dependent),
-					r.label);
+			((Predicate) sen.get(r.head)).addArgMap(sen.get(r.dependent), r.label);
 			// System.out.println(sen.get(r.head).getForm() + "["+r.label+"]: "
 			// + sen.get(r.dependent).getForm());
 		}
@@ -340,7 +351,7 @@ public class SentenceAnnotation {
 
 		boolean containsSubtrees = false;
 		for (Integer i : currids)
-			if (sen.get(i + 1).getSpan().size() > 1)
+			if (!sen.get(i+1).getDeprel().equals("PUNCT") && sen.get(i + 1).getSpan().size() > 1)
 				containsSubtrees = true;
 
 		if (containsSubtrees) {

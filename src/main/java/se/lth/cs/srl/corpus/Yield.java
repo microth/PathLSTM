@@ -6,7 +6,7 @@ import java.util.TreeSet;
 
 public class Yield extends TreeSet<Word> implements Comparable<Yield> {
 	private static final long serialVersionUID = 1L;
-	private Predicate pred;
+	private Word pred;
 	private Sentence sen;
 	private String argLabel;
 
@@ -14,14 +14,14 @@ public class Yield extends TreeSet<Word> implements Comparable<Yield> {
 		return argLabel;
 	}
 
-	public Yield(Predicate pred, Sentence sen, String argLabel) {
+	public Yield(Word pred, Sentence sen, String argLabel) {
 		super(sen.wordComparator);
 		this.pred = pred;
 		this.sen = sen;
 		this.argLabel = argLabel;
 	}
 
-	public Predicate getPred() {
+	public Word getPred() {
 		return pred;
 	}
 

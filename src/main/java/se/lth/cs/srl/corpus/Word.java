@@ -516,6 +516,9 @@ public class Word implements Serializable {
 	 * @return the Yield
 	 */
 	public Yield getYield(Predicate pred, String argLabel, Set<Word> argSet) {
+		return getYield((Word)pred, argLabel, argSet);
+	}
+	public Yield getYield(Word pred, String argLabel, Set<Word> argSet) {
 		Yield ret = new Yield(pred, mySentence, argLabel);
 		ret.add(this);
 		if (pred.idx == this.idx) // If the predicate is the argument, we don't

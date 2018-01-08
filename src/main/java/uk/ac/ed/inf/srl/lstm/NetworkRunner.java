@@ -77,6 +77,16 @@ public class NetworkRunner {
 				if(options.language.equals("ONT5")) {
 					OUTPUTLENGTH = 66;
 				}
+				if(options.language.equals("FNET17")) {
+					OUTPUTLENGTH = 732;				
+				}
+			}
+			if(options.language.equals("FNET17")) {
+				DATADIR = "/local/mroth/mateplus/";
+				TRAIN = "_data_main_FNET17.ssv";
+				SUPP  = "_data_supp_FNET17.ssv";
+				VAL= "_data_main_FNET17.ssv";
+				VALSUPP  = "_data_supp_FNET17.ssv";	
 			}
 		}
 				
@@ -108,18 +118,18 @@ public class NetworkRunner {
 		network.addSupplementary();
 
 		network.addInput("words", 
-				new File("/disk/scratch/mroth/xlbp/lexicon"+(!options.language.equals("ENG")?"_"+options.language.toLowerCase():"")+"/words.txt"), 
-				new File("/disk/scratch/mroth/vectors/en-fr.en"));
+				new File("/local/mroth/xlbp/lexicon"+(!options.language.equals("ENG")?"_"+options.language.toLowerCase():"")+"/words.txt"), 
+				new File("/local/mroth/vectors/en-fr.en"));
 				//new File("/disk/scratch/mroth/german_vectors/out_orig1_projected.txt.sparse+bin"));
 				//null);
 		network.addInput("pos", 
-				new File("/disk/scratch/mroth/xlbp/lexicon"+(!options.language.equals("ENG")?"_"+options.language.toLowerCase():"")+"/pos.txt"), 
+				new File("/local/mroth/xlbp/lexicon"+(!options.language.equals("ENG")?"_"+options.language.toLowerCase():"")+"/pos.txt"), 
 				null);
 		network.addInput("rels", 
-				new File("/disk/scratch/mroth/xlbp/lexicon"+(!options.language.equals("ENG")?"_"+options.language.toLowerCase():"")+"/rels.txt"), 
+				new File("/local/mroth/xlbp/lexicon"+(!options.language.equals("ENG")?"_"+options.language.toLowerCase():"")+"/rels.txt"), 
 				null);
 		network.addInput("position",
-				new File("/disk/scratch/mroth/xlbp/lexicon"+(!options.language.equals("ENG")?"_"+options.language.toLowerCase():"")+"/position.txt"),
+				new File("/local/mroth/xlbp/lexicon"+(!options.language.equals("ENG")?"_"+options.language.toLowerCase():"")+"/position.txt"),
 				null);
 		
 		if(options.nonbinpath) {
