@@ -116,9 +116,9 @@ public abstract class Language {
 				}
 			};
 		} else if(options.stanford) {
-			/*Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? getTokenizer(options.tokenizer)
-					: null);*/
-			Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? new WhiteSpaceTokenizer() : null);
+			Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? getTokenizer(options.tokenizer)
+					: null);
+			//Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? new WhiteSpaceTokenizer() : null);
 			pp = new StanfordPreprocessor(tokenizer);
 		} else if(options.uiucparser != null) {
 			Tokenizer tokenizer = (options.loadPreprocessorWithTokenizer ? getTokenizer(options.tokenizer)
